@@ -8,15 +8,15 @@ class PagesController extends Controller
 {
     //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function index() {
-        return view('pages.index');
+        return view('index');
     }
     //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function about() {
-        return view('pages.about');
+        return view('about');
     }
 
     //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function products() {
-        return view('pages.products');
+        return view('products');
     }
 }

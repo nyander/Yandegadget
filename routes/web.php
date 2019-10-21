@@ -12,6 +12,10 @@
 */
 
 Route::get('/', function () {
-    //return view('welcome');
-    return 'hello world';
+    return view('welcome');
+    });
+
+//this is a test to see if the website displays
+Route::get('/richard', function () {
+    return 'I can confirm that the routes are working'; 
 });

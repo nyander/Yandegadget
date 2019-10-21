@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{config('app.name','Yande Gadgets')}}</title> 
-        <!–– the title will retrieved from the app folder, if not found, it should use 'Yande Gadgets'   ––>
+        <title>Yande Gadgets</title> 
+       
     </head>
     <body>
         <div>

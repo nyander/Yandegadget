@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    //this public method/function is available and accessible anywhere
+    //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function index() {
-        return 'THIS IS A TEST FOR INDEX FUNCTION ';
+        return view('pages.index');
     }
 }

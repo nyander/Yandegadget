@@ -21,6 +21,6 @@ Route::get('/richard', function () {
 });
 */
 //this route should ensure that when the end user types in website link/about - it should open the about page in the pages folder 
-Route::get('https://yandegadget.herokuapp.com/about', function () {
+Route::get('/about', function () {
     return view('pages.about'); 
 });

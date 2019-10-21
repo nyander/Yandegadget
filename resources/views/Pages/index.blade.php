@@ -8,7 +8,7 @@
     </head>
     <body>
         <div>
-            <h1>The index page workds</h1>
+            <h1>The index page works</h1>
             <p> I can now conirm that you are connected to the index page </p> 
         </div>
     </body>

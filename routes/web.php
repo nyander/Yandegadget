@@ -17,15 +17,13 @@ Route::get('/richard', function () {
 });
 */
 
-/*//this route should display the index page of the website 
+//this route should display the index page of the website 
 Route::get('/', 'PagesController@index');
-*/
+
 
 //this route should ensure that when the end user types in website link/about - it should open the about page in the pages folder 
 Route::get('/about', function () {
     return view('pages.about'); 
 });
 
-Route::get('/', function(){
-    return view('welcome');
-});
+

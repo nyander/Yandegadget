@@ -8,7 +8,7 @@
     </head>
     <body>
         <div>
-            //this is will return the value and saves the content in its state
+            {{-- this is will return the value and saves the content in its state --}}      
             @yield('content')
         </div>
     </body>

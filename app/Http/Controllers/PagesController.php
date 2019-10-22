@@ -25,8 +25,9 @@ class PagesController extends Controller
             //the title is the products
             'title' => 'Products',
             //the product list is the enlisted products
-            'productlist' => ['Phone','TV & Audio', 'Appliances', 'Computing', 'Gaming', 'Phones', 'Many more smart tech']
+            'productslist' => ['Phone','TV & Audio', 'Appliances', 'Computing', 'Gaming', 'Phones', 'Many more smart tech']
         );
+        //display the products page which passes in the data array
         return view('products')->with($data);
     }
 }

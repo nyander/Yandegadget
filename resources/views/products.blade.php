@@ -4,5 +4,12 @@
 {{--inside the @section is what will be added in the app file, basically content to be added to your template--}}
 @section('content')
             <h1>{{$title}}</h1>
-            <p> I can now confirm that you are connected to the products page </p> 
+                {{--this is a loop which if the product list is 0, then it will return each of the products--}} 
+    @if(count($productslist) > 0)
+    <ul>
+        @foreach($productslist as $product)
+            <li>{{$product}}</li>
+        @endforeach
+    </ul>    
+    @endif
 @endsection

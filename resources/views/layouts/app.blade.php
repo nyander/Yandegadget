@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Yande Gadgets</title> 
-       
+        <link rel="stylesheet" href="{{asset('css/app.css')}}"/>
+        <title>Yande Gadgets</title>         
     </head>
     <body>
-        <div>
+        <div class="container">
             {{-- this is will return the value and saves the content in its state --}}      
             @yield('content')
         </div>

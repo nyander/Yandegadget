@@ -20,7 +20,13 @@ class PagesController extends Controller
 
     //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function products() {
-        $title = 'Products';
-        return view('products')->with('title',$title);
+        //as there is a range of fields that   
+        $data = array (
+            //the title is the products
+            'title' => 'Products',
+            //the product list is the enlisted products
+            'productlist' => ['Phone','TV & Audio', 'Appliances', 'Computing', 'Gaming', 'Phones', 'Many more smart tech']
+        );
+        return view('products')->with($data);
     }
 }

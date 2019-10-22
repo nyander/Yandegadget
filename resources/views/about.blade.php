@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Yande Gadgets</title> 
-       
-    </head>
-    <body>
-        <div>
+{{-- extend is basically extending another class using the @extend function which is extending the app file in the layout folder  --}}
+@extends('layouts.app')
+
+{{--inside the @section is what will be added in the app file, basically content to be added to your template--}}
+@section('content')
             <h1>The About page works</h1>
             <p> I can now conirm that you are connected to the index page </p> 
-        </div>
-    </body>
-</html>
+@endsection

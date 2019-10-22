@@ -6,9 +6,9 @@
             <h1>{{$title}}</h1>
                 {{--this is a loop which if the product list is 0, then it will return each of the products--}} 
     @if(count($productslist) > 0)
-    <ul>
+    <ul class="list-group">
         @foreach($productslist as $product)
-            <li>{{$product}}</li>
+            <li class="list-group-item">{{$product}}</li>
         @endforeach
     </ul>    
     @endif

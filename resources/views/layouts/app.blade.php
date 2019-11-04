@@ -7,6 +7,7 @@
         <title>Yande Gadgets</title>         
     </head>
     <body>
+        @include('inc.navbar')
         <div class="container">
             {{-- this is will return the value and saves the content in its state --}}      
             @yield('content')

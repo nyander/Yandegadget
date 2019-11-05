@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{asset('css/app.css')}}"/>
-        <title>Yande Gadgets</title>         
+        <title>Yande Gadgets</title>               
     </head>
     <body>
         {{--we are including the navbar into the website which is located in the inc folder --}}

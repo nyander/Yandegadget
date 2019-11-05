@@ -2,9 +2,8 @@
         <h5 class="my-0 mr-md-auto font-weight-normal">Yande Gadgets</h5>
         <nav class="my-2 my-md-0 mr-md-3">
           <a class="p-2 text-dark" href="/">Home</a>
-          <a class="p-2 text-dark" href="#">Products</a>
-          <a class="p-2 text-dark" href="#">About Us</a>
-          <a class="p-2 text-dark" href="#">Pricing</a>
+          <a class="p-2 text-dark" href="/products">Products</a>
+          <a class="p-2 text-dark" href="/about">About Us</a>          
         </nav>
         <a class="btn btn-outline-primary" href="#">Sign up</a>
       </div>

@@ -7,6 +7,7 @@
         <title>Yande Gadgets</title>         
     </head>
     <body>
+        {{--we are including the navbar into the website which is located in the inc folder --}}
         @include('inc.navbar')
         <div class="container">
             {{-- this is will return the value and saves the content in its state --}}      

@@ -14,10 +14,23 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
+            //'sold','sold_To'
             $table->bigIncrements('id');
             $table->string('name');
-            $table->unsignedDecimal('price');
-            $table->unsignedDecimal('sellingprice');
+            $table->set('type',['appliances','tv','audio','computing','gaming','phones','smarttech']);
+            $table->unsignedDecimal('cost');
+            $table->unsignedBigInteger('supplier');
+            $table->foreign('supplier')->references('id')->on('suppliers');
+            $table->date('purchase_Date');
+            $table->set('condition',['A','B','C','D']);
+            $table->string('condition_Notes');
+            $table->unsignedDecimal('selling_Price');
+            $table->boolean('recieved');
+            $table->unsignedBigInteger('shipment');
+            $table->foreign('shipment')->references('id')->on('shipments');
+            $table->boolean('sold');
+            $table->unsignedBigInteger('sold_To');
+            $table->foreign('sold_To')->references('id')->on('customers');
             $table->timestamps();
         });
     }

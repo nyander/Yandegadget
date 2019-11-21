@@ -16,12 +16,12 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->set('type',['appliances','tv','audio','computing','gaming','phones','smarttech']);
+            $table ->string('type');
             $table->unsignedDecimal('cost');
             $table->unsignedBigInteger('supplier');
             $table->foreign('supplier')->references('id')->on('suppliers');
             $table->date('purchase_Date');
-            $table->set('condition',['A','B','C','D']);
+            //$table->set('condition',['A','B','C','D']);
             $table->string('condition_Notes');
             $table->unsignedDecimal('selling_Price');
             $table->boolean('recieved');

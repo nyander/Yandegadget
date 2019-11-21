@@ -21,7 +21,8 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('supplier');
             $table->foreign('supplier')->references('id')->on('suppliers');
             $table->date('purchase_Date');
-            //$table->set('condition',['A','B','C','D']);
+            $table->unsignedBigInteger('condition');
+            $table->foreign('condition')->references('id')->on('conditions');
             $table->string('condition_Notes');
             $table->unsignedDecimal('selling_Price');
             $table->boolean('recieved');

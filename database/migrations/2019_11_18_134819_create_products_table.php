@@ -29,6 +29,8 @@ class CreateProductsTable extends Migration
             $table->boolean('recieved');
             $table->unsignedBigInteger('shipment');
             $table->foreign('shipment')->references('id')->on('shipments');
+            $table->unsignedBigInteger('request_from');
+            $table->foreign('request_from')->references('id')->on('product_requests');
             $table->boolean('sold');
             $table->unsignedBigInteger('sold_To');
             $table->foreign('sold_To')->references('id')->on('customers');

@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->unsignedBigInteger('type');
+            $table->unsignedBigInteger('type')->nullable();
             $table->foreign('type')->references('id')->on('categories');
             $table->unsignedDecimal('cost');
             $table->unsignedBigInteger('supplier');
@@ -31,9 +31,9 @@ class CreateProductsTable extends Migration
             $table->foreign('shipment')->references('id')->on('shipments');
             $table->unsignedBigInteger('request_from');
             $table->foreign('request_from')->references('id')->on('product_requests');
-            $table->boolean('sold');
-            $table->unsignedBigInteger('sold_To');
-            $table->foreign('sold_To')->references('id')->on('customers');
+            //$table->boolean('sold');
+            //$table->unsignedBigInteger('sold_To');
+            //$table->foreign('sold_To')->references('id')->on('customers');
             $table->timestamps();
         });
     }

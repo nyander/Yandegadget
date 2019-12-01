@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShipmentsTable extends Migration
+class CreateShipmentListsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateShipmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shipments', function (Blueprint $table) {
+        Schema::create('shipment_lists', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedDecimal('cost');
-            $table->date('dateOfShipment');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ class CreateShipmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipments');
+        Schema::dropIfExists('shipment_lists');
     }
 }

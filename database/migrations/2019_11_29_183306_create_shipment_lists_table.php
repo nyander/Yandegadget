@@ -15,6 +15,10 @@ class CreateShipmentListsTable extends Migration
     {
         Schema::create('shipment_lists', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('shipment_id');
+            $table->foreign('shipment_id')->references('id')->on('shipments');
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }

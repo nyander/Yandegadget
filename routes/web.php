@@ -25,7 +25,7 @@ Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
 
 
-Route::get('/products', 'PagesController@products');
+//Route::get('/products', 'PagesController@products');
 Route::get('/welcome', function () {
     return view('welcome'); 
 });

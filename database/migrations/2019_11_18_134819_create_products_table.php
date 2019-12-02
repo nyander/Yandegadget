@@ -16,15 +16,15 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->unsignedBigInteger('type');
+            $table->unsignedBigInteger('type')->nullable();
             $table->foreign('type')->references('id')->on('categories');
             $table->unsignedDecimal('cost');
-            $table->unsignedBigInteger('supplier');
+            $table->unsignedBigInteger('supplier')->nullable();
             $table->foreign('supplier')->references('id')->on('suppliers');
             $table->date('purchase_Date');
-            $table->unsignedBigInteger('condition');
+            $table->unsignedBigInteger('condition')->nullable();
             $table->foreign('condition')->references('id')->on('conditions');
-            $table->string('condition_Notes');
+            $table->string('condition_Notes')->nullable();
             $table->unsignedDecimal('selling_Price');
             $table->boolean('recieved');
             $table->unsignedBigInteger('shipment')->nullable();
@@ -32,7 +32,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('request_from')->nullable();
             $table->foreign('request_from')->references('id')->on('product_requests');
             $table->boolean('sold');
-            $table->unsignedBigInteger('sold_To');
+            $table->unsignedBigInteger('sold_To')->nullable();
             $table->foreign('sold_To')->references('id')->on('customers');
             $table->timestamps();
         });

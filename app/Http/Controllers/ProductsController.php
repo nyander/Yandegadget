@@ -6,5 +6,10 @@ use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    //
-}
+    index
+    create
+    store
+    edit
+    update
+    show
+    destroy

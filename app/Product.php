@@ -10,19 +10,19 @@ class Product extends Model
 protected $fillable = ['name','type','cost','supplier','purchase_Date','condition','condition_Notes','selling_Price','recieved','sold','sold_To'];
     
     public function supplier(){
-        return $this->belongsTo('App\Suppliers');
+        return $this->belongsTo('App\Supplier');
     }
 
     public function customer(){
-        return $this->belongsTo('App\Customers');
+        return $this->belongsTo('App\Customer');
     }
 
     public function category(){
-        return $this->belongsTo('App\Categories');
+        return $this->belongsTo('App\Category');
     }
 
     public function condition(){
-        return $this->belongsTo('App\Conditions');
+        return $this->belongsTo('App\Condition');
     }
 
     public function request(){

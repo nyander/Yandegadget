@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Conditions extends Model
+class Condition extends Model
 {
     protected $fillable = ['details'];
 }

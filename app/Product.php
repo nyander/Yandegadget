@@ -13,11 +13,7 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
         return $this->belongsTo('App\Supplier');
     }
 
-    public function customer(){
-        return $this->belongsTo('App\Customer');
-    }
-
-    public function category(){
+        public function category(){
         return $this->belongsTo('App\Category');
     }
 
@@ -26,7 +22,15 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     }
 
     public function request(){
-        return $this->belongsTo();
+        return $this->belongsTo('App\ProductRequest');
+    }
+    
+    public function customer(){
+        return $this->belongsTo('App\Customer');
+    }
+
+    public function shipmentlist(){
+        return $this->hasOne('App\ShipmentList');
     }
 }
 

@@ -13,6 +13,6 @@
     </div>
     @endforeach    
  @else
-    <p>No posts found</p>
+    <p>No Products Available at this very moment</p>
  @endif
 @endsection

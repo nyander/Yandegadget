@@ -8,7 +8,7 @@ use App\Product;
 class Product extends Model
 {
 protected $fillable = ['name','type','cost','supplier','purchase_Date','condition','condition_Notes','selling_Price','recieved','sold','sold_To'];
-    
+    /*
     public function supplier(){
         return $this->belongsTo('App\Supplier');
     }
@@ -30,7 +30,8 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     }
 
     public function shipmentlist(){
-        return $this->hasOne('App\ShipmentList');
+        return $this->belongsTo('App\ShipmentList');
     }
+    */
 }
 

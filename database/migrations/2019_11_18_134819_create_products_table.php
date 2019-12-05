@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->unsignedBigInteger('type')->nullable();
             $table->unsignedDecimal('cost')->nullable();;
             $table->unsignedBigInteger('supplier')->nullable();
@@ -28,7 +28,6 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('request_from')->nullable();
             $table->boolean('sold')->nullable();;
             $table->unsignedBigInteger('sold_To')->nullable();
-            $table->string('thumbnail_path');
             $table->timestamps();
         });
     }

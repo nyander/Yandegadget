@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('type')->nullable();
             $table->unsignedDecimal('cost')->nullable();;
             $table->unsignedBigInteger('supplier')->nullable();
+            $table->foreign('supplier')->references('id')->on('suppliers');
             $table->date('purchase_Date')->nullable();;
             $table->unsignedBigInteger('condition')->nullable();
             $table->string('condition_Notes')->nullable();

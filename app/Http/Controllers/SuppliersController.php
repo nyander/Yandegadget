@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
-use App\Supplier;
 
-
-class ProductsController extends Controller
+class SuppliersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +13,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        
-        //Pagination
-        $products = Product::OrderBy('purchase_Date', 'asc')->paginate(1);
-        return view('products.index')->with('products', $products);
-        
+        return $supplier = Supplier::all();
     }
 
     /**
@@ -30,9 +23,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        
-        $suppliers = Supplier::all('name');
-        return view('products.create')->with('suppliers', $suppliers);    
+        //
     }
 
     /**
@@ -90,4 +81,9 @@ class ProductsController extends Controller
     {
         //
     }
+
+    /*public function list($company_name,$id)
+    {
+        //
+    }*/
 }

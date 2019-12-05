@@ -11,7 +11,8 @@
             <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
         </div>
     </div>
-    @endforeach    
+    @endforeach   
+     {{$products->links()}}
  @else
     <p>No Products Available at this very moment</p>
  @endif

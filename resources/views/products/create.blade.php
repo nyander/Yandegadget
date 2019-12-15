@@ -8,8 +8,13 @@
         {{Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Title'])}}
     </div>    
     <div class="form-group">
-            {{Form::select('id', $suppliers, null )}}
+            {{Form::label('supplier', 'Supplier')}}
+            {{Form::select('supplier', $suppliers, null, ['placeholder' => 'Pick Supplier'] )}}
         </div>   
+    {{--<div class="form-group">
+            {{Form::label('condition', 'Condition')}}
+            {{Form::select('condition', $condition, null, ['placeholder' => 'Condition'] )}}
+    </div>--}}       
 {!! Form::close() !!} 
 @endsection
 

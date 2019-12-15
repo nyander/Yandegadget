@@ -7,7 +7,7 @@
     <div class="card" style="width:18rem;">
         <img class="card-img-top" src="{{$product->image}}"> 
         <div class="card-body">
-            <h5 class="title">{{$product->name}}</h5>
+        <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
             <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
         </div>
     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
+use App\Condition;
 
 
 class ProductsController extends Controller
@@ -32,6 +33,7 @@ class ProductsController extends Controller
     {
         
         $suppliers = Supplier::all('name');
+        //$condition = Condition::all('details');
         return view('products.create')->with('suppliers', $suppliers);    
     }
 
@@ -54,7 +56,8 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Product::find($id);
+        return view('products.show')->with('product', $post);
     }
 
     /**

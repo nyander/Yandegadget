@@ -57,6 +57,9 @@
                           </li>
                       @endguest
                   </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                    <li> <a href="/products/create">Upload Product</a></li> 
+                </ul>    
               </div>
           </div>
       </nav>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Condition;
+use DB;
 
 
 class ProductsController extends Controller
@@ -19,7 +20,7 @@ class ProductsController extends Controller
     {
         
         //Pagination
-        $products = Product::OrderBy('purchase_Date', 'asc')->paginate(1);
+        $products = Product::OrderBy('created_at', 'desc')->paginate(12);
         return view('products.index')->with('products', $products);
         
     }
@@ -33,6 +34,8 @@ class ProductsController extends Controller
     {
         
         $suppliers = Supplier::all('name');
+        //$categorie = Category::all('type');
+        //$products = Product::with('Supplier','Category');
         //$condition = Condition::all('details');
         return view('products.create')->with('suppliers', $suppliers);    
     }
@@ -45,7 +48,17 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+        'name' => 'required',
+        'condition_Notes' => 'required' 
+        ]);
+         //create products
+         $product = new Product;
+         $product->name = $request->input('name');
+         $product->condition_Notes = $request->input('condition_Notes');
+         $product->save();
+
+         return redirect('/products')->with('success', 'Product Uploaded');
     }
 
     /**

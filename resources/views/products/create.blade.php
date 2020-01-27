@@ -1,20 +1,91 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Upload Products</h3>
- {!! Form::open(['action' => 'ProductsController@store','method' => 'POST']) !!}
-    <div class="form-group">
-        {{Form::label('name', 'Product Name')}}
-        {{Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Title'])}}
-    </div> 
-   <div class="form-group">
-            {{Form::label('condition_Notes', 'Condition Notes')}}
-            {{Form::textarea('condition_Notes', '', ['class' => 'form-control', 'placeholder' => 'Condition Notes'])}}
-    </div> 
-    {{Form::submit('Submit', ['class'=> 'btn btn-primary'])}}       
-        {{-- <div class="form-group">
-            {{Form::label('supplier', 'Supplier')}}
-            {{Form::select('supplier', $suppliers, null, ['placeholder' => 'Pick Supplier'] )}}
-    </div> --}}
-{!! Form::close() !!} 
+    
+    <div id="wrapper">
+        <div id="createproduct" class="container">
+            <h3>Upload Products</h3>
+            <form method="POST" action="/products">
+                @csrf
+                {{-- Product Name field--}}
+                <div class="field">
+                    <label class="label" for="name">Product Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="name" id="name"> 
+                    </div>
+                </div>    
+
+                {{-- Cost field--}}
+                <div class="field">
+                    <label class="label" for="cost">Cost</label>
+                    <div class="control">
+                        <input class="input" type="number" name="cost" id="cost"> 
+                    </div>
+                </div>    
+
+                {{-- Categories Dropdown --}}
+                {{-- <select> is a dropdown --}}
+                {{-- <option> is each option of a dropdown --}}
+                <div class="form-group">
+                    <select name="catselect" id="category" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                        <option value="{{$categories}}">Select Type</option>
+                            @foreach($categories as $ct)
+                                <option value="{{$ct->id}}">{{$ct->type}}</option>
+                            @endforeach
+                    </select>
+                </div> 
+
+                {{-- Supplier Dropdown --}}
+                <div class="form-group">
+                    <select name="supselect" id="supplier" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                    <option value="{{$suppliers}}">Select Suppliers</option>
+                        @foreach($suppliers as $lb)
+                            <option value="{{$lb->id}}">{{$lb->name}}</option>
+                        @endforeach
+                    </select>
+                </div>   
+                
+                {{-- Purchase Date
+                <div class="field">
+                    <label class="label" for="date">Purchase Date</label>
+                    <div class="control">
+                        <input class="input" type="date" name="purchasedate" id="purchasedate"> 
+                    </div>
+                </div>   --}}
+
+                {{-- Condititon Dropdown --}}
+                <div class="form-group">
+                    <select name="conselect" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                    <option value="{{$conditions}}">Select Condition</option>
+                        @foreach($conditions as $cn)
+                            <option value="{{$cn->id}}">{{$cn->details}}</option>
+                        @endforeach
+                    </select>
+                </div>                
+
+                {{-- Condition Notes --}}
+                <div class="field">
+                    <label class="label" for="condition_Notes">Condition Notes</label>
+                    <div class="control">
+                        <textarea class="textarea" name="condition_Notes" id="condition_Notes"></textarea> 
+                    </div>
+                </div>
+
+                {{-- Selling Price field--}}
+                <div class="field">
+                    <label class="label" for="price">Price</label>
+                    <div class="control">
+                        <input class="input" type="number" name="price" id="price"> 
+                    </div>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link" type="submit">Submit</button>
+                    </div>
+                </div>                                
+            </form>
+        </div>
+    </div>    
 @endsection
+

@@ -32,12 +32,10 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        
-        $suppliers = Supplier::all('name');
-        //$categorie = Category::all('type');
-        //$products = Product::with('Supplier','Category');
-        //$condition = Condition::all('details');
-        return view('products.create')->with('suppliers', $suppliers);    
+        $suppliers = DB::table('suppliers')->select('id','name')->get();
+        $conditions = DB::table('conditions')->select('id','details')->get();
+        $categories = DB::table('categories')->select('id','type')->get();
+        return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 'categories'=> $categories]);    
     }
 
     /**
@@ -49,16 +47,23 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-        'name' => 'required',
-        'condition_Notes' => 'required' 
+            'name' => 'required',
+            'cost' => 'required'
         ]);
-         //create products
+
          $product = new Product;
-         $product->name = $request->input('name');
-         $product->condition_Notes = $request->input('condition_Notes');
+         $product->name = request("name");
+         $product->cost = request("cost");
+         $product->type = request("catselect");
+         $product->supplier = request("supselect");
+        //  $product->purchase_Date = request("date");
+         $product->condition = request("conselect");
+         $product->condition_Notes = request("condition_Notes");
+         $product->selling_Price = request("price");
          $product->save();
 
          return redirect('/products')->with('success', 'Product Uploaded');
+        
     }
 
     /**
@@ -70,7 +75,8 @@ class ProductsController extends Controller
     public function show($id)
     {
         $post = Product::find($id);
-        return view('products.show')->with('product', $post);
+        $supplier = Supplier::find($id);
+        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier]);
     }
 
     /**

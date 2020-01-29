@@ -27,6 +27,7 @@
                 {{-- <select> is a dropdown --}}
                 {{-- <option> is each option of a dropdown --}}
                 <div class="form-group">
+                    <label class="label" for="date">Product Type</label>
                     <select name="catselect" id="category" class="form-control input-lg dynamic" data-dependent="labSubCat">
                         <option value="{{$categories}}">Select Type</option>
                             @foreach($categories as $ct)
@@ -37,6 +38,7 @@
 
                 {{-- Supplier Dropdown --}}
                 <div class="form-group">
+                    <label class="label" for="date">Supplier</label>
                     <select name="supselect" id="supplier" class="form-control input-lg dynamic" data-dependent="labSubCat">
                     <option value="{{$suppliers}}">Select Suppliers</option>
                         @foreach($suppliers as $lb)
@@ -45,16 +47,16 @@
                     </select>
                 </div>   
                 
-                {{-- Purchase Date
                 <div class="field">
                     <label class="label" for="date">Purchase Date</label>
                     <div class="control">
-                        <input class="input" type="date" name="purchasedate" id="purchasedate"> 
+                        <input class="input" type="date" name="purchasedate" placeholder="Enter Date of Purchase"> 
                     </div>
-                </div>   --}}
+                </div>  
 
                 {{-- Condititon Dropdown --}}
                 <div class="form-group">
+                    <label class="label" for="date">Condition</label>
                     <select name="conselect" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
                     <option value="{{$conditions}}">Select Condition</option>
                         @foreach($conditions as $cn)

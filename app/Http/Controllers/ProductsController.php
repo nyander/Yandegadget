@@ -56,7 +56,7 @@ class ProductsController extends Controller
          $product->cost = request("cost");
          $product->type = request("catselect");
          $product->supplier = request("supselect");
-        //  $product->purchase_Date = request("date");
+         $product->purchase_Date = request("purchasedate");
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
@@ -75,8 +75,10 @@ class ProductsController extends Controller
     public function show($id)
     {
         $post = Product::find($id);
-        $supplier = Supplier::find($id);
-        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier]);
+        $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
+        $categories = DB::table('categories')->where('id',$post->type)->value('type');
+        $currency = '£';
+        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency]);
     }
 
     /**
@@ -87,7 +89,11 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Product::find($id);
+        $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
+        $categories = DB::table('categories')->where('id',$post->type)->value('type');
+        $currency = '£';
+        return view('products.edit')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency]);
     }
 
     /**

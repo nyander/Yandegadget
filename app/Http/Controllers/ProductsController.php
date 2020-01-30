@@ -35,7 +35,8 @@ class ProductsController extends Controller
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();
-        return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 'categories'=> $categories]);    
+        $currency = '£';
+        return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 'categories'=> $categories, 'currency' => $currency]);    
     }
 
     /**
@@ -77,8 +78,9 @@ class ProductsController extends Controller
         $post = Product::find($id);
         $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
         $categories = DB::table('categories')->where('id',$post->type)->value('type');
+        $condition = DB::table('conditions')->where('id',$post->condition)->value('details');
         $currency = '£';
-        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency]);
+        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency, 'condition'=>$condition]);
     }
 
     /**
@@ -89,11 +91,24 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        $post = Product::find($id);
-        $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
-        $categories = DB::table('categories')->where('id',$post->type)->value('type');
-        $currency = '£';
-        return view('products.edit')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency]);
+        $product = Product::find($id);
+        $suppliers = DB::table('suppliers')->select('id','name')->get();
+        $conditions = DB::table('conditions')->select('id','details')->get();
+        $categories = DB::table('categories')->select('id','type')->get();
+        $conditionname = DB::table('conditions')->where('id',$product->condition)->value('details');
+        $conditionid = DB::table('conditions')->where('id',$product->condition)->value('id');
+        $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
+        $suppliername = DB::table('suppliers')->where('id', $product->supplier)->value('name');
+        $supplierid = DB::table('suppliers')->where('id', $product->supplier)->value('id');        
+        return view('products.edit')->with(['product' => $product,
+                                            'suppliers'=>$suppliers, 
+                                            'conditions'=> $conditions, 
+                                            'categories'=> $categories, 
+                                            'categoriesname'=>$categoriesname, 
+                                            'suppliername'=> $suppliername,
+                                            'conditionname'=> $conditionname,
+                                            'conditionid'=> $conditionid,
+                                            'supplierid'=> $supplierid]);  
     }
 
     /**
@@ -105,7 +120,18 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         $product = Product::find($id);
+         $product->name = request("name");
+         $product->cost = request("cost");
+         $product->type = request("catselect");
+         $product->supplier = request("supselect");
+         $product->purchase_Date = request("purchasedate");
+         $product->condition = request("conselect");
+         $product->condition_Notes = request("condition_Notes");
+         $product->selling_Price = request("price");
+         $product->save();
+
+         return redirect('/products')->with('success', 'Product Updated');
     }
 
     /**
@@ -116,6 +142,9 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+
+        return redirect('/products')->with('success', 'The product has been deleted');
     }
 }

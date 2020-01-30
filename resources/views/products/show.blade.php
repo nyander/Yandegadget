@@ -9,7 +9,7 @@
     <p><span style="font-weight:bold"> Purchase Cost: </span> {{$currency}} {{$product->cost}}</p>
     <p>Supplier name: {{$supplier}}</p>
     <p>Purchase date: {{$product->purchase_Date}}</p>
-    <p>Condition: {{$product->condition}}</p>
+    <p>Condition: {{$condition}}</p>
     <p>Condition Notes: {{$product->condition_Notes}}</p>
     <p>Requested By: {{$product->request_from}}</p>
     <p> Shipped?: {{$product->recieved}}</p>
@@ -17,7 +17,10 @@
     <hr>
     <a href="/products/{{$product->id}}/edit" class="btn btn-default"> Edit </a>
     
-
+{!!Form::open(['action' => ['ProductsController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!}
+    {{Form::hidden('_method', 'DELETE')}}
+    {{Form::submit('Delete',['class' => 'btn btn-danger '])}}
+{!!Form::close() !!}
     
 </div> 
 

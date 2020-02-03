@@ -7,6 +7,7 @@ use App\Product;
 use App\Supplier;
 use App\Condition;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductsController extends Controller
@@ -47,6 +48,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        $id = Auth::id();
         $this->validate($request,[
             'name' => 'required',
             'cost' => 'required'
@@ -54,6 +56,7 @@ class ProductsController extends Controller
 
          $product = new Product;
          $product->name = request("name");
+         $product->user_id = $id;
          $product->cost = request("cost");
          $product->type = request("catselect");
          $product->supplier = request("supselect");
@@ -79,8 +82,9 @@ class ProductsController extends Controller
         $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
         $categories = DB::table('categories')->where('id',$post->type)->value('type');
         $condition = DB::table('conditions')->where('id',$post->condition)->value('details');
-        $currency = '£';
-        return view('products.show')->with(['product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency, 'condition'=>$condition]);
+        $adminname= DB::table('users')->where('id',$post->user_id)->value('name');
+        $currency = '£';        
+        return view('products.show')->with(['adminname'=>$adminname,'product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency, 'condition'=>$condition, 'user_id']);
     }
 
     /**

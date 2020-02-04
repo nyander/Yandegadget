@@ -12,7 +12,6 @@
         </div>
     </div>
     @endforeach   
-     {{$products->links()}}
  @else
     <p>No Products Available at this very moment</p>
  @endif

@@ -49,6 +49,9 @@
                                                    document.getElementById('logout-form').submit();">
                                       {{ __('Logout') }}
                                   </a>
+                                  <a class="dropdown-item" href="{{route('products.create')}}">
+                                    Upload Product
+                                </a>
                                   @can('manage-users')
                                     <a class="dropdown-item" href="{{ route('admin.users.index') }}">
                                        User Management 
@@ -57,6 +60,9 @@
                                   <a class="dropdown-item" href="{{ route('conditions.index') }}">
                                     Condition Management 
                                  </a> 
+
+                                     
+                                    
                                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                       @csrf
                                   </form>
@@ -64,9 +70,7 @@
                           </li>
                       @endguest
                   </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                    <li> <a href="/products/create">Upload Product</a></li> 
-                </ul>    
+                  
               </div>
           </div>
       </nav>

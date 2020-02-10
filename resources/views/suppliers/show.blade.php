@@ -8,7 +8,9 @@
     <p>Contact: {{$supplier->contact}}</p>
     <p>Email: {{$supplier->email}}</p>    
     <hr>
+    @can('supplier-management')
     <a href="/suppliers/{{$supplier->id}}/edit" class="btn btn-default"> Edit </a>
+    @endcan
 </div> 
 
 @endsection

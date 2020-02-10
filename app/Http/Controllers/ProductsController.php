@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Condition;
+use Gate;
 use DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,9 @@ class ProductsController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('add-product')){
+            return redirect(route('products.index'));
+        }
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();
@@ -94,7 +98,10 @@ class ProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+        if(Gate::denies('edit-product')){
+        return redirect(route('products.index'));
+        }
         $product = Product::find($id);
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details')->get();
@@ -145,7 +152,10 @@ class ProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {   
+        if(Gate::denies('delete-product')){
+            return redirect(route('products.index'));
+        }
         $product = Product::find($id);
         $product->delete();
 

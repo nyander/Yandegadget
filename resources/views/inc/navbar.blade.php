@@ -56,7 +56,10 @@
                                     <a class="dropdown-item" href="{{ route('admin.users.index') }}">
                                        User Management 
                                     </a>                                  
-                                  @endcan  
+                                  @endcan
+                                  <a class="dropdown-item" href="{{ route('suppliers.index') }}">
+                                    Supplier Management 
+                                  </a>   
                                   <a class="dropdown-item" href="{{ route('conditions.index') }}">
                                     Condition Management 
                                  </a> 

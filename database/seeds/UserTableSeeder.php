@@ -18,10 +18,11 @@ class UserTableSeeder extends Seeder
         User::truncate();
         DB::table('role_user')->truncate();
 
-        // Find the roles
+        // Find & get the roles
         $adminRole = Role::where('name', 'admin')->first();
         $staffRole = Role::where('name', 'staff')->first();
         $userRole = Role::where('name', 'user')->first();
+        $supplierRole = Role::where('name', 'supplier')->first();
 
         // create users
         $admin = User::create([
@@ -42,9 +43,17 @@ class UserTableSeeder extends Seeder
             'password' => Hash::make('richard'),
         ]);
 
-        // this attaches the role to the user
+        $supplier = User::create([
+            'name' => 'Supplier User',
+            'email' => 'supplier@supplier.com',
+            'password' => Hash::make('richard'),
+        ]);
+
+
+        // this attaches the role to the user we are creating a one to many connection
         $admin->roles()->attach($adminRole);
         $staff->roles()->attach($staffRole);
         $user->roles()->attach($userRole);
+        $supplier->roles()->attach($supplierRole);
     }
 }

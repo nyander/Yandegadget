@@ -23,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // user management
         $this->registerPolicies();
 
         Gate::define('manage-users', function($user){
@@ -37,6 +38,24 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
-        //
+        //condition management
+
+        Gate::define('add-product', function($user){
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('edit-product', function($user){
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('delete-product', function($user){
+            return $user->hasRole('admin');
+        });
+
+        //supplier management
+
+        Gate::define('supplier-management', function($user){
+            return $user->hasRole('admin');
+        });
     }
 }

@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Supplier;
+use Gate;
 
 class SuppliersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +19,9 @@ class SuppliersController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('supplier-management')){
+            return redirect(route('products.index'));
+        }
         $suppliers = Supplier::all();
         return view('suppliers.index')->with('suppliers', $suppliers);
     }
@@ -25,6 +33,9 @@ class SuppliersController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('supplier-management')){
+            return redirect(route('products.index'));
+        }
         return view('suppliers.create');
     }
 
@@ -61,6 +72,10 @@ class SuppliersController extends Controller
      */
     public function show($id)
     {
+        
+        if(Gate::denies('supplier-management')){
+            return redirect(route('products.index'));
+        }
         $supplier = Supplier::find($id);
         return view('suppliers.show')->with(['supplier'=> $supplier]);
     }
@@ -73,6 +88,9 @@ class SuppliersController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('supplier-management')){
+            return redirect(route('products.index'));
+        }
         $supplier = Supplier::find($id);
         return view('suppliers.edit')->with('supplier',$supplier);
     }

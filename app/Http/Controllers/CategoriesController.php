@@ -79,6 +79,9 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'type' => 'required'            
+        ]);
         $category = Category::find($id);
         $category->type = request("type");        
         $category->save();

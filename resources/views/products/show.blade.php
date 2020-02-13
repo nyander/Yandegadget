@@ -16,6 +16,16 @@
     <p>Shipped?: {{$product->recieved}}</p>
     <p>Shipment: {{$product->shipment}}</p>
     <hr>
+    {{-- <a href="" class="button">Add To Shipment</a>   --}}
+
+    <form action="{{route('shipments.store')}}" method="POST">
+        @csrf
+        <input type="hidden" name="id" value="{{$product->id}}">
+        <input type="hidden" name="name" value="{{$product->name}}">
+        <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
+        <button type="submit" class="button button-plain">Add To Cart</button>
+    </form>
+
     @can('edit-product')
     <a href="/products/{{$product->id}}/edit" class="btn btn-default"> Edit </a>
     @endcan

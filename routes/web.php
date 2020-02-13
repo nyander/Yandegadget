@@ -38,6 +38,18 @@ Route::resource('/conditions', 'ConditionsController');
 Route::resource('/categories', 'CategoriesController');
 Route::resource('/suppliers', 'SuppliersController');
 
+//shipment routes
+Route::resource('/shipments', 'ShipmentController'); 
+Route::post('/shipments/switchToSaveForLater/{product}', 'ShipmentController@switchToSaveForLater')->name('shipments.switchToSaveForLater');
+
+Route::resource('/saveForLater', 'SaveForLaterController'); 
+Route::post('/saveForLater/switchToShipment/{product}', 'SaveForLaterController@switchToShipment')->name('saveForLater.switchToShipment');
+
+Route::get('empty', function(){
+    Cart::instance('saveForLater')->destroy();
+});
+
+
 
 
 

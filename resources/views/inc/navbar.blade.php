@@ -26,7 +26,12 @@
                   <ul class="navbar-nav ml-auto">
                       <a class="nav-link" href="/">Home</a>
                       <a class="nav-link" href="/products">Products</a>
-                      <a class="nav-link" href="/about">About Us</a>     
+                      <a class="nav-link" href="/about">About Us</a> 
+                      <a class="nav-link" href="/shipments">Shipments <spanv class="shipment-count">
+                        @if(Cart::instance('default')->count() > 0) 
+                        <span>{{Cart::instance('default')->count()}}</span></span>    
+                        @endif                    
+                        </a>     
                       <!-- Authentication Links -->
                       @guest
                           <li class="nav-item">

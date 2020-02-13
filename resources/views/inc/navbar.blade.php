@@ -26,8 +26,9 @@
                   <ul class="navbar-nav ml-auto">
                       <a class="nav-link" href="/">Home</a>
                       <a class="nav-link" href="/products">Products</a>
-                      <a class="nav-link" href="/about">About Us</a> 
-                      <a class="nav-link" href="/shipments">Shipments <spanv class="shipment-count">
+                      <a class="nav-link" href="/about">About Us</a>
+                      <a class="nav-link" href="/requests/create">Request Product</a> 
+                      <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
                         @if(Cart::instance('default')->count() > 0) 
                         <span>{{Cart::instance('default')->count()}}</span></span>    
                         @endif                    
@@ -56,6 +57,9 @@
                                   </a>
                                   <a class="dropdown-item" href="{{route('products.create')}}">
                                     Upload Product
+                                </a>
+                                <a class="dropdown-item" href="{{route('requests.index')}}">
+                                    Requested Products
                                 </a>
                                   @can('manage-users')
                                     <a class="dropdown-item" href="{{ route('admin.users.index') }}">

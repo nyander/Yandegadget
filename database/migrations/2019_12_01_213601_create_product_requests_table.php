@@ -15,14 +15,11 @@ class CreateProductRequestsTable extends Migration
     {
         Schema::create('product_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('customer_id')->nullable();
             $table->string('name');
-            $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers');
-            $table->unsignedBigInteger('type');
-            $table->foreign('type')->references('id')->on('categories');
-            $table->unsignedBigInteger('condition');
-            $table->foreign('condition')->references('id')->on('conditions');
-            $table->boolean('available');            
+            $table->unsignedBigInteger('type')->nullable();            
+            $table->unsignedBigInteger('condition')->nullable(); 
+            $table->boolean('deposit_paid')->default('0');
             $table->timestamps();
         });
     }

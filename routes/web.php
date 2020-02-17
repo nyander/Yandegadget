@@ -38,6 +38,8 @@ Route::resource('/requests','ProductRequestController');
 Route::resource('/conditions', 'ConditionsController');
 Route::resource('/categories', 'CategoriesController');
 Route::resource('/suppliers', 'SuppliersController');
+Route::resource('/confirmations','ShipmentConfirmationController');
+Route::resource('/checkouts', 'CheckoutController');
 
 //shipment routes
 Route::resource('/shipments', 'ShipmentController'); 

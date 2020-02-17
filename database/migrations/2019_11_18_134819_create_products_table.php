@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             $table->date('purchase_Date')->nullable();;
             $table->unsignedBigInteger('condition')->nullable();
             $table->string('condition_Notes')->nullable();
-            $table->unsignedDecimal('selling_Price')->nullable();;
+            $table->unsignedDecimal('selling_Price')->nullable();
             $table->boolean('recieved')->nullable();;
             $table->unsignedBigInteger('shipment')->nullable();
             $table->unsignedBigInteger('request_from')->nullable();

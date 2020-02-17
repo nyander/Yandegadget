@@ -20,6 +20,7 @@ class CreateProductRequestsTable extends Migration
             $table->unsignedBigInteger('type')->nullable();            
             $table->unsignedBigInteger('condition')->nullable(); 
             $table->boolean('deposit_paid')->default('0');
+            $table->unsignedDecimal('charge')->nullable();
             $table->timestamps();
         });
     }

@@ -37,14 +37,26 @@
                             <option value="{{$cn->id}}">{{$cn->details}}</option>
                         @endforeach
                     </select>
-                </div>         
+                </div>     
+                
+                {{-- Price--}}
+                <div class="field">                    
+                    <div class="control">
+                        
+                        <span>Deposit:</span><input class="input" type="text" name="deposit_amount" id="name" value="50" readonly>
+                    
+                    </div>
+                </div> 
 
+                <h4> Price will be: CREATE FUNCTION TO CHECK IF CONDITION IS A - £50, B- £40 , C - £30<h4>
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <a href="{{route('products.index')}}" class="button">Back</a>
+                        <a href="{{route('checkouts.index')}}" class="button">Proceed to Checkout</a>
                     </div>
                 </div>                                
             </form>
+            
         </div>
     </div>    
 @endsection

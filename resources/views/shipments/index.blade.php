@@ -11,7 +11,7 @@
                         <div class="shipment-item-details">
                             <div class="shipment-product-name"><a href="/products/{{$item->id}}">{{ $item->model->name}}</a></div>
                             <div class="shipment-product-conditionnotes">{{$item->model->condition_Notes}}</div>
-                            <div class="shipment-product-price">£{{$item->model->selling_Price}}</div>
+                            <div class="shipment-product-price">Potential Sale: £{{$item->model->selling_Price}}</div>
                         </div>
                     </div>
                     <div class="shipment-table-row-right">
@@ -35,13 +35,11 @@
             <div>
                 SubTotal: <br>
                 Tax: <br>                    
-            </div>
-            <div class="cart-totals-subtotal">
-                Subtotal: £{{Cart::subtotal()}}<br>
-                Tax: £{{Cart::tax()}}
-            </div>
-            <span class="shipment-totals-total">Total: £{{Cart::total()}}</span>                
-        </div>   
+            </div>            
+            <span class="shipment-totals-total">Potential Sale Total: £{{Cart::total()}}</span>                
+        </div>
+        <a href="/products" class="button">Add More Products</a>
+        <a href="/confirmations" class="button-primary">Confirm Shipment</a>   
     @else
         <h3>No items for shipment</h3> 
         <div class="spacer"></div>
@@ -60,7 +58,7 @@
                 <div class="shipment-item-details">
                 <div class="shipment-table-item"> <a href="/products/{{$item->id}}">{{$item->model->name}}</a></div>
                 <div class="shipment-table-conditionnotes">{{$item->model->condition_Notes}}</div>
-                <div class="shipment-table-price">£{{$item->model->selling_Price}}</div>
+                <div class="shipment-table-price">Potential Sale £{{$item->model->selling_Price}}</div>
                 </div>
             </div>
             <div class="shipment-table-row-light">
@@ -75,7 +73,7 @@
                         @csrf
                         <button type="submit" class="cart-options">Switch To Cart</button>
                     </form>
-
+                    
                 </div>
             </div>
         </div>

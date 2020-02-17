@@ -15,6 +15,10 @@ class CreateDepositsTable extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('type')->nullable();
+            $table->unsignedDecimal('condition_a')->nullable();
+            $table->unsignedDecimal('condition_b')->nullable();
+            $table->unsignedDecimal('condition_c')->nullable();
             $table->timestamps();
         });
     }

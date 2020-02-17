@@ -130,4 +130,10 @@ class ProductRequestController extends Controller
 
         return redirect('/requests')->with('success', 'Request has been removed');
     }
+
+    public function findDeposit($id)
+    {
+       return $deposits = DB::table('conditions')->groupBy('type');
+
+    }
 }

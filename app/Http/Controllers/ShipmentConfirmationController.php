@@ -35,7 +35,8 @@ class ShipmentConfirmationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Cart::instance('default')->destroy();
+        return redirect()->route('shipments.index')->with('success', 'Shipment has been confirmed'); 
     }
 
     /**

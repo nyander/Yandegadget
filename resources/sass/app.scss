@@ -26,6 +26,21 @@
     -webkit-transition: box-shadow 150ms ease;
     transition: box-shadow 150ms ease;
   }
+
+  // .button-primary {
+  //   background: $primary;
+  //   color:white !important;
+  //   padding: 12px 0px;
+
+  //   &:hover{
+  //     background: darken($primary, 7%);
+  //   }
+
+  //   &:disabled{
+  //     background: lighten($primary, 10%);
+  //     cursor: not-allowed;
+  //   }
+  // }
   
   .StripeElement--focus {
     box-shadow: 0 1px 3px 0 #cfd7df;

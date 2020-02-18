@@ -7,37 +7,38 @@
             <h1 class="checkout-heading stylish-heading"> Checkout </h1>
             <div class="checkout-section">
                 <div>
-                    <form action="#" id="payment-form">
+                <form action="{{route('checkouts.store')}}" method="POST" id="payment-form">
+                    {{ csrf_field() }}
                         <h2> Billing Details </h2>
                         
                             <div class="form-group">
                             <label for="email"> Email Address </label>
-                            <input type="email"  class="form-control" id="email" name="email" value="">
+                            <input type="email"  class="form-control" id="email" name="email" value="{{old('email')}}">
                         </div>
 
                         <div class="form-group">
                             <label for="name"> Name </label>
-                            <input type="text"  class="form-control" id="name" name="name" value="">
+                            <input type="text"  class="form-control" id="name" name="name" value="{{old('name')}}">
                         </div>
 
                         <div class="form-group">
                             <label for="address"> Address </label>
-                            <input type="text"  class="form-control" id="address" name="address" value="">
+                            <input type="text"  class="form-control" id="address" name="address" value="{{old('address')}}">
                         </div>
 
                         <div class="half-form">
                             <label for="city"> City </label>
-                            <input type="text"  class="form-control" id="city" name="city" value="">
+                            <input type="text"  class="form-control" id="city" name="city" value="{{old('city')}}">
                         </div>
                         
                         <div class="form-form">
                             <label for="postcode"> Postcode </label>
-                            <input type="text"  class="form-control" id="postcode" name="postcode" value="">
+                            <input type="text"  class="form-control" id="postcode" name="postcode" value="{{old('postcode')}}">
                         </div>
                         
                         <div class="form-form">
                             <label for="phone"> Phone </label>
-                            <input type="text"  class="form-control" id="phone" name="phone" value="">
+                            <input type="text"  class="form-control" id="phone" name="phone" value="{{old('phone')}}">
                         </div>
 
                         <div class="spacer"></div>
@@ -86,12 +87,26 @@
                                 <input type="text"  class="form-control" id="cvc" name="cvc" value="">
                             </div>
                         </div>  --}}
-                      
+                        <div class="form-group">
+                            <label for="charge"> Product Name </label>
+                            <input type="text"  class="form-control" id="productname" name="productname" value="{{$request->name}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="charge"> Type </label>
+                            <input type="text"  class="form-control" id="type" name="type" value="{{$categoriesname}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="charge"> Condition </label>
+                            <input type="text"  class="form-control" id="condition" name="condition" value="{{$conditionname}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="charge"> Total Price </label>
+                            <input type="text"  class="form-control" id="charge" name="charge" value="{{$request->charge}}" readonly>
+                        </div>                      
 
                         <div class="spacer"></div>
-
-                        <button type="submit" class="button-primary full-width"> Complete Purchase </button>
-                        Price: {{$request->charge}}
+                        <button type="submit" id="complete-order" class="button-primary full-width"> Confirm</button>
+                        
                     </form>
                 </div>
 
@@ -107,7 +122,7 @@
     <script> 
         (function(){
                         // Create a Stripe client.
-            var stripe = Stripe('pk_test_h3CcIJurHplCOZu6M1RaFoGr00wGJMcAIS');
+            var stripe = Stripe('pk_test_0rU5AzN9osLSyuAJWlIc9FRy');
 
             // Create an instance of Elements.
             var elements = stripe.elements();
@@ -154,11 +169,25 @@
             form.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            stripe.createToken(card).then(function(result) {
+            //This will ensure that transcation does not occur twice if the user clicks confirms more than once
+            document.getElementById('complete-order').disabled = true;
+
+            // This will pass in the card details and address as it is recommended
+            var options = {
+                name: document.getElementById('name_on_card').value,
+                address_line1: document.getElementById('address').value,
+                address_city: document.getElementById('city').value,
+                address_zip: document.getElementById('postcode').value
+            }
+
+            stripe.createToken(card, options).then(function(result) {
                 if (result.error) {
                 // Inform the user if there was an error.
                 var errorElement = document.getElementById('card-errors');
                 errorElement.textContent = result.error.message;
+
+                //enable the submit button    
+                document.getElementById('complete-order').disabled = false;
                 } else {
                 // Send the token to your server.
                 stripeTokenHandler(result.token);
@@ -177,7 +206,7 @@
             form.appendChild(hiddenInput);
 
             // Submit the form
-            //form.submit();
+            form.submit();
             }
         })();
     </script>

@@ -5,8 +5,8 @@
 @section('content')
 <div id="wrapper">
     <div id="createproduct" class="container">
-        <h3>Upload Products</h3>
-        <form method="POST" action="/confirmations">
+        <h3>Upload Products</h3>        
+        <form action="{{route('confirmations.store')}}" method="POST">
             @csrf            
 
             {{-- Shipment Company Dropdown --}}
@@ -51,7 +51,12 @@
                 <div class="control">
                     <a href="/shipments" class="button">Back to Cart</a>
                 </div>
-            </div>                                
+            </div> 
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button-primary full-width"> Confirm</button>
+                </div>
+            </div> 
         </form>
     </div>
 

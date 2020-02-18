@@ -10,8 +10,9 @@
         Yes
     @else
         No
-     @endif</p>    
-    <hr>    
+     @endif</p>
+     <p>£ {{$requests->charge}}    
+    <br>    
     <a href="/requests/{{$requests->id}}/edit" class="btn btn-default"> Edit </a>
     
 </div> 

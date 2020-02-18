@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+
+
 @section('content')
 <div id="wrapper">
     <div id="createproduct" class="container">
@@ -63,11 +65,18 @@
                     <div class="shipment-table-item"> <a href="/products/{{$item->id}}">{{$item->model->name}}</a></div>
                     <div class="shipment-table-conditionnotes">{{$item->model->condition_Notes}}</div>
                      <div class="shipment-table-price">£{{$item->model->selling_Price}}</div>
-                    </div>
-                    <br>
                 </div>
-                @endforeach
+                    <br>
+            </div>           
+            @endforeach
+            <div class="confirmation-totals">
+                <div class ="checkout-totals-right">
+                    <span class="confirm-totals-total">Total</span>
+                </div>
 
-
+                <div class="confirmation-totals-right">
+                    <span class="confirmation-totals-total">£ {{Cart::total()}}</span>
+                </div>
+                
 </div>    
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\ProductRequest;
 
 class CheckoutController extends Controller
 {
@@ -45,7 +46,13 @@ class CheckoutController extends Controller
      */
     public function show($id)
     {
-        //
+       $request = ProductRequest::find($id);
+        return   view('checkouts.index')->with(['request'=> $request]);        
+    }
+
+    public function proceed($id)
+    {
+        
     }
 
     /**

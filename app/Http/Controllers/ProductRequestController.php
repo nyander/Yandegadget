@@ -52,7 +52,8 @@ class ProductRequestController extends Controller
          $productrequ->customer_id = $id;         
          $productrequ->type = request("type");         
          $productrequ->condition = request("condition");
-         $productrequ->deposit_paid = true;         
+         $productrequ->deposit_paid = true;  
+         $productrequ->charge= request("charge");       
          $productrequ->save();
 
          return redirect('/requests')->with('success', 'Request has been made');
@@ -72,7 +73,7 @@ class ProductRequestController extends Controller
         return view('requests.show')->with(['requests'=> $requests, 'categories'=> $categories, 'condition'=>$condition ]);
     }
 
-    /**
+        /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -130,10 +131,5 @@ class ProductRequestController extends Controller
 
         return redirect('/requests')->with('success', 'Request has been removed');
     }
-
-    public function findDeposit($id)
-    {
-       return $deposits = DB::table('conditions')->groupBy('type');
-
-    }
+    
 }

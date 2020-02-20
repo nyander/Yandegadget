@@ -11385,3 +11385,29 @@ a.text-dark:focus {
   background-color: #fefde5 !important;
 }
 
+.products-header {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+          justify-content: space-between;
+}
+
+.sidebar.li.active {
+  font-weight: 500;
+}
+
+.pagination {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  margin-top: 4%;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 2px 16px;
+  text-decoration: none;
+}
+

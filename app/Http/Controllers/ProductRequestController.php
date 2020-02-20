@@ -110,9 +110,10 @@ class ProductRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $productrequ = ProductRequest::find($id);
         $productrequ->name = request("name");
-        $productrequ->customer_id = $id;         
+        $productrequ->customer_id = Auth::id();         
         $productrequ->type = request("type");         
         $productrequ->condition = request("condition");               
         $productrequ->save();

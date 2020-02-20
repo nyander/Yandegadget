@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Condition;
+use App\Category;
 use Gate;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,11 +21,31 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        $pagination = 9;
+        $categories = Category::all();
+        //categories 
+        if(request()->category) {
+            //this will return the products based on the requested category            
+            $products = Product::where('type', request()->category);
+            $categories ;
+            $categoryname = optional($categories->where('id', request()->category)->first())->type;
+        } else
+        {        //Pagination
+        $products = Product::where('featured', 'true');
+        $categories;        
+        $categoryname = 'Featured';
+        }
         
-        //Pagination
-        $products = Product::OrderBy('created_at', 'desc')->paginate(12);
-        return view('products.index')->with('products', $products);
-        
+        //sort development
+        if(request()->sort == 'low_high'){
+            $products = $products->OrderBy('selling_Price', 'asc')->paginate($pagination);
+
+        }elseif (request()->sort == 'high_low'){
+            $products = $products->OrderBy('selling_Price', 'desc')->paginate($pagination);
+        } else{
+            $products = $products->paginate($pagination);
+        }
+        return view('products.index')->with(['products' => $products, 'categories'=> $categories, 'categoryname'=>$categoryname]);
     }
 
     /**

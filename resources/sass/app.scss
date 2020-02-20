@@ -53,3 +53,24 @@
   .StripeElement--webkit-autofill {
     background-color: #fefde5 !important;
   }
+
+  .products-header{
+    display:flex;
+    justify-content: space-between;
+  }
+
+  .sidebar.li.active{
+    font-weight: 500;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 4%;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 2px 16px;
+    text-decoration: none;
+  }

@@ -39,43 +39,8 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $this->validate($request,[
-            'name' => 'required',
-            'email' => 'required|email',
-            'address' => 'required',
-            'city' => 'required',
-            'postcode' => 'required',
-            'phone' => 'required',
-            'name_on_card' => 'required',            
-            
-        ]);
-        // dd($request->all());
-        //this is what is parsed into the stripe system. this is collected from the index form.
-        // use die dumb method to see what information is being passed in
-        try{
-            
-            $charge = Stripe::charges()->create([
-                
-                'amount' => $request->charge,
-                'currency'=> 'GBP',
-                'source' => $request->stripeToken,               
-                'description'=> 'Order',
-                'receipt_email' => $request->email,
-                'metadata' => [
-                    'Requested Product' => $request->productname,
-                    'Product Type' => $request->type,
-                    'Product condition' => $request->condition,                    
-                ],
-            ]);
 
-            //successful
-            return redirect()->route('requests.index')->with('success', 'Thank you! Your Payment has been successful');
-        } catch (CardErrorException $e) {
-            //if the card payment comes back or detects an error, 
-            //it should go back to the checkouts page and dispay what is the error 
-            return back()->withErrors('Error! ' . $e->getMessage());
-        }
+        
     }
 
     /**
@@ -117,7 +82,49 @@ class CheckoutController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $productreq = ProductRequest::find($id);
+        $productreq->deposit_paid = 1;        
+        $productreq->save();   
+        
+        
+        $this->validate($request,[
+            'name' => 'required',
+            'email' => 'required|email',
+            'address' => 'required',
+            'city' => 'required',
+            'postcode' => 'required',
+            'phone' => 'required',
+            'name_on_card' => 'required',            
+            
+        ]);
+        // dd($request->all());
+        //this is what is parsed into the stripe system. this is collected from the index form.
+        // use die dumb method to see what information is being passed in
+        try{
+            
+            $charge = Stripe::charges()->create([
+                
+                'amount' => $request->charge,
+                'currency'=> 'GBP',
+                'source' => $request->stripeToken,               
+                'description'=> 'Order',
+                'receipt_email' => $request->email,
+                'metadata' => [
+                    'Requested Product' => $request->productname,
+                    'Product Type' => $request->type,
+                    'Product condition' => $request->condition,                    
+                ],
+            ]);
+            
+            //this is going to set the deposit paid field to true           
+            //successful
+                          
+            return redirect()->route('requests.index')->with('success', 'Thank you! Your Payment has been successful');
+        } catch (CardErrorException $e) {
+            //if the card payment comes back or detects an error, 
+            //it should go back to the checkouts page and dispay what is the error 
+            return back()->withErrors('Error! ' . $e->getMessage());
+        }
     }
 
     /**

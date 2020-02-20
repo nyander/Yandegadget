@@ -12,7 +12,7 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     public function supplier(){
         return $this->belongsTo('App\Supplier');
     }
-    /*
+    
         public function category(){
         return $this->belongsTo('App\Category');
     }
@@ -21,17 +21,17 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
         return $this->belongsTo('App\Condition');
     }
 
-    public function request(){
-        return $this->belongsTo('App\ProductRequest');
-    }
+    // public function request(){
+    //     return $this->belongsTo('App\ProductRequest');
+    // }
     
-    public function customer(){
-        return $this->belongsTo('App\Customer');
-    }
+    // public function customer(){
+    //     return $this->belongsTo('App\Customer');
+    // }
 
-    public function shipmentlist(){
-        return $this->belongsTo('App\ShipmentList');
-    }
-    */
+    // public function shipmentlist(){
+    //     return $this->belongsTo('App\ShipmentList');
+    // }
+    
 }
 

@@ -17,6 +17,7 @@ class CreateConditionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('details');
             $table->mediumText('explanation');
+            $table->string('deposit');
             $table->timestamps();
         });
     }

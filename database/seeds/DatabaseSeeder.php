@@ -14,5 +14,9 @@ class DatabaseSeeder extends Seeder
         // when we run php artidan bbc, anything in the run meathod with be called
         $this->call(RolesTableSeeder::class);
         $this->call(UserTableSeeder::class);
+        $this->call(SupplierTableSeeder::class);
+        $this->call(CategoriesTableSeeder::class);
+        $this->call(ConditionsTableSeeder::class);        
+        $this->call(ProductTableSeeder::class);
     }
 }

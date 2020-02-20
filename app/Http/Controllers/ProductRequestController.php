@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class ProductRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +33,7 @@ class ProductRequestController extends Controller
      */
     public function create()
     {
-        $conditions = DB::table('conditions')->select('id','details')->get();
+        $conditions = DB::table('conditions')->select('id','details','deposit')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         return view('requests.create')->with(['conditions'=> $conditions, 'categories'=> $categories]);
     }
@@ -51,8 +55,8 @@ class ProductRequestController extends Controller
          $productrequ->name = request("name");
          $productrequ->customer_id = $id;         
          $productrequ->type = request("type");         
-         $productrequ->condition = request("condition");
-         $productrequ->deposit_paid = true;  
+         $productrequ->condition = $condition = DB::table('conditions')->where('deposit',request("condition"))->value('id');
+         $productrequ->deposit_paid = false;  
          $productrequ->charge= request("charge");       
          $productrequ->save();
 
@@ -110,8 +114,7 @@ class ProductRequestController extends Controller
         $productrequ->name = request("name");
         $productrequ->customer_id = $id;         
         $productrequ->type = request("type");         
-        $productrequ->condition = request("condition");
-        $productrequ->deposit_paid = true;         
+        $productrequ->condition = request("condition");               
         $productrequ->save();
 
         return redirect('/requests')->with('success', 'Request has been updated');

@@ -7,10 +7,12 @@
             <h1 class="checkout-heading stylish-heading"> Checkout </h1>
             <div class="checkout-section">
                 <div>
-                <form action="{{route('checkouts.store')}}" method="POST" id="payment-form">
+                <form action="{{route('checkouts.update',$request->id)}}" method="POST" id="payment-form">
+                    @method('PUT')
                     {{ csrf_field() }}
                         <h2> Billing Details </h2>
-                        
+
+                        <input type="hidden" id="custId" name="custId" value="1">
                             <div class="form-group">
                             <label for="email"> Email Address </label>
                             <input type="email"  class="form-control" id="email" name="email" value="{{old('email')}}">

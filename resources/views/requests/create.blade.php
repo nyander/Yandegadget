@@ -28,7 +28,28 @@
                         </select>
                     </div> 
                     
-                {{-- Condititon Dropdown --}}
+                    {{-- <div class="form-group">
+                    <label class="label" for="type">Condition</label>
+                        <select name="condition" id="cmbitems">
+                            <option value="">Select Type</option>
+                            @foreach($conditions as $ct)
+                                    <option value="{{$ct->deposit}}">{{$ct->type}}</option>
+                            @endforeach
+                        </select>
+                        <input type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
+                    </div>  --}}
+                    <div class="form-group">
+                        <label class="label" for="type">Condition</label>
+                        <select name="condition" id="condition">
+                            <option value="">Select Type </option>
+                            @foreach($conditions as $ct)
+                                <option value="{{$ct->deposit}}">{{$ct->details}}</option>
+                            @endforeach
+                        </select>
+                        £<input type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
+                    </div> 
+                    
+                {{-- Condititon Dropdown
                 <div class="form-group">
                     <label class="label" for="date">Condition</label>
                     <select name="condition" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
@@ -39,16 +60,19 @@
                     </select>
                 </div>     
                 
-                {{-- Price--}}
+                {{-- Price
                 <div class="field">                    
                     <div class="control">
                         
                         <span>Deposit:</span><input class="input" type="text" name="charge" id="charge" value="50" readonly>
                     
                     </div>
-                </div> 
+                </div>                 --}}
 
-                <h4> Price will be: CREATE FUNCTION TO CHECK IF CONDITION IS A - £50, B- £40 , C - £30<h4>
+                
+
+                
+
                 <div class="field is-grouped">
                     <div class="control">
 
@@ -56,13 +80,28 @@
                             <div class="control">
                                 <button class="button is-link" type="submit">Submit</button>
                             </div>
-                        <a href="{{route('products.index')}}" class="button">Back</a>
-                        <a href="{{route('checkouts.index')}}" class="button">Proceed to Checkout</a>
+
+                            <div class="control">
+                                <a href="{{route('products.index')}}" class="button btn-secondary" type="button">Back To Products </a>
+                            </div>
+                                              
                     </div>
                 </div>                                
             </form>
             
         </div>
     </div>    
+@endsection
+
+@section('extra-js')
+    <script>
+        
+            var select = document.getElementById('condition');
+            var input = document.getElementById('charge');
+            select.onchange = function() {
+            input.value = select.value;
+        }
+        
+    </script>
 @endsection
 

@@ -7,14 +7,14 @@ use App\Condition;
 
 class Condition extends Model
 {
-    protected $fillable = ['details','explanation'];
-/*
-    public function shipmentlist(){
-        return $this->hasMany('App\ShipmentList');
-    }
+    // protected $fillable = ['details','explanation'];
 
-    public function product(){
+    // public function shipmentlist(){
+    //     return $this->hasMany('App\ShipmentList');
+    // }
+
+    public function products(){
         return $this->hasMany('App\Product');
     }
-   */ 
+   
 }

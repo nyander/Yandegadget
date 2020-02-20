@@ -13,8 +13,9 @@
      @endif</p>
      <p>£ {{$requests->charge}}    
     <br>    
+    @can('manage-requests')
     <a href="/requests/{{$requests->id}}/edit" class="btn btn-default"> Edit </a>
-    
+    @endcan
 </div> 
 
 @endsection

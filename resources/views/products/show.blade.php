@@ -15,6 +15,13 @@
     <p>Requested By: {{$product->request_from}}</p>
     <p>Shipped?: {{$product->recieved}}</p>
     <p>Shipment: {{$product->shipment}}</p>
+    <p>Featured: @if($product->featured = true)
+                 Yes
+                 @else
+                 No
+                 @endif   
+           
+    </p>
     <hr>
     {{-- <a href="" class="button">Add To Shipment</a>   --}}
 

@@ -76,7 +76,9 @@
                                  <a class="dropdown-item" href="{{ route('categories.index') }}">
                                     Categories Management 
                                  </a>    
-                                 
+                                 <a class="dropdown-item" href="{{ route('ships.index') }}">
+                                    Shipped Product Management 
+                                  </a>                                  
                                  <a class="dropdown-item" href="{{ route('deposits.index') }}">
                                     Deposit Management 
                                  </a>                                       

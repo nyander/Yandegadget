@@ -81,6 +81,13 @@
                     </div>
                 </div>
 
+                {{-- Featured Product --}}
+                <div class="field">
+                    <label class="label" for="condition_Notes">Featured ?</label>
+                    Yes: {{Form::radio('featured', 'true')}}
+                    No:  {{Form::radio('featured', 'false')}}                   
+                </div>
+
                 <div class="field is-grouped">
                     <div class="control">
                         <button class="button is-link" type="submit">Submit</button>

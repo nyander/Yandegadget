@@ -54,6 +54,7 @@ class ConditionsController extends Controller
          $condition = new Condition;
          $condition->details = request("details");
          $condition->explanation = request("explanation");
+         $condition->deposit = request("deposit");
          $condition->save();
 
          return redirect('/conditions')->with('success', 'Condition Uploaded');
@@ -95,6 +96,7 @@ class ConditionsController extends Controller
         $condition = Condition::find($id);
         $condition->details = request("details");
         $condition->explanation = request("explanation");
+        $condition->deposit = request("deposit");
         $condition->save();
 
          return redirect('/conditions')->with('success', 'Conditions Updated');

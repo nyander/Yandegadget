@@ -107,7 +107,7 @@ class CheckoutController extends Controller
                 'amount' => $request->charge,
                 'currency'=> 'GBP',
                 'source' => $request->stripeToken,               
-                'description'=> 'Order',
+                'description'=> 'Deposit',
                 'receipt_email' => $request->email,
                 'metadata' => [
                     'Requested Product' => $request->productname,

@@ -34,6 +34,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/products', 'ProductsController');
+Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
 Route::resource('/requests','ProductRequestController');
 Route::resource('/conditions', 'ConditionsController');
 Route::resource('/categories', 'CategoriesController');
@@ -41,6 +42,9 @@ Route::resource('/suppliers', 'SuppliersController');
 Route::resource('/confirmations','ShipmentConfirmationController');
 Route::resource('/checkouts', 'CheckoutController');
 Route::resource('/deposits', 'DepositsController');
+Route::resource('/ships', 'ShipController');
+Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
+
 
 
 //shipment routes

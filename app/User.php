@@ -51,7 +51,8 @@ class User extends Authenticatable
         return false;
     } 
 
-    public function hasRole($role){
+    public function hasRole($role)
+    {
         // this is basically first checking roles relationship 
         // and if their is any roles assigned. then it will chekc the first one
         if($this->roles()->where('name', $role)->first()){
@@ -59,4 +60,9 @@ class User extends Authenticatable
         }
         return false;
     } 
+
+    public function shippedProducts()
+    {
+        return $this->hasMany('App\Ship');
+    }
 }

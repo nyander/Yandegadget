@@ -24,13 +24,12 @@
                     </div>
                 </div>    
 
-                {{-- Categories Dropdown --}}
-                {{-- <select> is a dropdown --}}
-                {{-- <option> is each option of a dropdown --}}
+                
+
                 <div class="form-group">
                     <label class="label" for="date">Product Type</label>
-                    <select name="catselect" id="category" class="form-control input-lg dynamic" data-dependent="labSubCat" >
-                        <option value="{{$categories}}">Select Categories</option>
+                    <select name="type" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                        <option value="{{$categories}}">{{$categoriesname}}</option>
                             @foreach($categories as $ct)
                                 <option value="{{$ct->id}}">{{$ct->type}}</option>
                             @endforeach
@@ -80,6 +79,19 @@
                     <div class="control">
                         <input class="input" type="number" name="price" id="price" value="{{$product->selling_Price}}"> 
                     </div>
+                </div>
+
+                {{-- Featured Product --}}
+                <div class="field">
+                    <label class="label" for="condition_Notes">Featured ?</label>
+                    @if($product->featured = true)
+                    Yes: {{Form::radio('featured', 'true', true)}}
+                    No:  {{Form::radio('featured', 'false')}} 
+                    @else 
+                        Yes: {{Form::radio('featured', 'true')}}
+                        No:  {{Form::radio('featured', 'false', true)}}  
+                                 
+                    @endif     
                 </div>
 
                 <div class="field is-grouped">

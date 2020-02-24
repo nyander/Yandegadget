@@ -19,9 +19,16 @@
                 <div class="field">
                     <label class="label" for="cost">Condition Explanation</label>
                     <div class="control">
-                        <input class="input" type="textarea" name="explanation" id="cost" > 
+                        <input class="input" type="textarea" name="explanation" id="explanation" > 
                     </div>
-                </div>    
+                </div>  
+                {{-- Condition Explanation--}}
+                <div class="field">
+                    <label class="label" for="cost">Deposit</label>
+                    <div class="control">
+                        <input class="input" type="number" name="deposit" id="deposit" > 
+                    </div>
+                </div>   
 
                 <div class="field is-grouped">
                     <div class="control">

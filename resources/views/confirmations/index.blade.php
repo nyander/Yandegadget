@@ -26,7 +26,7 @@
             <div class="field">
                 <label class="label" for="date">Date of Shipment</label>
                 <div class="control">
-                    <input class="input" type="date" name="purchasedate" placeholder="Enter Date of Purchase"> 
+                    <input class="input" type="date" name="shipmentdate" placeholder="Enter Date of Purchase"> 
                 </div>
             </div>  
 
@@ -41,9 +41,9 @@
             
             {{-- Further Notes --}}
             <div class="field">
-                <label class="label" for="condition_Notes">Condition Notes</label>
+                <label class="label" for="shipment_Notes">Shipment Notes</label>
                 <div class="control">
-                    <textarea class="textarea" name="condition_Notes" id="condition_Notes"></textarea> 
+                    <textarea class="textarea" name="shipment_Notes" id="shipment_Notes"></textarea> 
                 </div>
             </div>
 

@@ -89,6 +89,7 @@ class ProductsController extends Controller
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
+         $product->featured = request("featured");
          $product->save();
 
          return redirect('/products')->with('success', 'Product Uploaded');
@@ -143,6 +144,14 @@ class ProductsController extends Controller
                                             'supplierid'=> $supplierid]);  
     }
 
+    public function recieved($id){
+        // when called, it will set the specific shipment's recieved to true
+        $product = Product::find($id);
+        $product->recieved = true;
+        $product->save();
+        return redirect()->back()->with('success','A Product has been recieved');
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -155,12 +164,13 @@ class ProductsController extends Controller
          $product = Product::find($id);
          $product->name = request("name");
          $product->cost = request("cost");
-         $product->type = request("catselect");
+         $product->type = request("type");
          $product->supplier = request("supselect");
          $product->purchase_Date = request("purchasedate");
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
+         $product->featured = request("featured");
          $product->save();
 
          return redirect('/products')->with('success', 'Product Updated');

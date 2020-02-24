@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Cart;
 use App\Ship;
 use App\ShippedProduct;
+use App\ShipCompany;
 
 class ShipmentConfirmationController extends Controller
 {
@@ -16,7 +17,8 @@ class ShipmentConfirmationController extends Controller
      */
     public function index()
     {
-        return view('confirmations.index');
+        $companies = ShipCompany::all();
+        return view('confirmations.index')->with(['companies'=>$companies]);
     }
 
     /**

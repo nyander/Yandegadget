@@ -32,13 +32,14 @@ Route::get('/welcome', function () {
 //authentication related
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
-
+Route::resource('/supplierproducts', 'SupplierProductController');
 Route::resource('/products', 'ProductsController');
 Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
 Route::resource('/requests','ProductRequestController');
 Route::resource('/conditions', 'ConditionsController');
 Route::resource('/categories', 'CategoriesController');
 Route::resource('/suppliers', 'SuppliersController');
+Route::resource('/shipcompanies', 'ShipCompanyController');
 Route::resource('/confirmations','ShipmentConfirmationController');
 Route::resource('/checkouts', 'CheckoutController');
 Route::resource('/deposits', 'DepositsController');

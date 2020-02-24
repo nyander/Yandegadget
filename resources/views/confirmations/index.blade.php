@@ -16,9 +16,9 @@
                 <label class="label" for="date">Shipment Company Dropdown</label>
                 <select name="shipselect" id="shipmentcompany" class="form-control input-lg dynamic" data-dependent="labSubCat">
                     <option value="">Select Shipment Company</option>
-                        {{-- @foreach($companies as $company)
-                            <option value="{{$company->id}}">{{company->name}}</option>
-                        @endforeach --}}
+                        @foreach($companies as $company)
+                            <option value="{{$company->id}}">{{$company->name}}</option>
+                        @endforeach 
                 </select>
             </div> 
 

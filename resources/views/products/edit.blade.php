@@ -25,7 +25,7 @@
                 </div>    
 
                 
-
+                {{-- Category field --}}
                 <div class="form-group">
                     <label class="label" for="date">Product Type</label>
                     <select name="type" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat">

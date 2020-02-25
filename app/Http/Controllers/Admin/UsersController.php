@@ -35,7 +35,7 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         // this checks the Gate in the AuthServiceProvider by checking the hasRole in User role, if the gate is denied (if user is not admin, it should redirect them to index page)  
-        if(Gate::denies('edit-users')){
+        if(Gate::denies('manage-users')){
             return redirect(route('admin.users.index'));
         }
         $roles = Role::all();
@@ -79,7 +79,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        if(Gate::denies('delete-users')){
+        if(Gate::denies('manage-users')){
             return redirect(route('admin.users.index'));
         }
         $user->roles()->detach();

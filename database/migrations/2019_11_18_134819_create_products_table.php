@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->boolean('recieved')->default(false)->nullable();
             $table->unsignedBigInteger('request_from')->nullable();
             $table->boolean('sold')->default(false)->nullable();
+            $table->date('sold_Date')->nullable();
             $table->unsignedBigInteger('sold_To')->nullable();
             $table->boolean('featured')->default(false);
             $table->timestamps();

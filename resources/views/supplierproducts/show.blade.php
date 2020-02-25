@@ -33,11 +33,11 @@
         <button type="submit" class="button button-plain">Purchase</button>
     </form> --}}
 
-    @can('edit-product')
+    @can('manage-products')
     <a href="/supplierproducts/{{$product->id}}/edit" class="btn btn-default"> Edit </a>
     @endcan
     
-    @can('delete-product')
+    @can('manage-products')
 {!!Form::open(['action' => ['SupplierProductController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!}
     {{Form::hidden('_method', 'DELETE')}}
     {{Form::submit('Delete',['class' => 'btn btn-danger '])}}

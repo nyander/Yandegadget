@@ -55,7 +55,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('add-product')){
+        if(Gate::denies('manage-products')){
             return redirect(route('products.index'));
         }
         $suppliers = DB::table('suppliers')->select('id','name')->get();
@@ -121,7 +121,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {   
-        if(Gate::denies('edit-product')){
+        if(Gate::denies('manage-products')){
         return redirect(route('products.index'));
         }
         $product = Product::find($id);
@@ -184,12 +184,29 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {   
-        if(Gate::denies('delete-product')){
+        if(Gate::denies('manage-products')){
             return redirect(route('products.index'));
         }
         $product = Product::find($id);
         $product->delete();
 
         return redirect('/products')->with('success', 'The product has been deleted');
+    }
+
+    public function purchase($id){
+        // when called, it will set the specific shipment's recieved to true
+        $product = Product::find($id); 
+        return view('products.purchase')->with(['product'=>$product]);
+    }
+
+    public function purchaseupdate(Request $request, $id)
+    {
+         $product = Product::find($id);         
+         $product->selling_Price = request("price");
+         $product->sold_Date = request("soldDate");
+         $product->sold = true;
+         $product->save();
+
+         return redirect('/products')->with('success', 'Product Purchased');
     }
 }

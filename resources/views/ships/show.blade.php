@@ -33,9 +33,6 @@
             @endforeach
         </ul>
     
-        
-        <a href="/ships/{{$ship->id}}/edit" class="btn btn-default"> Edit </a>
-    
     
 
 @endsection

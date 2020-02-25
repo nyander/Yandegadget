@@ -34,7 +34,7 @@
                                 
                                 <a href="{{route('deposits.edit', $deposits->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
-                                @can('delete-users')
+                                @can('manage-users')
                                 <form action="{{route('deposits.destroy', $deposits->id)}}" method="POST" class="float-left">
                                 @csrf
                                 {{method_field('DELETE')}}

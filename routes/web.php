@@ -33,20 +33,34 @@ Route::get('/welcome', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/supplierproducts', 'SupplierProductController');
+
 Route::resource('/products', 'ProductsController');
 Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
+Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
+Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name('products.purchaseupdate');
+
 Route::resource('/requests','ProductRequestController');
+
 Route::resource('/conditions', 'ConditionsController');
+
 Route::resource('/categories', 'CategoriesController');
+
 Route::resource('/suppliers', 'SuppliersController');
+
 Route::resource('/shipcompanies', 'ShipCompanyController');
+
 Route::resource('/confirmations','ShipmentConfirmationController');
+
 Route::resource('/checkouts', 'CheckoutController');
+
 Route::resource('/deposits', 'DepositsController');
+
 Route::resource('/ships', 'ShipController');
 Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
 
 
+//Route for charts
+Route::resource('/reports', 'ReportController');
 
 //shipment routes
 Route::resource('/shipments', 'ShipmentController'); 

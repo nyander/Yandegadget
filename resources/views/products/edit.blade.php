@@ -39,7 +39,7 @@
                 {{-- Supplier Dropdown --}}
                 <div class="form-group">
                     <label class="label" for="date">Supplier</label>
-                    <select name="supselect" id="supplier" class="form-control input-lg dynamic" data-dependent="labSubCat" value="{{$product->supplier}}">
+                    <select name="supselect" id="supselect" class="form-control input-lg dynamic" data-dependent="labSubCat" value="{{$product->supplier}}">
                     <option value="{{$supplierid}}">{{$suppliername}}</option>
                         @foreach($suppliers as $lb)
                             <option value="{{$lb->id}}">{{$lb->name}}</option>

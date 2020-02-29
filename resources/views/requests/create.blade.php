@@ -95,12 +95,13 @@
 
 @section('extra-js')
     <script>
-        
+        document.addEventListener('DOMContentLoaded', function () {
             var select = document.getElementById('condition');
             var input = document.getElementById('charge');
             select.onchange = function() {
             input.value = select.value;
         }
+        });
         
     </script>
 @endsection

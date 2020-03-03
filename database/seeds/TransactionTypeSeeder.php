@@ -19,6 +19,7 @@ class TransactionTypeSeeder extends Seeder
         TransactionType::create(['type'=> 'Inventory', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Prepaid', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Other Current Assets ', 'explanation' => '' ]);
+        TransactionType::create(['type'=> 'Rent', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Land', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Building', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Vehicles', 'explanation' => '' ]);

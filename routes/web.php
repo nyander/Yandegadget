@@ -41,6 +41,8 @@ Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name
 
 Route::resource('/requests','ProductRequestController');
 
+Route::resource('/staffwages', 'StaffWageController');
+
 Route::resource('/conditions', 'ConditionsController');
 
 Route::resource('/categories', 'CategoriesController');
@@ -61,6 +63,8 @@ Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recie
 
 //Route for charts
 Route::resource('/reports', 'ReportController');
+
+Route::resource('/transactions', 'TransactionController');
 
 //shipment routes
 Route::resource('/shipments', 'ShipmentController'); 

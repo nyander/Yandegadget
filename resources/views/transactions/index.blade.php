@@ -2,36 +2,37 @@
 
 @section('content')
 <div class="container">
-    <a href="{{route('supplierproducts.index')}}"><button type="button" class="btn btn-primary" >View Supplier Products </button></a>
-    <div class="row justify-content-center">        
+    <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header">Suppliers</div> 
+                <div class="card-header">Transactions</div>
+                
+                
+
                 <div class="card-body">
                      {{-- Table design based from : https://getbootstrap.com/docs/4.4/content/tables/ --}}
                      <table class="table">
                         <thead class="thead-dark">
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Contact</th>
-                            <th scope="col">Email</th>                            
-                            <th scope="col"><a href="{{route('suppliers.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
+                            <th scope="col">Date</th>
+                            <th scope="col">Description</th> 
+                            <th scope="col">Amount</th>                           
+                            <th scope="col"><a href="{{route('transactions.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
                           </tr>
                         </thead>
                         <tbody>
-                        @foreach ($suppliers as $supplier)
+                        @foreach ($transactions as $transaction)
                         <tr>
-                            <th scope="row">{{$supplier->id}}</th>
-                            <td><a href="/suppliers/{{$supplier->id}}">{{$supplier->name}}</a></td>
-                            <td>{{$supplier->contact}}</td>
-                            <td>{{$supplier->email}}</td>
+                            <th scope="row">{{$transaction->id}}</th>
+                            <td>{{$transaction->date}}</td>
+                            <td>{{$transaction->description}}</td>
+                            <td>{{$transaction->amount}}</td>
                             <td>                          
                                 
-                                <a href="{{route('suppliers.edit', $supplier->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
                                 @can('manage-users')
-                                <form action="{{route('suppliers.destroy', $supplier->id)}}" method="POST" class="float-left">
+                                <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left">
                                 @csrf
                                 {{method_field('DELETE')}}
                                 <button type="submit" class="btn btn-danger">Delete</button>

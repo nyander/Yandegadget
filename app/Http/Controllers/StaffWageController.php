@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\StaffWage;
 
-class StaffPaymentController extends Controller
+class StaffWageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,8 @@ class StaffPaymentController extends Controller
      */
     public function index()
     {
-        //
+        $wages = StaffWage::all();
+        return view('staffwages.index')->with(['wages'=>$wages]);
     }
 
     /**
@@ -23,7 +25,8 @@ class StaffPaymentController extends Controller
      */
     public function create()
     {
-        //
+        $currency = '£';
+        return view('staffwages.create')->with(['currency' => $currency]);
     }
 
     /**
@@ -34,7 +37,14 @@ class StaffPaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $wages = new StaffWage;
+        $wages->startDate = request("startdate");
+        $wages->endDate = request("enddate");        
+        $wages->wage = request("wages");
+        
+        $wages->save();
+
+        return redirect('/staffwages')->with('success', 'Wage has been added');
     }
 
     /**
@@ -79,6 +89,9 @@ class StaffPaymentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $wage = StaffWage::find($id);
+        $wage->delete();
+        
+        return redirect('/staffwages')->with('success', 'Wage has been deleted');
     }
 }

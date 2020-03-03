@@ -73,8 +73,14 @@
                                   <a class="dropdown-item" href="{{ route('conditions.index') }}">
                                     Condition Management 
                                  </a> 
+                                 <a class="dropdown-item" href="{{ route('reports.index') }}">
+                                    Reports 
+                                 </a> 
                                  <a class="dropdown-item" href="{{ route('categories.index') }}">
                                     Categories Management 
+                                 </a>    
+                                 <a class="dropdown-item" href="{{ route('staffwages.index') }}">
+                                    Staff Wage Management 
                                  </a>    
                                  <a class="dropdown-item" href="{{ route('ships.index') }}">
                                     Shipped Product Management 

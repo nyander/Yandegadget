@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStaffPaymentsTable extends Migration
+class CreateStaffWagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateStaffPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('staff_payments', function (Blueprint $table) {
+        Schema::create('staff_wages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('startDate');
-            $table->unsignedDecimal('selling_Price')->nullable();
+            $table->unsignedDecimal('wage')->nullable();
             $table->date('endDate');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateStaffPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('staff_payments');
+        Schema::dropIfExists('staff_wages');
     }
 }

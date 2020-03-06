@@ -67,6 +67,7 @@ Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recie
 //mark notiication as read
 // Route::post('/markAsRead','ShipController@markAsRead')->name('markAsRead');
 
+Route::resource('/images','ImageController');
 
 //Route for charts
 Route::resource('/reports', 'ReportController');

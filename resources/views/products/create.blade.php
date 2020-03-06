@@ -88,6 +88,21 @@
                     No:  {{Form::radio('featured', 'false')}}                   
                 </div>
 
+                <div >
+                    <div class="bg-info">
+                        <div class="container">
+                            <div class="col-lg-12 col-sm-12 col-11 main-section">
+                                <h6> Upload Images</h6>
+                                
+                                <div class="form-group">
+                                    {{-- creates an input which atleast two images can be uploaded --}}
+                                    <input id="input-id" type="file" class="file" data-preview-file-type="text">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="field is-grouped">
                     <div class="control">

@@ -11429,3 +11429,11 @@ a.text-dark:focus {
   padding: 30px;
 }
 
+.main-section {
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 100px;
+  background-color: #fff;
+  box-shadow: 0px 0px 20px #C1C1C1;
+}
+

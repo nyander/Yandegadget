@@ -88,21 +88,20 @@
                     No:  {{Form::radio('featured', 'false')}}                   
                 </div>
 
-                <div >
+                {{-- <div >
                     <div class="bg-info">
                         <div class="container">
                             <div class="col-lg-12 col-sm-12 col-11 main-section">
                                 <h6> Upload Images</h6>
-                                
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <div class="form-group">
-                                    {{-- creates an input which atleast two images can be uploaded --}}
-                                    <input id="input-id" type="file" class="file" data-preview-file-type="text">
-                                    
+                                    <input type="file" id="file-1" name="file" multiple class="file" data-overwrite-initial="false"
+                                    data-min-file-count="2"> 
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 
                 <div class="field is-grouped">
                     <div class="control">

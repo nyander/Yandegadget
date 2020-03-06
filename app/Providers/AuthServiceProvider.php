@@ -59,5 +59,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-productRequest', function($user){
             return $user->hasRole(['admin', 'customer']);
         });
+
+        Gate::define('upload-edit-supplier-products', function($user){
+            return $user->hasRole(['supplier']);
+        });
+
+        Gate::define('notifications', function($user){
+            return $user->hasRole(['staff']);
+        });
     }
 }

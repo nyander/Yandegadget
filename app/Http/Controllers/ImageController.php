@@ -3,17 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Ship;
-use App\ShippedProduct;
-use App\Product;
 
-class ShipController extends Controller
+class ImageController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,8 +13,7 @@ class ShipController extends Controller
      */
     public function index()
     {
-        $ships = Ship::all();
-        return view('ships.index')->with(['ships'=> $ships]);
+        //
     }
 
     /**
@@ -54,21 +45,7 @@ class ShipController extends Controller
      */
     public function show($id)
     {
-        $ship = Ship::find($id);
-        $products1 = ShippedProduct::where('shipment_id', $ship->id)->get();
-        // $products = ShippedProduct::where('shipment_id', $ship->id)->get();
-        return view('ships.show')->with(['ship'=>$ship, 'products1'=> $products1]);
-    }
-
-    public function recieved($id){
-        // when called, it will set the specific shipment's recieved to true
-        $ship = Ship::find($id);
-        $ship->recieved = true;
-        $ship->save();
-        
-        $id1 = auth()->user()->unreadNotifications[0]->id;
-        auth()->user()->unreadNotifications->where('id', $id1)->markAsRead(); 
-        return redirect()->route('ships.index')->with('success','A Shipment has been recieved');
+        //
     }
 
     /**
@@ -104,10 +81,4 @@ class ShipController extends Controller
     {
         //
     }
-
-    // public function markAsRead(Request $r ){
-    //     auth()->user()->unreadNotifications->find($r->not_id)->markAsRead();
-    //     return back();
-    // }
-
-  }
+}

@@ -24,6 +24,7 @@
     </p>
     <hr>
     {{-- <a href="" class="button">Add To Shipment</a>   --}}
+    @if($product->ship == 0)
 
     <form action="{{route('shipments.store')}}" method="POST">
         @csrf
@@ -32,7 +33,7 @@
         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
         <button type="submit" class="button button-plain">Add To Cart</button>
     </form>
-
+   @endif
     @can('manage-products')
     <a href="/products/{{$product->id}}/edit" class="btn btn-default"> Edit </a>
     @endcan

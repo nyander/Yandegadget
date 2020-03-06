@@ -28,7 +28,8 @@
                       <a class="nav-link" href="/products">Products</a>
                       <a class="nav-link" href="/about">About Us</a>  
                       <a class="nav-link" href="/supplierproducts">Supplier Products</a> 
-                      <a class="nav-link" href="/requests/create">Request Product</a> 
+                      <a class="nav-link" href="/requests/create">Request Product</a>
+
                       <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
                         @if(Cart::instance('default')->count() > 0) 
                         <span>{{Cart::instance('default')->count()}}</span></span>    
@@ -45,7 +46,43 @@
                               </li>
                           @endif
                       @else
-                          <li class="nav-item dropdown">
+                        {{-- Notification--}}
+
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown1" cclass="nav-link dropdown-toggle" class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre> 
+                                <i class="fa fa-bell"></i>
+                                <span class="badge badge-light">{{auth()->user()->unreadNotifications -> count() }}</span>
+                            </a>                          
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                                                 
+                               
+                                  @foreach (auth()->user()->unreadNotifications as $notification)
+                                  <a class="dropdown-item card" style="background-color: lightgreen; margin-bottom:5px;" href="/ships">
+                                      
+                                        <div class="card-body">
+                                        <b >{{$notification->data['data']}}</b>
+                                        <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                    </div>                                   
+                                 </a>    
+                                 
+                                  @endforeach 
+
+                                  @foreach (auth()->user()->readNotifications as $notification)
+                                  <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="/ships">
+                                      <hr>
+                                     <b>{{$notification->data['data']}}</b>
+                                     <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                 </a>     
+                                  @endforeach
+                                  
+                                                                
+                                
+                            </div>
+                        </li>
+                        
+                        {{-- Logged in user --}}
+                        <li class="nav-item dropdown">
                               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                   {{ Auth::user()->name }} <span class="caret"></span>
                               </a>

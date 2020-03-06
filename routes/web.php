@@ -1,4 +1,8 @@
 <?php
+use App\Notifications\NewShipment;
+use App\Ship;
+use App\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +64,9 @@ Route::resource('/deposits', 'DepositsController');
 Route::resource('/ships', 'ShipController');
 Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
 
+//mark notiication as read
+// Route::post('/markAsRead','ShipController@markAsRead')->name('markAsRead');
+
 
 //Route for charts
 Route::resource('/reports', 'ReportController');
@@ -79,11 +86,15 @@ Route::get('empty', function(){
 
 
 
-
-
 // adding a prefix adds admin to the start of the URL and the name adds the admin. to the routes entered. it applies middleware so when the user logs in it checks whther it is a staff or an admin 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:manage-users')->group(function(){
     Route::resource('/users', 'UsersController',['except'=>['show','create','store']]);
     
 
 });
+
+// Route::get('markAsRead', function(){
+//     auth()->user()->unreadNotifications->markAsRead();
+//     redirect()->back();
+// })->name('markRead');
+

@@ -20,8 +20,10 @@
                             <th scope="col">Condition</th>
                             <th scope="col">Price</th>  
                             {{-- Only Suppliers can add new products --}}
+                            @can('upload-edit-supplier-products')
                             <th scope="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
-                          </tr>
+                            @endcan
+                        </tr>
                         </thead>
                         <tbody>
                         @foreach ($products as $product)
@@ -32,6 +34,7 @@
                             <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
                             <td>£ {{$product->selling_Price}}</td>
                             <td>                          
+                                @can('upload-edit-supplier-products')
                                 {{-- ONly Supplier should be able to edit Product  --}}
                                 <a href="{{route('supplierproducts.edit', $product->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
@@ -41,7 +44,7 @@
                                 {{method_field('DELETE')}}
                                 <button type="submit" class="btn btn-danger">Delete</button>
                                 </form> 
-                                
+                                @endcan
                             </td>
                         </tr>    
                         @endforeach   

@@ -7,9 +7,16 @@ use Cart;
 use App\Ship;
 use App\ShippedProduct;
 use App\ShipCompany;
+use DB;
+use App\User;
+use App\Notifications\NewShipment;
 
 class ShipmentConfirmationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +47,12 @@ class ShipmentConfirmationController extends Controller
     public function store(Request $request)
     {
         $this->addToOrdersTable($request);
+
+        $staffretrieval = DB::table('role_user')->where('role_id',2)->get();
+        foreach ($staffretrieval as $staff){
+            User::find($staff->user_id)->notify(new NewShipment);
+    
+        }
 
         //when successful it will remove the items from the cart
         Cart::instance('default')->destroy();

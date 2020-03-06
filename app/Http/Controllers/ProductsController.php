@@ -10,6 +10,7 @@ use App\Category;
 use Gate;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use App\ShippedProduct;
 
 
 class ProductsController extends Controller
@@ -149,6 +150,12 @@ class ProductsController extends Controller
         $product = Product::find($id);
         $product->recieved = true;
         $product->save();
+        
+        $recievedshipprod = ShippedProduct::where('product_id', $id)->get();
+        foreach($recievedshipprod as $prod){
+        $prod->recieved =true;
+        $prod->save(); 
+        }
         return redirect()->back()->with('success','A Product has been recieved');
     }
 

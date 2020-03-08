@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Condition;
+use App\Images;
 use App\Category;
 use Gate;
 use DB;
@@ -74,6 +75,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        
         $id = Auth::id();
         $this->validate($request,[
             'name' => 'required',
@@ -92,6 +94,43 @@ class ProductsController extends Controller
          $product->selling_Price = request("price");
          $product->featured = request("featured");
          $product->save();
+
+        if($request->hasfile('images'))
+        {
+
+            // $allowedfileExtension=['pdf','jpg','png','docx'];
+
+            // foreach ($request->file('images') as $image)
+            // {
+            //     $filename = $image->getClientOriginalName();
+            //     $extension = $image->getClientOriginalExtension();
+            //     $check = in_array($extension,$allowedfileExtension);
+
+            //     $image->move(public_path().'/gallery/'. $filename);
+                
+
+                
+            //     $photo = new Image;
+            //     $photo->product_id = $product->id;
+            //     $photo->$path = $name;
+            //     $photo->save();
+            // }
+
+            foreach($request->file('images') as $image) {
+
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $location = public_path('./publc/photos/' . $filename);
+                $image->move(public_path().'/gallery/',$filename);
+                // width - height
+                // Images::make($image)->resize(640, 480)->save($location);
+
+                $photo = new Images;
+                $photo->product_id = $product->id;
+                $photo->path = $filename;
+                $photo->save();  
+            }
+    
+        }
 
          return redirect('/products')->with('success', 'Product Uploaded');
         

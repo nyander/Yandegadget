@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createproduct" class="container">
             <h3>Upload Products</h3>
-            <form method="POST" action="/products">
+            <form method="POST" action="/products"  enctype="multipart/form-data">                >
                 @csrf
                 {{-- Product Name field--}}
                 <div class="field">
@@ -87,6 +87,11 @@
                     Yes: {{Form::radio('featured', 'true')}}
                     No:  {{Form::radio('featured', 'false')}}                   
                 </div>
+
+                <div class="form-group">
+                    <input type="file" class="form-control" name="images[]" multiple required>
+                </div>
+
 
                 {{-- <div >
                     <div class="bg-info">

@@ -32,6 +32,10 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     // public function shipmentlist(){
     //     return $this->belongsTo('App\ShipmentList');
     // }
+    public function images()
+    {
+        return $this->hasMany('App\Image');
+    }
     
 }
 

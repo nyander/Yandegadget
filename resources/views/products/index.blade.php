@@ -29,7 +29,7 @@
                 <div class="card" style="background-color: #C0D9AF; border-width: 5px; ">
                     
                     <div class="card" style=" background-color: #DCF4CC;">
-                        <img class="card-img-top" src="{{$product->image}}"> 
+                        <img src="/gallery/{{$product->thumbnail_path}}">
                         <div class="card-body">
                             <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                             <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
@@ -42,7 +42,7 @@
             <div class="card" style=" background-color: #C0D9AF; border-width: 5px;">
             
                 <div class="card" style=" ">
-                    <img class="card-img-top" src="{{$product->image}}"> 
+                    <img src="/gallery/{{$product->thumbnail_path}}"> 
                     <div class="card-body">
                         <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                         <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
@@ -53,16 +53,16 @@
             </div>
             @endif
         @elseif($product->recieved == false)
+        
         <div class="card" style=" border-width: 5px;">
         
-            <div class="card" style="">
-                <img class="card-img-top" src="{{$product->image}}"> 
-                <div class="card-body">
+            <div class="card" style="">                
+            <div class="card-body">                
+                    <img src="/gallery/{{$product->thumbnail_path}}">
                     <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                     <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
                     
                 </div>
-                
             </div>
         </div>
         @endif
@@ -100,7 +100,7 @@
         <div class="card" style="">
         
             <div class="card" style="" >
-                <img class="card-img-top" src="{{$product->image}}"> 
+                <img src="/gallery/{{$product->thumbnail_path}}">
                 <div class="card-body">
                     <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                     <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
@@ -114,7 +114,7 @@
     <div class="card" style=" ">
         
         <div class="card" style=" background-color: #DCF4CC;">
-            <img class="card-img-top" src="{{$product->image}}"> 
+            <img src="/gallery/{{$product->thumbnail_path}}">
             <div class="card-body">
                 <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                 <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
@@ -160,7 +160,7 @@
             <div class="card" style="">
             
                 <div class="card" style="">
-                    <img class="card-img-top" src="{{$product->image}}"> 
+                    <img src="/gallery/{{$product->thumbnail_path}}">
                     <div class="card-body">
                         <h5 class="title"> <a href="/products/{{$product->id}}">{{$product->name}}</a></h5>
                         <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
@@ -178,3 +178,9 @@
     {{$products->appends(request()->input())->links()}}
 @endif    
 @endsection
+<script type="text/javascript">
+    //to add more records  
+    //    document.addEventListener('DOMContentLoaded', function () {
+    //     $('.carousel').carousel();
+    //     });
+   </script>

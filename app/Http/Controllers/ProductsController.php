@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Condition;
-use App\Images;
+use App\Image;
 use App\Category;
 use Gate;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
 
 
@@ -75,7 +77,15 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if($request->hasfile('thumbnail'))
+        {
+            $thumb = $request->file('thumbnail');
+            $name = pathinfo($thumb->getClientOriginalName(), PATHINFO_FILENAME);
+            $filename =  $name.'-'.time().'.'.$thumb->getClientOriginalExtension();
+            $location = public_path('./publc/photos/' . $filename);
+            $thumb->move(public_path().'/gallery/',$filename);
+        }
+
         $id = Auth::id();
         $this->validate($request,[
             'name' => 'required',
@@ -93,38 +103,22 @@ class ProductsController extends Controller
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
          $product->featured = request("featured");
+         $product->thumbnail_path = $filename;
          $product->save();
 
         if($request->hasfile('images'))
         {
-
-            // $allowedfileExtension=['pdf','jpg','png','docx'];
-
-            // foreach ($request->file('images') as $image)
-            // {
-            //     $filename = $image->getClientOriginalName();
-            //     $extension = $image->getClientOriginalExtension();
-            //     $check = in_array($extension,$allowedfileExtension);
-
-            //     $image->move(public_path().'/gallery/'. $filename);
-                
-
-                
-            //     $photo = new Image;
-            //     $photo->product_id = $product->id;
-            //     $photo->$path = $name;
-            //     $photo->save();
-            // }
-
             foreach($request->file('images') as $image) {
 
-                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+
+                $filename =  $name.'-'.time().'.'.$image->getClientOriginalExtension();
                 $location = public_path('./publc/photos/' . $filename);
                 $image->move(public_path().'/gallery/',$filename);
                 // width - height
                 // Images::make($image)->resize(640, 480)->save($location);
 
-                $photo = new Images;
+                $photo = new Image;
                 $photo->product_id = $product->id;
                 $photo->path = $filename;
                 $photo->save();  
@@ -234,7 +228,17 @@ class ProductsController extends Controller
             return redirect(route('products.index'));
         }
         $product = Product::find($id);
+        File::delete(public_path('/gallery/'.$product->thumbnail_path));
+        
+
+        $image = DB::table('images')->where('product_id', $id)->get();
+        foreach($image as $im){            
+            File::delete(public_path('/gallery/'.$im->path));
+            $animage = Image::find($im->id);
+            $animage->delete();   
+        }
         $product->delete();
+        
 
         return redirect('/products')->with('success', 'The product has been deleted');
     }

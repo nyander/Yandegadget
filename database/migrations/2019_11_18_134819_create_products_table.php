@@ -29,7 +29,6 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('request_from')->nullable();
             $table->boolean('sold')->default(false)->nullable();
             $table->date('sold_Date')->nullable();
-            $table->unsignedBigInteger('sold_To')->nullable();
             $table->boolean('featured')->default(false);
             $table->string('thumbnail_path')->nullable();
             $table->timestamps();

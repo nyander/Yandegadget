@@ -89,6 +89,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="label" for="imagecollection"> Product Thumbnail </label>
+                    <input type="file" class="form-control" name="thumbnail" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="imagecollection"> Product Images </label>
                     <input type="file" class="form-control" name="images[]" multiple required>
                 </div>
 

@@ -16,8 +16,8 @@ class CreateConditionsTable extends Migration
         Schema::create('conditions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('details');
-            $table->mediumText('explanation');
-            $table->string('deposit');
+            $table->string('explanation');
+            $table->unsignedDecimal('deposit');
             $table->timestamps();
         });
     }

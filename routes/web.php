@@ -59,8 +59,6 @@ Route::resource('/confirmations','ShipmentConfirmationController');
 
 Route::resource('/checkouts', 'CheckoutController');
 
-Route::resource('/deposits', 'DepositsController');
-
 Route::resource('/ships', 'ShipController');
 Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
 

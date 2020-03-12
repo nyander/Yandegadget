@@ -21,14 +21,15 @@
                     <div class="control">
                         <input class="input" type="textarea" name="explanation" id="explanation" > 
                     </div>
-                </div>  
-                {{-- Condition Explanation--}}
+                </div>
+
+                {{-- Deposit field--}}
                 <div class="field">
-                    <label class="label" for="cost">Deposit</label>
+                    <label class="label" for="deposit">Deposit ({{$currency}}) </label>
                     <div class="control">
-                        <input class="input" type="number" name="deposit" id="deposit" > 
+                        <input class="input" type="number" name="deposit" id="deposit"> 
                     </div>
-                </div>   
+                </div>
 
                 <div class="field is-grouped">
                     <div class="control">

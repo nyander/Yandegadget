@@ -16,6 +16,8 @@
 
                     You are logged in as:  {{Auth::user()->name}}
                 </div>
+
+                
             </div>
         </div>
         

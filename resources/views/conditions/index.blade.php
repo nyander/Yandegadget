@@ -15,7 +15,8 @@
                         <thead class="thead-dark">
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>                            
+                            <th scope="col">Name</th>
+                            <th scope="col">Deposit</th>                            
                             <th scope="col"><a href="{{route('conditions.create')}}"><button type="button" class="btn btn-primary float-left" >Add Condition</button></a></th>                            
                           </tr>
                         </thead>
@@ -24,6 +25,7 @@
                         <tr>
                             <th scope="row">{{$condition->id}}</th>
                             <td>{{$condition->details}}</td>
+                            <td>{{$currency}} {{$condition->deposit}}</td>
                             <td>                          
                                 
                                 <a href="{{route('conditions.edit', $condition->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>

@@ -24,7 +24,8 @@ class ConditionsController extends Controller
     {
         // $conditions = Condition::OrderBy('created_at', 'desc');
         $conditions = Condition::all();
-        return view('conditions.index')->with('conditions', $conditions);
+        $currency = '£';
+        return view('conditions.index')->with(['conditions' => $conditions, 'currency' => $currency]);
     }
 
     /**
@@ -34,7 +35,8 @@ class ConditionsController extends Controller
      */
     public function create()
     {
-        return view('conditions.create');
+        $currency = '£';
+        return view('conditions.create')->with(['currency' => $currency]);
     }
 
     /**
@@ -80,8 +82,9 @@ class ConditionsController extends Controller
      */
     public function edit($id)
     {
+        $currency = '£';
         $condition = Condition::find($id);
-        return view('conditions.edit')->with('condition',$condition);
+        return view('conditions.edit')->with(['condition' => $condition, 'currency' => $currency]);
     }
 
     /**

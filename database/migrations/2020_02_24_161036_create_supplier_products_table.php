@@ -15,8 +15,7 @@ class CreateSupplierProductsTable extends Migration
     {
         Schema::create('supplier_products', function (Blueprint $table) {
             $table->bigIncrements('id');            
-            $table->unsignedBigInteger('supplier_id')->nullable();
-            $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->unsignedBigInteger('supplier_id')->nullable();            
             $table->string('name')->nullable();
             $table->unsignedBigInteger('type')->nullable();
             $table->unsignedBigInteger('condition')->nullable();

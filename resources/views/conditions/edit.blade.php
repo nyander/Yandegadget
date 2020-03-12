@@ -24,6 +24,14 @@
                     </div>
                 </div>    
 
+                {{-- Deposit field--}}
+                <div class="field">
+                    <label class="label" for="deposit">Deposit ({{$currency}}) </label>
+                    <div class="control">
+                        <input class="input" type="number" name="deposit" id="deposit" value="{{$condition->deposit}}"> 
+                    </div>
+                </div>
+
                 <div class="field is-grouped">
                     <div class="control">
                         <button class="button is-link" type="submit">Submit</button>

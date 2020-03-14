@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Supplier;
+use Auth;
+use DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $suppliers = DB::table('suppliers')->where('supplier_id', Auth::user()->id)->value('id');
+        //this is to check whether the current user's ID does not exist in the table. 
+        $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
+        return view('home')->with(['suppliers' => $suppliers, 'checker' => $checker]);
     }
 }

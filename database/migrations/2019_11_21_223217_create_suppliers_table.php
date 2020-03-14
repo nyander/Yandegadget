@@ -18,7 +18,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('contact');
-            $table->string('email');
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->timestamps();
         });
     }

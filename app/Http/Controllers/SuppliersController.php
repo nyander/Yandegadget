@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Supplier;
 use Gate;
+use Auth;
+use DB;
 
 class SuppliersController extends Controller
 {
@@ -33,10 +35,17 @@ class SuppliersController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('manage-suppliers')){
-            return redirect(route('products.index'));
-        }
-        return view('suppliers.create');
+        
+        // if(Gate::denies('manage-suppliers')){
+        //     return redirect(route('products.index'));
+        // }
+        $suppliersrole = DB::table('role_user')->where('user_id',4)->get();
+        //this will check if the current user is a supplier or not
+        $userIsSupplier =    DB::table('role_user')->where('user_id',Auth::user()->id)->where('role_id', 4)->exists();
+         $currentUserid  =  DB::table('users')->where('id', Auth::user()->id)->value('id');
+        $currentUsername  =  DB::table('users')->where('id', Auth::user()->id)->value('name');
+         
+        return view('suppliers.create')->with(['suppliersrole'=>$suppliersrole, 'userIsSupplier' => $userIsSupplier, 'currentUserid' => $currentUserid, 'currentUsername' => $currentUsername ]);
     }
 
     /**
@@ -51,17 +60,22 @@ class SuppliersController extends Controller
             'name' => 'required',
             'address' => 'required',            
             'contact' => 'required',
-            'email' => 'required'
         ]);
+
+        
 
         $supplier = new Supplier;
         $supplier->name = request("name");
         $supplier->address = request("address");
         $supplier->contact = request("contact");
-        $supplier->email = request("email");
+        $supplier->supplier_id = request("supplier_id");
         $supplier->save();
-        
-        return redirect('/suppliers')->with('success', 'Supplier has been added');
+        if(Gate::denies('manage-suppliers')){
+            return redirect(route('home'));
+        }
+        else {
+            return redirect('/suppliers')->with('success', 'Supplier has been added');
+        }
     }
 
     /**
@@ -88,11 +102,21 @@ class SuppliersController extends Controller
      */
     public function edit($id)
     {
-        if(Gate::denies('manage-suppliers')){
-            return redirect(route('products.index'));
-        }
+        // if(Gate::denies('manage-suppliers')){
+        //     return redirect(route('products.index'));
+        // }
+        $suppliersrole = DB::table('role_user')->where('user_id',4)->get();
+        //this will check if the current user is a supplier or not
+        $userIsSupplier =    DB::table('role_user')->where('user_id',Auth::user()->id)->where('role_id', 4)->exists();
+        $currentUserid  =  DB::table('users')->where('id', Auth::user()->id)->value('id');
+        $currentUsername  =  DB::table('users')->where('id', Auth::user()->id)->value('name');
         $supplier = Supplier::find($id);
-        return view('suppliers.edit')->with('supplier',$supplier);
+        $user_supplierid = DB::table('users')->where('id',$supplier->supplier_id)->value('id');
+        $user_suppliername = DB::table('users')->where('id',$supplier->supplier_id)->value('name');
+        return view('suppliers.edit')->with(['supplier' => $supplier, 'suppliersrole'=>$suppliersrole, 'userIsSupplier' => $userIsSupplier, 'currentUserid' => $currentUserid
+                                            , 'currentUsername' => $currentUsername
+                                            , 'user_supplierid' => $user_supplierid
+                                            , 'user_suppliername' => $user_suppliername ]);
     }
 
     /**
@@ -108,10 +132,15 @@ class SuppliersController extends Controller
         $supplier->name = request("name");
         $supplier->address = request("address");
         $supplier->contact = request("contact");
-        $supplier->email = request("email");
+        $supplier->supplier_id = request("supplier_id");
         $supplier->save();
         
+        if(Gate::denies('manage-suppliers')){
+            return redirect(route('home'))->with('success', 'Your Details has been updated');
+        }
+        else {
         return redirect('/suppliers')->with('success', 'Supplier has been updated');
+        }
     }
 
     /**

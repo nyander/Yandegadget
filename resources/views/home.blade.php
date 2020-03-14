@@ -16,7 +16,13 @@
 
                     You are logged in as:  {{Auth::user()->name}}
                 </div>
-
+                @can('supplier-role')
+                    @if ($checker)
+                        <a href="{{ route('suppliers.create') }}"> <button class="btn btn-success" type="submit">Add Details</button> </a>
+                    @else 
+                    <a href="{{route('suppliers.edit', $suppliers)}}"> <button class="btn btn-success" type="submit">Manage Details</button> </a>
+                    @endif
+                @endcan
                 
             </div>
         </div>

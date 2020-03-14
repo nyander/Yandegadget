@@ -15,15 +15,12 @@ class SupplierTableSeeder extends Seeder
         Supplier::truncate();
         Supplier::create(['name' => 'Supplier 1',
                           'address' => 'Address road 1',
-                          'contact' => '123456',
-                          'email' => 'supplier1@supplier1.com',]); 
+                          'contact' => '123456',]); 
         Supplier::create(['name' => 'Supplier 2',
                           'address' => 'Address road 2',
-                          'contact' => '123456',
-                          'email' => 'supplier2@supplier2.com',]);                                
+                          'contact' => '123456',]);                                
         Supplier::create(['name' => 'Supplier 3',
                           'address' => 'Address road 3',
-                          'contact' => '123456',
-                          'email' => 'supplier3@supplier3.com',]);  
+                          'contact' => '123456',]);  
                         }
 }

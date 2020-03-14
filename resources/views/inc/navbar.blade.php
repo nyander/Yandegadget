@@ -93,6 +93,9 @@
                                                    document.getElementById('logout-form').submit();">
                                       {{ __('Logout') }}
                                   </a>
+                                  <a class="dropdown-item" href="{{route('home')}}">
+                                    Dashboard
+                                </a>
                                   <a class="dropdown-item" href="{{route('products.create')}}">
                                     Upload Product
                                 </a>

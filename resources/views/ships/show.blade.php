@@ -9,7 +9,8 @@
         <p>Date of Shipment: {{$ship->shipment_date}} 
         <p>Cost of Shipment: {{$ship->shipment_cost}}</p>    
         <p>Extra Information: {{$ship->shipment_notes}}</p>
-        <p>Shipment Recieved? : {{$ship->shipment_notes}}</p>
+        <p>Shipment Recieved? : {{$ship->recieved}}</p>
+        
         <br>
     </div>
 

@@ -58,9 +58,97 @@
                 {{-- this is will return the value and saves the content in its state --}}      
                 @yield('content')
                 
-            </div>       
+            </div> 
+            @yield('index')      
 
     </div>
     @yield('extra-js')
+
+    <br>
+    <br>
+    <!-- Footer -->
+    <footer class="page-footer font-small blue pt-4 ">
+        <div class="container">
+            <!-- Footer Links -->
+            <div class="container-fluid text-center text-md-left">
+    
+                <!-- Grid row -->
+                <div class="row">
+    
+                    <!-- Grid column -->
+                    <div class="col-md-6 mt-md-0 mt-3">
+    
+                        <!-- Content -->
+                        <h5 class="text-uppercase text-light">Yande Gadgets</h5>
+                        <p class="text-light">Here you can use rows and columns to organize your footer content.</p>
+    
+                    </div>
+                    <!-- Grid column -->
+    
+                    <hr class="clearfix w-100 d-md-none pb-3">
+    
+                    <!-- Grid column -->
+                    <div class="col-md-3 mb-md-0 mb-3">
+    
+                        <!-- Links -->
+                        <h5 class="text-uppercase text-light">Links</h5>
+    
+                        <ul class="list-unstyled text-light">
+                            <li>
+                                <a href="#!" class="text-light">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-light">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!"class="text-light">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-light">Link 4</a>
+                            </li>
+                        </ul>
+    
+                    </div>
+                    <!-- Grid column -->
+    
+                    <!-- Grid column -->
+                    <div class="col-md-3 mb-md-0 mb-3">
+    
+                        <!-- Links -->
+                        <h5 class="text-uppercase text-light" >Links</h5>
+    
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#!" class="text-light">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-light">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-light">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-light">Link 4</a>
+                            </li>
+                        </ul>
+    
+                    </div>
+                    <!-- Grid column -->
+    
+                </div>
+                <!-- Grid row -->
+    
+            </div>
+            <!-- Footer Links -->
+    
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3 text-light">© 2020 Copyright:
+                <a class="text-light" href="https://github.com/nyander/Yandegadget/"> Richard Nyande</a>
+            </div>
+            <!-- Copyright -->
+        </div>
+    </footer>
+  <!-- Footer -->
+
 </body>
 </html>

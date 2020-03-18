@@ -101,4 +101,63 @@
     box-shadow: 0px 0px 20px #C1C1C1;
   }
 
+  .brand_logo{
+    height: 50px;
+    width: auto;
+  }
   
+  .header-banner{    
+    background: linear-gradient(0deg, rgba(64,64,64, 0.6), rgba(64,64,64, 0.6)),url("/images/view-of-vintage-camera-325153.jpg");
+    text-align: center!important;
+    padding: 15rem 2rem;
+    background-size: cover;
+    background-position: initial;
+    min-height:100%;
+  }
+
+  .index-title,
+  .index-subtitle {
+    color: white;
+  }
+  
+  
+  .mb-4,
+  .box-shadow{
+    padding:13rem 0.5rem 1rem 0.5rem; 
+  }
+
+
+  #phones{
+    padding:15rem 0.5rem 1rem 0.5rem; 
+    background: linear-gradient(0deg, rgba(64,64,64, 0.7), rgba(64,64,64, 0.7)),url("/images/index_phone.jpeg");
+    background-size: cover;
+    background-position: initial;
+  }
+
+  #tvaudio{
+    padding:15rem 0.5rem 1rem 0.5rem; 
+    background: linear-gradient(0deg, rgba(64,64,64, 0.7), rgba(64,64,64, 0.7)),url("/images/Samsung-QLED.png");
+    background-size: cover;
+    background-position: center;
+  }
+
+  #computer{
+    padding:15rem 0.5rem 1rem 0.5rem; 
+    background: linear-gradient(0deg, rgba(64,64,64, 0.7), rgba(64,64,64, 0.7)),url("/images/idnex_Laptop.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+
+
+  .index,
+  .card-text{
+    color:white;
+  }
+
+  html,body{
+    height: 100%;
+}
+
+footer{
+  background-color: green;
+}

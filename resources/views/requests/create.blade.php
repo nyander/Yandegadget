@@ -47,29 +47,7 @@
                             @endforeach
                         </select>
                         £<input type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
-                    </div> 
-                    
-                {{-- Condititon Dropdown
-                <div class="form-group">
-                    <label class="label" for="date">Condition</label>
-                    <select name="condition" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
-                    <option value="{{$conditions}}">Select Condition</option>
-                        @foreach($conditions as $cn)
-                            <option value="{{$cn->id}}">{{$cn->details}}</option>
-                        @endforeach
-                    </select>
-                </div>     
-                
-                {{-- Price
-                <div class="field">                    
-                    <div class="control">
-                        
-                        <span>Deposit:</span><input class="input" type="text" name="charge" id="charge" value="50" readonly>
-                    
-                    </div>
-                </div>                 --}}
-
-                
+                    </div>               
 
                 
 
@@ -85,6 +63,7 @@
                                 <a href="{{route('products.index')}}" class="button btn-secondary" type="button">Back To Products </a>
                             </div>
                                               
+                        </div>
                     </div>
                 </div>                                
             </form>

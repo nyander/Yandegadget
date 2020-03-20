@@ -4,7 +4,6 @@
 {{--inside the @section is what will be added in the app file, basically content to be added to your template--}}
 @section('index')
 {{-- $title is the variable name in which the Postcontroller will replace with the variable $tite - so this title will be variable in the postcontroller    --}}
-
     <div class="header-banner">
         <h1 class="index-title">{{$title}}</h1>
         <p class="index-subtitle"> I can now conirm that you are connected to the index page hello serve</p> 
@@ -76,6 +75,7 @@
               </div>
             </div>
         </div>
+      </div>
     </div>
 
 

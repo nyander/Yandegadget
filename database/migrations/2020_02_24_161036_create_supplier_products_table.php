@@ -23,6 +23,7 @@ class CreateSupplierProductsTable extends Migration
             $table->unsignedDecimal('selling_Price')->nullable();
             $table->boolean('interested');
             $table->boolean('purchased');
+            $table->string('thumbnail_path')->nullable();
             $table->timestamps();
         });
     }

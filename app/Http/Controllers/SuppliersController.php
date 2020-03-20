@@ -21,9 +21,9 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('manage-suppliers')){
-            return redirect(route('products.index'));
-        }
+        // if(Gate::denies('manage-suppliers')){
+        //     return redirect(route('products.index'));
+        // }
         $suppliers = Supplier::all();
         return view('suppliers.index')->with('suppliers', $suppliers);
     }
@@ -87,9 +87,9 @@ class SuppliersController extends Controller
     public function show($id)
     {
         
-        if(Gate::denies('manage-suppliers')){
-            return redirect(route('products.index'));
-        }
+        // if(Gate::denies('manage-suppliers')){
+        //     return redirect(route('products.index'));
+        // }
         $supplier = Supplier::find($id);
         return view('suppliers.show')->with(['supplier'=> $supplier]);
     }

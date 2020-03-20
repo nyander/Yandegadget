@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createproduct" class="container">
             <h3>Upload Products</h3>
-            <form method="POST" action="/supplierproducts">
+            <form method="POST" action="/supplierproducts" enctype="multipart/form-data">
                 @csrf
                 {{-- Product Name field--}}
                 <div class="field">
@@ -54,6 +54,16 @@
                     <div class="control">
                         <input class="input" type="number" name="price" id="price"> 
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="imagecollection"> Product Thumbnail </label>
+                    <input type="file" class="form-control" name="thumbnail" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="imagecollection"> Product Images </label>
+                    <input type="file" class="form-control" name="images[]" multiple required>
                 </div>
                 
 

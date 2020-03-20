@@ -39,7 +39,10 @@ class TransactionTypeSeeder extends Seeder
         TransactionType::create(['type'=> 'Treasury Stock', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Common Stock', 'explanation' => '' ]);
         TransactionType::create(['type'=> 'Other Shareholder Equity', 'explanation' => '' ]);
-        
+        TransactionType::create(['type'=> 'Other Income', 'explanation' => '' ]);
+        TransactionType::create(['type'=> 'Income before Provision for income taxes', 'explanation' => '' ]);
+        TransactionType::create(['type'=> 'Provision for Income taxes', 'explanation' => '' ]);
+
 
 
     }

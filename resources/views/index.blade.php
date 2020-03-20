@@ -37,10 +37,10 @@
 
           <div class="row">
             <div class="col-md-4">
-              <div class="card mb-4 box-shadow" id="phones">                             
-                <div class="card-body">
-                  <h5 class="index card-text">Phones</h5>  
-                  <p class="index card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="card mb-4 box-shadow pt-5" id="phones">                             
+                <div class="card-body pt-5">
+                  <h5 class="index card-text text-light">Phones</h5>  
+                  <p class="index card-text text-light">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-danger">View</button>
@@ -50,10 +50,10 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="card mb-4 box-shadow" id="tvaudio">
-                <div class="card-body">
-                  <h5 class="index card-text">TV & Audio</h5>  
-                  <p class="index card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="card mb-4 box-shadow pt-5" id="tvaudio">
+                <div class="card-body pt-5">
+                  <h5 class="index card-text text-light">TV & Audio</h5>  
+                  <p class="index card-text text-light">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-danger">View</button>
@@ -63,10 +63,10 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="card mb-4 box-shadow" id="computer">                
-                <div class="card-body">
-                  <h5 class="index card-text">Computer</h5> 
-                  <p class="index card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="card mb-4 box-shadow pt-5" id="computer">                
+                <div class="card-body pt-5">
+                  <h5 class="index card-text text-light">Computer</h5> 
+                  <p class="index card-text text-light">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-danger">View</button>

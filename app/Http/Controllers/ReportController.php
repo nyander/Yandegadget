@@ -207,6 +207,17 @@ class ReportController extends Controller
             
             //total assets
             $assets_total = ($retained_earnings + $stock);
+
+
+            //Income Statement
+            $product_cost = Product::where('sold', true)->where('sold_Date','>=', $startdate )->where('sold_Date','<=', $enddate)->sum('cost');
+            $gross_profit = $retained_earnings - $product_cost;
+            $totalexpenses = $delivery_charge + $sum + $account_payable + $rent + $overdrafts + $currentLeasePayaple + $customerRepayment;
+            $other_Income = Transaction::where('type',26)->where('date','>=', $startdate )->where('date','<=', $enddate)->sum('amount');
+            $income_provision = Transaction::where('type',27)->where('date','>=', $startdate )->where('date','<=', $enddate)->sum('amount');
+            $provision_for_income_taxes = Transaction::where('type',28)->where('date','>=', $startdate )->where('date','<=', $enddate)->sum('amount');
+            $totalotherincome = $other_Income + $income_provision + $provision_for_income_taxes;
+
             $categories = Category::all();  
         return view('reports.show')->with(compact('startdate','enddate','categories','sold_products_category_1',
                                                     'sold_products_category_2','sold_products_category_3',
@@ -219,7 +230,9 @@ class ReportController extends Controller
                                                     ,'othercurrentassets','land','building','vehicles'
                                                     ,'machinery','computer','otherfixedassets','account_payable','rent','delivery_charge','overdrafts', 
                                                     'currentLeasePayaple','customerRepayment','otherCurrentLiabilities','sum','longTermDepts','pensionFundLiability','totalassets',
-                                                    'prefferedTaxedLiability','otherLongTermLiability','totalliability','retained_earnings','treausryStock','commonStock','otherShareholderEquity','totalequity','totalequityliability'));
+                                                    'prefferedTaxedLiability','otherLongTermLiability','totalliability','retained_earnings','treausryStock','commonStock','otherShareholderEquity','totalequity','totalequityliability',
+                                                    'gross_profit','product_cost','totalexpenses','other_Income', 'income_provision', 'provision_for_income_taxes',
+                                                    'totalotherincome'));
     }
 
     /**

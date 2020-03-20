@@ -112,6 +112,67 @@
         </div>
     </div>
 
+    <div class="card" id="balanceSheet">
+        <h4> Income Statement for the Period: {{$startdate}} to {{$enddate}} </h4>
+            <div class="income_statement">
+                <div class="salesRevenue">
+                    <h6>Sales Revenue</h6>
+                    <span class="leftstatment"> Net sales</span> <span class="rightstatment">£ {{$retained_earnings}}</span>
+                    <br>
+                    <span class="leftstatment"> Cost of Goods </span> <span class="rightstatment">£ {{$product_cost}}</span>
+                    <br>
+                    <hr>
+                    <span class="leftstatment"> Gross Profit</b> <span class="rightstatment">£ {{$gross_profit}}</span>
+                    
+                </div>
+                <hr>  
+                <br> 
+                <div class="operatingExpenses">
+                    <h6>Operating Expenses</h6>
+                    <span class="leftstatment"> Delivery Charges </span> <span class="rightstatment">£ {{$delivery_charge}}</span>
+                    <br>
+                    <span class="leftstatment"> Staff Payable (wages) </span> <span class="rightstatment">£ {{$sum}}</span>
+                    <br>
+                    <span class="leftstatment"> Account Payable </span> <span class="rightstatment">£ {{$account_payable}}</span>
+                    <br>
+                    <span class="leftstatment"> Rent </span> <span class="rightstatment">£ {{$rent}}</span>
+                    <br>
+                    <span class="leftstatment"> Overdrafts </span> <span class="rightstatment">£ {{$overdrafts}}</span>
+                    <br>
+                    <span class="leftstatment"> Current Lease Payable </span> <span class="rightstatment">£ {{$currentLeasePayaple}}</span>
+                    <br>
+                    <span class="leftstatment"> Customer Repayment </span> <span class="rightstatment">£ {{$customerRepayment}}</span>
+                    <br>
+                    <hr>
+                    <span class="leftstatment"> Total Operation Expenses </span> <span class="rightstatment">£ {{$totalexpenses}}</span>
+                    <hr> 
+                    <div class="grossprofit">
+                        <b class="leftstatment"> Operating Income</b> <span class="rightstatment">£ {{$gross_profit - $totalexpenses}}</span>
+                        <br>
+                    </div>
+                </div>
+                <hr>
+                <br> 
+                <div class="operatingExpenses">
+                    <h6>Other Revenue & Expenses </h6>
+                    <span class="leftstatment"> Other Income </span> <span class="rightstatment">£ {{$other_Income}}</span>
+                    <br>
+                    <span class="leftstatment"> Income before provision for income taxes  </span> <span class="rightstatment">£ {{$income_provision}}</span>
+                    <br>
+                    <span class="leftstatment"> Provision for income taxes </span> <span class="rightstatment">£ {{$provision_for_income_taxes}}</span>
+                    <br>                    
+                    <hr>
+                    <span class="leftstatment"> Total </span> <span class="rightstatment">£ {{$totalotherincome}}</span>
+                    <hr>                   
+                    <br>
+                    <div class="grossprofit">
+                        <b class="leftstatment"> Net Income</b> <span class="rightstatment">£ {{$gross_profit - $totalexpenses - $totalotherincome}}</span>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <div id="chartContainer" style="height: 370px; width: 100%;"></div>
     <br>
     <div id="chartContainer1" style="height: 370px; width: 100%;"></div>

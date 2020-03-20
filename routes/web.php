@@ -42,6 +42,7 @@ Route::resource('/products', 'ProductsController');
 Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
 Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
 Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name('products.purchaseupdate');
+Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupproduct')->name('products.storesupproduct');
 Route::resource('/images', 'ImageController');
 Route::resource('/requests','ProductRequestController');
 

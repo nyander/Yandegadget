@@ -5,10 +5,11 @@
     <div id="wrapper">
         <div id="updateproduct" class="container">
             <h3>Upload Products</h3>
-            <form method="POST" action="/supplierproducts/{{$product->id}}">
+            <form method="POST" action="/supplierproducts/{{$product->id}}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 {{-- Product Name field--}}
+                
                 <div class="field">
                     <label class="label" for="name">Product Name</label>
                     <div class="control">

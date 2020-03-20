@@ -20,8 +20,7 @@ class CreateSupplierProductsTable extends Migration
             $table->unsignedBigInteger('type')->nullable();
             $table->unsignedBigInteger('condition')->nullable();
             $table->string('condition_Notes')->nullable();
-            $table->unsignedDecimal('selling_Price')->nullable();
-            $table->boolean('interested');
+            $table->unsignedDecimal('selling_Price')->nullable();            
             $table->boolean('purchased');
             $table->string('thumbnail_path')->nullable();
             $table->timestamps();

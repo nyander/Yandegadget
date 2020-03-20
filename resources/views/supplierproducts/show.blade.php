@@ -45,17 +45,13 @@
            
     </p>
     <hr>
-
-    @can('manage-products')
     <a href="/supplierproducts/{{$product->id}}/edit" class="btn btn-default"> Edit </a>
-    @endcan
     
-    @can('manage-products')
-{!!Form::open(['action' => ['SupplierProductController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!}
-    {{Form::hidden('_method', 'DELETE')}}
-    {{Form::submit('Delete',['class' => 'btn btn-danger '])}}
-{!!Form::close() !!}
-    @endcan
+    
+        {!!Form::open(['action' => ['SupplierProductController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!}
+            {{Form::hidden('_method', 'DELETE')}}
+            {{Form::submit('Delete',['class' => 'btn btn-danger '])}}
+        {!!Form::close() !!}    
 
     
 </div> 

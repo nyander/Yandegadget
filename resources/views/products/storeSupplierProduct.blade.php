@@ -4,14 +4,14 @@
     
     <div id="wrapper">
         <div id="createproduct" class="container">
-            <h3>Upload Products</h3>
+            <h3>Store Products</h3>
             <form method="POST" action="/products"  enctype="multipart/form-data">       
                 @csrf
                 {{-- Product Name field--}}
                 <div class="field">
                     <label class="label" for="name">Product Name</label>
                     <div class="control">
-                        <input class="input" type="text" name="name" id="name"> 
+                    <input class="input" type="text" name="name" id="name" value="{{$product->name}}"> 
                     </div>
                 </div>    
 
@@ -19,7 +19,7 @@
                 <div class="field">
                     <label class="label" for="cost">Cost ({{$currency}})</label>
                     <div class="control">
-                       <input class="input" type="number" name="cost" id="cost"> 
+                        <input class="input" type="number" name="cost" id="cost" value="{{$product->selling_Price}}"> 
                     </div>
                 </div>    
 
@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label class="label" for="date">Product Type</label>
                     <select name="catselect" id="category" class="form-control input-lg dynamic" data-dependent="labSubCat">
-                        <option value="{{$categories}}">Select Type</option>
+                        <option value="{{$product->type}}">{{$categoriesname}}</option>
                             @foreach($categories as $ct)
                                 <option value="{{$ct->id}}">{{$ct->type}}</option>
                             @endforeach
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label class="label" for="date">Supplier</label>
                     <select name="supselect" id="supplier" class="form-control input-lg dynamic" data-dependent="labSubCat">
-                    <option value="{{$suppliers}}">Select Suppliers</option>
+                    <option value="{{$product->supplier_id}}">{{$suppliername}}</option>
                         @foreach($suppliers as $lb)
                             <option value="{{$lb->id}}">{{$lb->name}}</option>
                         @endforeach
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label class="label" for="date">Condition</label>
                     <select name="conselect" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
-                    <option value="{{$conditions}}">Select Condition</option>
+                    <option value="{{$product->condition}}">{{$conditionname}}</option>
                         @foreach($conditions as $cn)
                             <option value="{{$cn->id}}">{{$cn->details}}</option>
                         @endforeach
@@ -69,7 +69,7 @@
                 <div class="field">
                     <label class="label" for="condition_Notes">Condition Notes</label>
                     <div class="control">
-                        <textarea class="textarea" name="condition_Notes" id="condition_Notes"></textarea> 
+                        <textarea class="textarea" name="condition_Notes" id="condition_Notes">{{$product->condition_Notes}}</textarea> 
                     </div>
                 </div>
 
@@ -97,22 +97,6 @@
                     <label class="label" for="imagecollection"> Product Images </label>
                     <input type="file" class="form-control" name="images[]" multiple required>
                 </div>
-
-
-                {{-- <div >
-                    <div class="bg-info">
-                        <div class="container">
-                            <div class="col-lg-12 col-sm-12 col-11 main-section">
-                                <h6> Upload Images</h6>
-                                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                <div class="form-group">
-                                    <input type="file" id="file-1" name="file" multiple class="file" data-overwrite-initial="false"
-                                    data-min-file-count="2"> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 
                 <div class="field is-grouped">
                     <div class="control">

@@ -74,7 +74,6 @@ class SupplierProductController extends Controller
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
-         $product->interested = false;
          $product->purchased = false; 
          $product->thumbnail_path = $filename;        
          $product->save();
@@ -161,14 +160,12 @@ class SupplierProductController extends Controller
             'name' => 'required',            
         ]);
 
-         $product = SupplierProduct::find($id) ;
-         $product->supplier_id = $id;    
+         $product = SupplierProduct::find($id);         
          $product->name = request("name");              
          $product->type = request("catselect");         
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
-         $product->selling_Price = request("price");
-         $product->interested = false;
+         $product->selling_Price = request("price");         
          $product->purchased = false;         
          $product->save();
 

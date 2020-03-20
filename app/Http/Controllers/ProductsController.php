@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
+use App\SupplierProduct;
 use App\Condition;
 use App\Image;
 use App\Category;
@@ -243,6 +244,7 @@ class ProductsController extends Controller
         return redirect('/products')->with('success', 'The product has been deleted');
     }
 
+
     public function purchase($id){
         // when called, it will set the specific shipment's recieved to true
         $product = Product::find($id); 
@@ -258,5 +260,22 @@ class ProductsController extends Controller
          $product->save();
 
          return redirect('/products')->with('success', 'Product Purchased');
+    }
+
+    public function storesupproduct($id)
+    {
+        $product = SupplierProduct::find($id);
+        $product->purchased = true;
+        $suppliers = DB::table('suppliers')->select('id','name')->get();
+        $conditions = DB::table('conditions')->select('id','details')->get();
+        $categories = DB::table('categories')->select('id','type')->get();
+        $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
+        $suppliername = DB::table('suppliers')->where('id', $product->supplier_id)->value('name');
+        $conditionname = DB::table('conditions')->where('id',$product->condition)->value('details');
+        $currency = '£';
+        return view('products.storeSupplierProduct')->with(['product'=>$product, 'suppliers'=>$suppliers, 
+                                                            'conditions'=> $conditions, 'categories'=> $categories, 
+                                                            'currency' => $currency, 'categoriesname'=> $categoriesname,
+                                                            'suppliername' => $suppliername, 'conditionname' => $conditionname]);
     }
 }

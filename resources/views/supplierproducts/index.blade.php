@@ -14,6 +14,7 @@
                         <thead class="thead-dark">
                           <tr>
                             <th scope="col">#</th>
+                            <th></th>
                             <th scope="col">Product Name </th>
                             <th scope="col">Type</th>
                             <th scope="col">Condition</th>
@@ -22,13 +23,30 @@
                             @can('upload-edit-supplier-products')
                             <th scope="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
                             @endcan
+                            @can('manage-products')
+                            <th>Manage  </th> 
+                            @endcan
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($products as $product)
-                        <tr>
-                            <th scope="row">{{$product->id}}</th>
-                            <td><a href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
+                        @if($product->purchased == true)
+                        <tr class="bg-secondary text-white">
+                            <th class="text-white" scope="row">{{$product->id}}</th>
+                            <td ><a class="text-white" href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
+                            <td ><a class="text-white" href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
+                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                            <td>£ {{$product->selling_Price}}</td>
+                            <td>                          
+                                <b>Purchased</b>
+                            </td>
+                        </tr>    
+                        @else
+                        <tr >
+                            <th  scope="row">{{$product->id}}</th>
+                            <td ><a  href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
+                            <td ><a  href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
                             <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
                             <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
                             <td>£ {{$product->selling_Price}}</td>
@@ -44,8 +62,13 @@
                                 <button type="submit" class="btn btn-danger">Delete</button>
                                 </form> 
                                 @endcan
+
+                                @can('manage-products')
+                                    <a href="{{route('products.storesupproduct', $product->id)}}"><button type="button" class="btn btn-primary float-left">Purchased</button></a>
+                                @endcan
                             </td>
                         </tr>    
+                        @endif
                         @endforeach   
                                                
                         </tbody>

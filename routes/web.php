@@ -32,6 +32,9 @@ Route::get('/welcome', function () {
 //authentication related
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/products/markAsRead', 'ProductsController@markAsRead')->name('markAsRead'); 
+
+
 Route::resource('/supplierproducts', 'SupplierProductController');
 
 Route::resource('/products', 'ProductsController');
@@ -88,11 +91,7 @@ Route::get('empty', function(){
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:manage-users')->group(function(){
     Route::resource('/users', 'UsersController',['except'=>['show','create','store']]);
     
-
 });
 
-// Route::get('markAsRead', function(){
-//     auth()->user()->unreadNotifications->markAsRead();
-//     redirect()->back();
-// })->name('markRead');
+
 

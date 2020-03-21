@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ProductAcquired extends Notification
+class NewRequestedProduct extends Notification
 {
     use Queueable;
 
@@ -55,7 +55,7 @@ class ProductAcquired extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A Product you have requested has be acquired. Head to Requested Products',
+            'data' => 'A user has made a requested for a product. View Now'
         ];
     }
 }

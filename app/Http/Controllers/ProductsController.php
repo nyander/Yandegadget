@@ -303,4 +303,9 @@ class ProductsController extends Controller
                                                             'currency' => $currency, 'categoriesname'=> $categoriesname,
                                                              'conditionname' => $conditionname, 'requestedname'=> $requestedname]);
     }
+
+    public function markAsRead(){
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back();
+    }
 }

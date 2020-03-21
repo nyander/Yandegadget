@@ -31,4 +31,6 @@ class HomeController extends Controller
         $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
         return view('home')->with(['suppliers' => $suppliers, 'checker' => $checker]);
     }
+
+    
 }

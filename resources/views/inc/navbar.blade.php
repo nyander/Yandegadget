@@ -80,7 +80,7 @@
                                     @endforeach
 
                                 @else                                                                                   
-                                        <a class="dropdown-item bg-primary text-light"  href="">
+                                        <a class="dropdown-item bg-primary text-light"  href="/products/markAsRead">
                                             <p>Mark all as Read</p>                                                                              
                                         </a>      
                                 
@@ -96,8 +96,7 @@
                                     @endforeach 
 
                                     @foreach (auth()->user()->readNotifications as $notification)
-                                        <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="">
-                                            <hr>
+                                        <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="">                                            
                                             <b>{{$notification->data['data']}}</b>
                                             <p>{{$notification->created_at->diffForHumans()}}</p> 
                                         </a>     

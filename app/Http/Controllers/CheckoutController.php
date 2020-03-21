@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Cart;
 use Stripe;
 use DB;
+use App\User;
 use Illuminate\Http\Request;
 use App\ProductRequest;
 use Cartalyst\Stripe\Exception\CardErrorException;	
+use App\Notifications\NewRequestedProduct;
 
 class CheckoutController extends Controller
 {
@@ -115,7 +117,12 @@ class CheckoutController extends Controller
                     'Product condition' => $request->condition,                    
                 ],
             ]);
-            
+
+            $adminretrieval = DB::table('role_user')->where('role_id',1)->get();
+            foreach ($adminretrieval as $admin){
+                User::find($admin->user_id)->notify(new NewRequestedProduct);
+        
+            }            
             //this is going to set the deposit paid field to true           
             //successful
                           

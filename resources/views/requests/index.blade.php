@@ -23,6 +23,24 @@
                             </thead>
                             <tbody>
                             @foreach ($requests as $request)
+                            @if($request->acquired)
+                                <tr class="bg-success text-light" >
+                                    <th scope="row" class="text-light">{{$request->id}}</th>
+                                    <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
+                                    <td><a class="text-light" href="/requests/{{$request->id}}">{{$request->name}}</a></td>
+                                    <td>
+                                        @if($request->deposit_paid == 1)
+                                            Yes
+                                        @else
+                                            No
+                                        @endif
+                                    </td>
+                                        <td >
+                                            <b >Acquired<b>
+                                        </td>
+
+                                </tr>
+                            @else 
                             <tr>
                                 <th scope="row">{{$request->id}}</th>
                                 <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
@@ -34,17 +52,11 @@
                                         No
                                     @endif
                                 </td>
-                                <td>                          
-                                    
+                                <td>                                
                                     <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                     
-                                    
-                                    <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left">
-                                    @csrf
-                                    {{method_field('DELETE')}}
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form> 
-                                    
+                                    <a href="{{route('products.storereqproduct', $request->id)}}"><button type="button" class="btn btn-info float-left">Acquired</button></a>
+                                    @endif
                                     
                                 </td>
                             </tr>    
@@ -57,6 +69,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 @else
     <div class="container">
         <div class="row justify-content-center">
@@ -77,39 +93,60 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($requests as $request)
-                                @if(($request->customer_id == Auth::id()))
-                                <tr>
-                                    <th scope="row">{{$request->id}}</th>
-                                    <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
-                                    <td><a href="/requests/{{$request->id}}">{{$request->name}}</a></td>
-                                    <td>
-                                        @if($request->deposit_paid == 1)
-                                            Yes
-                                        @else
-                                            No
+                                @foreach ($requests as $request)
+                                    @if(($request->customer_id == Auth::id()))
+                                    @if($request->acquired)
+                                        <tr class="bg-success text-light" >
+                                            <th scope="row" class="text-light">{{$request->id}}</th>
+                                            <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
+                                            <td><a class="text-light" href="/requests/{{$request->id}}">{{$request->name}}</a></td>
+                                            <td>
+                                                @if($request->deposit_paid == 1)
+                                                    Yes
+                                                @else
+                                                    No
+                                                @endif
+                                            </td>
+                                                <td >
+                                                    <b >Acquired<b>
+                                                </td>
+
+                                        </tr>
+                                    @else
+                                            <tr>
+                                                <th scope="row">{{$request->id}}</th>
+                                                <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
+                                                <td><a href="/requests/{{$request->id}}">{{$request->name}}</a></td>
+                                                <td>
+                                                    @if($request->deposit_paid == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
+                                                </td>      
+                                                <td>                          
+                                                    @can('manage-requests')
+                                                        <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
+                                                    @endcan
+                                                        {{-- after customer has made the payment, they cannot remove the requested product for reference purposes --}}
+                                                    @if($request->deposit_paid == 0)
+                                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left">
+                                                        @csrf
+                                                        {{method_field('DELETE')}}
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form> 
+                                                    @endif
+                                                    @if($request->deposit_paid == 0)
+                                                        <a href="{{route('checkouts.index')}}/{{$request->id}}"><button type="button" class="btn btn-success float-left">Pay</button></a>
+                                                    @endif
+                                                        
+                                                </td>
                                         @endif
-                                    </td>
-                                    <td>                          
-                                        @can('manage-requests')
-                                        <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
-                                        @endcan
-                                        {{-- after customer has made the payment, they cannot remove the requested product for reference purposes --}}
-                                        @if($request->deposit_paid == 0)
-                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left">
-                                        @csrf
-                                        {{method_field('DELETE')}}
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form> 
-                                        @endif
-                                        @if($request->deposit_paid == 0)
-                                        <a href="{{route('checkouts.index')}}/{{$request->id}}"><button type="button" class="btn btn-success float-left">Pay</button></a>
-                                        @endif
-                                    </td>
-                                </tr>    
-                                @endif
-                            @endforeach   
-                                                
+                                        
+                                        </tr>    
+                                    @endif
+                                @endforeach   
+                                                    
                             </tbody>
                         </table>                      
                     </div>

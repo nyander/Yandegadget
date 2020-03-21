@@ -6,16 +6,18 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\SupplierProduct;
+use App\ProductRequest;
 use App\Condition;
 use App\Image;
 use App\Category;
 use Gate;
+use App\User;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
-
+use App\Notifications\ProductAcquired;
 
 class ProductsController extends Controller
 {
@@ -104,6 +106,9 @@ class ProductsController extends Controller
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
          $product->featured = request("featured");
+         if($request->requestedby){
+           $product->request_from = request("requestedby");
+         }
          $product->thumbnail_path = $filename;
          $product->save();
 
@@ -266,6 +271,7 @@ class ProductsController extends Controller
     {
         $product = SupplierProduct::find($id);
         $product->purchased = true;
+        $product->save();
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();
@@ -277,5 +283,24 @@ class ProductsController extends Controller
                                                             'conditions'=> $conditions, 'categories'=> $categories, 
                                                             'currency' => $currency, 'categoriesname'=> $categoriesname,
                                                             'suppliername' => $suppliername, 'conditionname' => $conditionname]);
+    }
+    
+    public function storereqproduct($id)
+    {
+        $product = ProductRequest::find($id);
+        $product->acquired = true;
+        $product->save();
+        User::find($product->customer_id)->notify(new ProductAcquired);
+        $suppliers = DB::table('suppliers')->select('id','name')->get();
+        $conditions = DB::table('conditions')->select('id','details')->get();
+        $categories = DB::table('categories')->select('id','type')->get();
+        $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
+        $conditionname = DB::table('conditions')->where('id',$product->condition)->value('details');
+        $requestedname = DB::table('users')->where('id',$product->customer_id)->value('name');
+        $currency = '£';
+        return view('products.storeRequestedProduct')->with(['product'=>$product, 'suppliers'=>$suppliers, 
+                                                            'conditions'=> $conditions, 'categories'=> $categories, 
+                                                            'currency' => $currency, 'categoriesname'=> $categoriesname,
+                                                             'conditionname' => $conditionname, 'requestedname'=> $requestedname]);
     }
 }

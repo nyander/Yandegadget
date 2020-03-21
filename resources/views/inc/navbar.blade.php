@@ -57,29 +57,52 @@
                             </a>                          
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                                                 
                                
-                                  @foreach (auth()->user()->unreadNotifications as $notification)
-                                  <a class="dropdown-item card" style="background-color: lightgreen; margin-bottom:5px;" href="/ships">
-                                      
-                                        <div class="card-body">
-                                        <b >{{$notification->data['data']}}</b>
-                                        <p>{{$notification->created_at->diffForHumans()}}</p> 
-                                    </div>                                   
-                                 </a>    
-                                 
-                                  @endforeach 
+                                {{$checker = DB::table('role_user')->where('role_id', 2) ->where('user_id', Auth::user()->id)->exists()}}
+                               @if ($checker)
+                                    @foreach (auth()->user()->unreadNotifications as $notification)
+                                    <a class="dropdown-item card" style="background-color: lightgreen; margin-bottom:5px;" href="/ships">
+                                        
+                                            <div class="card-body">
+                                            <b >{{$notification->data['data']}}</b>
+                                            <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                        </div>                                   
+                                    </a>    
+                                    
+                                    @endforeach 
 
-                                  @foreach (auth()->user()->readNotifications as $notification)
-                                  <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="/ships">
-                                      <hr>
-                                     <b>{{$notification->data['data']}}</b>
-                                     <p>{{$notification->created_at->diffForHumans()}}</p> 
-                                 </a>     
-                                  @endforeach
-                                  
-                                                                
+                                    @foreach (auth()->user()->readNotifications as $notification)
+                                    <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="/ships">
+                                        <hr>
+                                        <b>{{$notification->data['data']}}</b>
+                                        <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                    </a>     
+                                    @endforeach
+
+                                @else                                                                                   
+                                        <a class="dropdown-item bg-primary text-light"  href="">
+                                            <p>Mark all as Read</p>                                                                              
+                                        </a>      
                                 
+                                    @foreach (auth()->user()->unreadNotifications as $notification)
+                                        <a class="dropdown-item card" style="background-color: lightgreen; margin-bottom:5px;" href="">
+                                            
+                                                <div class="card-body">
+                                                <b >{{$notification->data['data']}}</b>
+                                                <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                            </div>                                   
+                                        </a>    
+                                        
+                                    @endforeach 
+
+                                    @foreach (auth()->user()->readNotifications as $notification)
+                                        <a class="dropdown-item card" style="background-color: lightgrey; margin-bottom:5px;" href="">
+                                            <hr>
+                                            <b>{{$notification->data['data']}}</b>
+                                            <p>{{$notification->created_at->diffForHumans()}}</p> 
+                                        </a>     
+                                    @endforeach
+                               @endif 
                             </div>
                         </li>
                         

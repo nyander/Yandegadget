@@ -11,6 +11,7 @@ use Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
+use App\Supplier;
 
 
 class SupplierProductController extends Controller
@@ -36,6 +37,10 @@ class SupplierProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()    {
+        $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
+        if ($checker){
+            return redirect('/home')->with('error', 'Add Your Details to enable product management')->with(['checker'=> $checker]);
+        }
         
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();
@@ -155,7 +160,7 @@ class SupplierProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id = Auth::id();
+        // $id = Auth::id();
         $this->validate($request,[
             'name' => 'required',            
         ]);

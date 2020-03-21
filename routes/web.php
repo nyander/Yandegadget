@@ -1,8 +1,4 @@
 <?php
-use App\Notifications\NewShipment;
-use App\Ship;
-use App\User;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +39,8 @@ Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('prod
 Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
 Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name('products.purchaseupdate');
 Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupproduct')->name('products.storesupproduct');
+Route::get('/requester/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
+
 Route::resource('/images', 'ImageController');
 Route::resource('/requests','ProductRequestController');
 

@@ -38,7 +38,9 @@
     <p>Purchase date: {{$product->purchase_Date}}</p>
     <p>Condition: {{$condition}}</p>
     <p>Condition Notes: {{$product->condition_Notes}}</p>
-    <p>Requested By: {{$product->request_from}}</p>
+     @if ($product->request_from)
+     <p>Requested By: {{$product->request_from}}
+    @endif </p>
     <p>Shipped?: {{$product->recieved}}</p>
     <p>Shipment: {{$product->shipment}}</p>
     <p>Featured: @if($product->featured = true) Yes @else No @endif

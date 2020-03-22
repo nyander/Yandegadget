@@ -40,8 +40,9 @@
 
             
             <div>
-                <form action="{{ route('images.store', $product->id) }}" method="POST" class="form-group" enctype="multipart/form-data">
+                <form action="/images/{{$product->id}}" method="POST" class="form-group" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                     <input class="input" type="text" name="productId" id="productId" value="{{$product->id}}" hidden> 
                     {{-- Add & Update Gallery --}}
                     <div class="form-group">
@@ -92,7 +93,7 @@
                 <div class="form-group">
                     <label class="label" for="date">Product Type</label>
                     <select name="type" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat">
-                        <option value="{{$categories}}">{{$categoriesname}}</option>
+                        <option value="{{$product->type}}">{{$categoriesname}}</option>
                             @foreach($categories as $ct)
                                 <option value="{{$ct->id}}">{{$ct->type}}</option>
                             @endforeach
@@ -112,8 +113,8 @@
                 
                 <div class="field">
                     <label class="label" for="date">Purchase Date</label>
-                    <div class="control">
-                        <input class="input" type="date" name="purchasedate" placeholder="Enter Date of Purchase" value="{{$product->purchase_Date}}"> 
+                    <div class="control">  
+                        <input class="input" type="date" name="purchasedate" placeholder="Enter Date of Purchase" value={{$date}}>                         
                     </div>
                 </div>  
 

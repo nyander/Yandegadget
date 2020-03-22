@@ -43,7 +43,7 @@
                 <div class="field">
                     <label class="label" for="condition_Notes">Extra Information</label>
                     <div class="control">
-                        <input class="input" type="text" name="extra_information" id="extra_information">
+                        <textarea class="textarea" name="extra_information" id="extra_information"></textarea>
                     </div>
                 </div>                
 

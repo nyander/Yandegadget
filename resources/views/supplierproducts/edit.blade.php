@@ -34,8 +34,9 @@
 
         
         <div>
-            <form action="{{ route('images.store', $product->id) }}" method="POST" class="form-group" enctype="multipart/form-data">
+            <form action="/images/updatesuppliers/{{$product->id}}" method="POST" class="form-group" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
                 <input class="input" type="text" name="productId" id="productId" value="{{$product->id}}" hidden> 
                 {{-- Add & Update Gallery --}}
                 <div class="form-group">
@@ -76,7 +77,7 @@
                 {{-- <select> is a dropdown --}}
                 {{-- <option> is each option of a dropdown --}}
                 <div class="form-group">
-                    <label class="label" for="date">Product Type</label>
+                    <label class="label" for="producttype">Product Type</label>
                     <select name="catselect" id="category" class="form-control input-lg dynamic" data-dependent="labSubCat">
                         <option value="{{$categoriesid}}">{{$categoriesname}}</option>
                             @foreach($categories as $ct)
@@ -88,7 +89,7 @@
 
                 {{-- Condititon Dropdown --}}
                 <div class="form-group">
-                    <label class="label" for="date">Condition</label>
+                    <label class="label" for="condition">Condition</label>
                     <select name="conselect" id="condition" class="form-control input-lg dynamic" data-dependent="labSubCat">
                     <option value="{{$conditionid}}">{{$conditionname}}</option>
                         @foreach($conditions as $cn)

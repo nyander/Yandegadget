@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Image;
 use App\Product;
+use App\SupplierProduct;
 use Illuminate\Support\Facades\File;
 
 class ImageController extends Controller
@@ -38,6 +39,40 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         
+        
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
         if($request->hasfile('thumbnail'))
         {
             $thumb = $request->file('thumbnail');
@@ -77,38 +112,45 @@ class ImageController extends Controller
         return back()->with('success', 'Images has been updated'); 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function updatesuppliers(Request $request, $id)
     {
-        //
-    }
+        if($request->hasfile('thumbnail'))
+        {
+            $thumb = $request->file('thumbnail');
+            $name = pathinfo($thumb->getClientOriginalName(), PATHINFO_FILENAME);
+            $filename =  $name.'-'.time().'.'.$thumb->getClientOriginalExtension();
+            $location = public_path('./public/photos/' . $filename);
+            $thumb->move(public_path().'/gallery/',$filename);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        
+        $product = SupplierProduct::find($request->productId);
+        if($request->hasfile('thumbnail')){
+            File::delete(public_path('/gallery/'.$product->thumbnail_path));
+            $product->thumbnail_path = $filename;
+            $product->save();
+        }
+        
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        if($request->hasfile('images'))
+        {
+            foreach($request->file('images') as $image) {
+
+                $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+
+                $filename =  $name.'-'.time().'.'.$image->getClientOriginalExtension();
+                $location = public_path('./publc/photos/' . $filename);
+                $image->move(public_path().'/gallery/',$filename);
+
+                $photo = new Image;
+                $photo->supplierproduct_id = $product->id;
+                $photo->path = $filename;
+                $photo->save();  
+            }
+    
+        }
+
+        return back()->with('success', 'Images has been updated'); 
     }
 
     /**

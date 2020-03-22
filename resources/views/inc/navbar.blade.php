@@ -34,7 +34,7 @@
 
                       <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
                         @if(Cart::instance('default')->count() > 0) 
-                        <span>{{Cart::instance('default')->count()}}</span></span>    
+                        <span class="badge badge-light">{{Cart::instance('default')->count()}}</span></span>    
                         @endif                    
                         </a>     
                       <!-- Authentication Links -->
@@ -148,7 +148,11 @@
                                  </a>    
                                  <a class="dropdown-item" href="{{ route('ships.index') }}">
                                     Shipped Product Management 
-                                  </a>                                  
+                                  </a>      
+
+                                  <a class="dropdown-item" href="{{ route('shipcompanies.index') }}">
+                                    Shipment Company Management 
+                                  </a> 
                                                                      
                                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                       @csrf

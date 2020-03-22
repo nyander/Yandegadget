@@ -42,7 +42,7 @@
                 
                 {{-- Condititon Dropdown --}}
                 <div class="form-group">
-                    <label class="label" for="date">User</label>
+                    <label class="label" for="user">User</label>
                     <select name="supplier_id" id="supplier_id" class="form-control input-lg dynamic" data-dependent="labSubCat">                      
                     @if ($userIsSupplier)                                         
                             <option value= {{$currentUserid}}>{{$currentUsername}}</option>                        

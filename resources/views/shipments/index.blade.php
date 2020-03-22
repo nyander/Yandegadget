@@ -27,7 +27,8 @@
                                 <button type="submit" class="cart-options">Save For Later</button>
                             </form>
                         </div>
-                    </div>        
+                    </div>
+                </div>        
             @endforeach            
         </div>
         
@@ -48,37 +49,44 @@
     @endif
 
     @if(Cart::instance('saveForLater')->count()>0)
-    <h2>{{Cart::instance('saveForLater')->count()}} items(s) saved for later shipment </h2>
-    <div class="save-for-later shipment-table">
-        @foreach(Cart::instance('saveForLater')->content() as $item)
-        <div class="shipment-table-row">
-            <div class="shipment-table-row-left">
-                <br>
-                <a href="/">Image Here</a>
-                <div class="shipment-item-details">
-                <div class="shipment-table-item"> <a href="/products/{{$item->id}}">{{$item->model->name}}</a></div>
-                <div class="shipment-table-conditionnotes">{{$item->model->condition_Notes}}</div>
-                <div class="shipment-table-price">Potential Sale £{{$item->model->selling_Price}}</div>
+        <h2>{{Cart::instance('saveForLater')->count()}} items(s) saved for later shipment </h2>
+        <div class="save-for-later shipment-table">
+            @foreach(Cart::instance('saveForLater')->content() as $item)
+                <div class="shipment-table-row">
+                    <div class="shipment-table-row-left">
+                        <br>
+                        <a href="/">Image Here</a>
+                        <div class="shipment-item-details">
+                            <div class="shipment-table-item">
+                                <a href="/products/{{$item->id}}">{{$item->model->name}}</a>
+                            </div>
+                            <div class="shipment-table-conditionnotes">
+                                <p>{{$item->model->condition_Notes}}</p>
+                            </div>
+                            <div class="shipment-table-price">
+                                <p>Potential Sale £{{$item->model->selling_Price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shipment-table-row-light">
+                        <div class="shipment-table-actions">
+                            <form action="{{route('saveForLater.destroy', $item->rowId)}}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cart-options">Remove</button>
+                            </form>
+                            
+                            <form action="{{route('saveForLater.switchToShipment', $item->rowId)}}" method="POST">
+                                @csrf
+                                <button type="submit" class="cart-options">Switch To Cart</button>
+                            </form>
+                            
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="shipment-table-row-light">
-                <div class="shipment-table-actions">
-                    <form action="{{route('saveForLater.destroy', $item->rowId)}}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="cart-options">Remove</button>
-                    </form>
-                    
-                    <form action="{{route('saveForLater.switchToShipment', $item->rowId)}}" method="POST">
-                        @csrf
-                        <button type="submit" class="cart-options">Switch To Cart</button>
-                    </form>
-                    
-                </div>
-            </div>
+            @endforeach
         </div>
-        @endforeach
     @else
-    <h2> You have no items saved for shipment </h2>
+        <h2> You have no items saved for shipment </h2>
     @endif
 @endsection

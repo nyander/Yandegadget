@@ -1,5 +1,7 @@
 <?php
-
+    use App\Notifications\NewShipment;	
+    use App\Ship;	
+    use App\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,6 +47,8 @@ Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupprod
 Route::get('/requester/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
 
 Route::resource('/images', 'ImageController');
+Route::put('/images/updatesuppliers/{id}', 'ImageController@updatesuppliers')->name('updatesuppliers');
+
 Route::resource('/requests','ProductRequestController');
 
 Route::resource('/staffwages', 'StaffWageController');
@@ -67,7 +71,6 @@ Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recie
 //mark notiication as read
 // Route::post('/markAsRead','ShipController@markAsRead')->name('markAsRead');
 
-Route::resource('/images','ImageController');
 
 //Route for charts
 Route::resource('/reports', 'ReportController');

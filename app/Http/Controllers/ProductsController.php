@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
 use App\Notifications\ProductAcquired;
+use Carbon\Carbon;
+
 
 class ProductsController extends Controller
 {
@@ -172,7 +174,8 @@ class ProductsController extends Controller
         $conditionid = DB::table('conditions')->where('id',$product->condition)->value('id');
         $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
         $suppliername = DB::table('suppliers')->where('id', $product->supplier)->value('name');
-        $supplierid = DB::table('suppliers')->where('id', $product->supplier)->value('id');        
+        $supplierid = DB::table('suppliers')->where('id', $product->supplier)->value('id');  
+        $date = Carbon::createFromFormat('d/m/Y', $product->purchase_Date)->format('Y-m-d');      
         return view('products.edit')->with(['product' => $product,
                                             'suppliers'=>$suppliers, 
                                             'conditions'=> $conditions, 
@@ -181,7 +184,8 @@ class ProductsController extends Controller
                                             'suppliername'=> $suppliername,
                                             'conditionname'=> $conditionname,
                                             'conditionid'=> $conditionid,
-                                            'supplierid'=> $supplierid]);  
+                                            'supplierid'=> $supplierid,
+                                            'date' => $date]);  
     }
 
     public function recieved($id){
@@ -207,12 +211,14 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $date = Carbon::createFromFormat('Y-m-d', request("purchasedate"))->format('d/m/Y'); 
          $product = Product::find($id);
          $product->name = request("name");
          $product->cost = request("cost");
          $product->type = request("type");
          $product->supplier = request("supselect");
-         $product->purchase_Date = request("purchasedate");
+         $product->purchase_Date = $date;
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");

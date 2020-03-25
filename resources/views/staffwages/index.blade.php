@@ -1,14 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.settingside')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
+@section('settings')
+
             <div class="card">
                 <div class="card-header">wages</div>
-                
-                
-
                 <div class="card-body">
                      {{-- Table design based from : https://getbootstrap.com/docs/4.4/content/tables/ --}}
                      <table class="table">
@@ -48,7 +43,4 @@
                       </table>                      
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 @endsection

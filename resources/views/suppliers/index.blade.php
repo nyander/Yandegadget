@@ -1,10 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.settingside')
 
-@section('content')
-<div class="container">
-    <a href="{{route('supplierproducts.index')}}"><button type="button" class="btn btn-primary" >View Supplier Products </button></a>
-    <div class="row justify-content-center">        
-        <div class="col-md-9">
+@section('settings')
+        <div>
             <div class="card">
                 <div class="card-header">Suppliers</div> 
                 <div class="card-body">
@@ -47,6 +44,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    
+
 @endsection

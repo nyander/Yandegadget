@@ -25,6 +25,7 @@ Route::get('/', 'PagesController@index');
 
 //this route should ensure that when the end user types in website link/about - it should open the about page in the pages folder 
 Route::get('/about', 'PagesController@about');
+Route::get('/settings', 'PagesController@settings');
 
 //Route::get('/products', 'PagesController@products');
 Route::get('/welcome', function () {

@@ -57,9 +57,8 @@
                 @include('inc.messages')
                 {{-- this is will return the value and saves the content in its state --}}      
                 @yield('content')
-                
-            </div> 
-            @yield('index')      
+        </div> 
+        @yield('index')      
 
     </div>
     @yield('extra-js')

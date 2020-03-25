@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.settingside')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+@section('settings')
+    <div class="row">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Conditions</div>
                 
@@ -12,7 +11,7 @@
                 <div class="card-body">
                      {{-- Table design based from : https://getbootstrap.com/docs/4.4/content/tables/ --}}
                      <table class="table">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark ">
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
@@ -48,5 +47,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

@@ -30,4 +30,9 @@ class PagesController extends Controller
         //display the products page which passes in the data array
         return view('products')->with($data);
     }
+
+    public function settings() {
+        
+        return view('settings');
+    }
 }

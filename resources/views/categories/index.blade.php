@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.settingside')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+@section('settings')
+
+        <div    >
             <div class="card">
                 <div class="card-header">Categories</div>
                 
@@ -45,6 +44,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 @endsection

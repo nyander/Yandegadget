@@ -111,13 +111,13 @@
                                   {{ Auth::user()->name }} <span class="caret"></span>
                               </a>
 
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" href="{{ route('logout') }}"
+                              <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item bg-secondary text-light" href="{{ route('logout') }}"
                                      onclick="event.preventDefault();
                                                    document.getElementById('logout-form').submit();">
                                       {{ __('Logout') }}
                                   </a>
-                                  <a class="dropdown-item" href="{{route('home')}}">
+                                <a class="dropdown-item" href="{{route('home')}}">
                                     Dashboard
                                 </a>
                                   <a class="dropdown-item" href="{{route('products.create')}}">
@@ -126,33 +126,15 @@
                                 <a class="dropdown-item" href="{{route('requests.index')}}">
                                     Requested Products
                                 </a>
-                                  @can('manage-users')
-                                    <a class="dropdown-item" href="{{ route('admin.users.index') }}">
-                                       User Management 
-                                    </a>                                  
-                                  @endcan
-                                  <a class="dropdown-item" href="{{ route('suppliers.index') }}">
-                                    Supplier Management 
-                                  </a>   
-                                  <a class="dropdown-item" href="{{ route('conditions.index') }}">
-                                    Condition Management 
-                                 </a> 
                                  <a class="dropdown-item" href="{{ route('reports.index') }}">
                                     Reports 
                                  </a> 
-                                 <a class="dropdown-item" href="{{ route('categories.index') }}">
-                                    Categories Management 
-                                 </a>    
-                                 <a class="dropdown-item" href="{{ route('staffwages.index') }}">
-                                    Staff Wage Management 
-                                 </a>    
                                  <a class="dropdown-item" href="{{ route('ships.index') }}">
                                     Shipped Product Management 
-                                  </a>      
-
-                                  <a class="dropdown-item" href="{{ route('shipcompanies.index') }}">
-                                    Shipment Company Management 
                                   </a> 
+                                  <a class="dropdown-item" href="/settings">
+                                    Settings
+                                </a>
                                                                      
                                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                       @csrf

@@ -39,7 +39,7 @@
                                 <input class="input" type="number" name="amount[]" id="amount"> 
                             </td>
                             <td>
-                                <input class="input" type="date" name="date[]" placeholder="Enter Date of Purchase">  
+                                <input class="input" type="date" name="date[]" max="{{$today}}" placeholder="Enter Date of Purchase">  
                             </td>
                             <td>
                                 <a href="#" class="btn btn-danger remove">x</a>

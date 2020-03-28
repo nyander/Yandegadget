@@ -48,7 +48,7 @@
                         <div class="field row">
                             <label class="label col-md-6" for="date">Purchase Date</label>
                             <div class="control">
-                                <input class="input col-md-12" type="date" name="purchasedate" placeholder="Enter Date of Purchase"> 
+                                <input class="input col-md-12" type="date" name="purchasedate" max="{{$today}}" placeholder="Enter Date of Purchase"> 
                             </div>
                         </div>  
                         <div class="row">

@@ -22,7 +22,7 @@
                 <div class="field">
                     <label class="label" for="date">Date of Shipment</label>
                     <div class="control">
-                        <input class="input" type="date" name="shipmentdate" placeholder="Enter Date of Purchase"> 
+                        <input class="input" type="date" max="{{$today}}" name="shipmentdate" placeholder="Enter Date of Purchase"> 
                     </div>
                 </div>  
 

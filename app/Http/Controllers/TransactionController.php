@@ -26,8 +26,10 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
         $types = DB::table('transaction_types')->select('id','type')->get();
-        return view('transactions.create')->with(['types'=>$types]);
+        return view('transactions.create')->with(['types'=>$types, 'today' => $today]);
     }
 
     /**

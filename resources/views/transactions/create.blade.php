@@ -84,7 +84,7 @@
             ' <td><input class="input" type="text" name="description[]" class="form-control"></td>'+
             '<td><select name="type[]" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat"><option value="">Select</option>@foreach($types as $cn)<option value="{{$cn->id}}">{{$cn->type}}</option>@endforeach</select></td>'+
             '<td><input class="input" type="number" name="amount[]" id="amount"></td>'+
-            '<td><input class="input" type="date" name="date[]" placeholder="Enter Date of Purchase"></td>'+
+            '<td><input class="input" type="date" max="{{$today}}" name="date[]" placeholder="Enter Date of Purchase"></td>'+
             '<td><a href="#" class="btn btn-danger remove">x</a></td>'
             '</tr>';
             $('tbody').append(tr);

@@ -65,8 +65,9 @@ class ReportController extends Controller
      */
     public function create()
     {
-         
-        return view('reports.create');
+        $dt = Carbon::now();
+        $today = $dt->toDateString(); 
+        return view('reports.create')->with(['today'=>$today]);
     }
 
     /**

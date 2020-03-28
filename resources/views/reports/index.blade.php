@@ -1,24 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
+<br>
+<br>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-<a href="{{route('reports.create')}}"><button type="button" class="btn btn-success" >Filter Products</button></a>
-<a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary" >Record Transactions</button></a>
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-<div id="chartContainer1" style="height: 300px; width: 100%;"></div>
-
+<div class="row">
+    
+</div>
+<div class="row">
+    <div class = "col-md-5 order-md-1">
+        <h2 class="header">Report</h2>
+        <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
+            since the 1500s, when an unknown printer took a galley of type and scrambled
+        </p>
+    </div>
+    <div class = "col-md-7 order-md-2">
+        <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success mr-2 pull-right" >Filter Products</button></a>
+        <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary mr-2 pull-right" >Record Transactions</button></a>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-5 order-md-1 bg-success p-3 text-light">
+        <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
+            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        </p>
+    </div>
+    <div id="chartContainer" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-5 order-md-2 bg-success p-3 text-light">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
+            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        </p>
+    </div>
+    <div id="chartContainer1" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
+</div>
+<br>
+<br>
+<div class="container text-center">
+    <h3 class="container text-center">Transactions</h3>
+    <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
+            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+    </p>
+</div>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header">Transactions</div>
-                
-                
-
                 <div class="card-body">
                      {{-- Table design based from : https://getbootstrap.com/docs/4.4/content/tables/ --}}
                      <table class="table">
-                        <thead class="thead-dark">
+                        <thead class="thead-darkx">
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Date</th>
@@ -34,9 +73,7 @@
                             <td>{{$transaction->date}}</td>
                             <td>{{$transaction->description}}</td>
                             <td>{{$transaction->amount}}</td>
-                            <td>                          
-                                
-                                
+                            <td>             
                                 @can('manage-users')
                                 <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left">
                                 @csrf
@@ -47,14 +84,14 @@
                                 
                             </td>
                         </tr>    
-                        @endforeach   
-                                               
+                        @endforeach                                                 
                         </tbody>
                       </table>                      
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 @endsection

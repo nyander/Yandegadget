@@ -71,7 +71,11 @@ class ProductsController extends Controller
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         $currency = '£';
-        return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 'categories'=> $categories, 'currency' => $currency]);    
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
+        return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 
+                                              'categories'=> $categories, 'currency' => $currency,
+                                              'today'=> $today]);    
     }
 
     /**
@@ -166,6 +170,8 @@ class ProductsController extends Controller
         if(Gate::denies('manage-products')){
         return redirect(route('products.index'));
         }
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
         $product = Product::find($id);
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details')->get();
@@ -185,7 +191,8 @@ class ProductsController extends Controller
                                             'conditionname'=> $conditionname,
                                             'conditionid'=> $conditionid,
                                             'supplierid'=> $supplierid,
-                                            'date' => $date]);  
+                                            'date' => $date,
+                                            'today' => $today ]);  
     }
 
     public function recieved($id){
@@ -258,8 +265,10 @@ class ProductsController extends Controller
 
     public function purchase($id){
         // when called, it will set the specific shipment's recieved to true
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
         $product = Product::find($id); 
-        return view('products.purchase')->with(['product'=>$product]);
+        return view('products.purchase')->with(['product'=>$product, 'today' => $today]);
     }
 
     public function purchaseupdate(Request $request, $id)
@@ -276,6 +285,8 @@ class ProductsController extends Controller
     public function storesupproduct($id)
     {
         $product = SupplierProduct::find($id);
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
         $product->purchased = true;
         $product->save();
         $suppliers = DB::table('suppliers')->select('id','name')->get();
@@ -288,11 +299,13 @@ class ProductsController extends Controller
         return view('products.storeSupplierProduct')->with(['product'=>$product, 'suppliers'=>$suppliers, 
                                                             'conditions'=> $conditions, 'categories'=> $categories, 
                                                             'currency' => $currency, 'categoriesname'=> $categoriesname,
-                                                            'suppliername' => $suppliername, 'conditionname' => $conditionname]);
+                                                            'suppliername' => $suppliername, 'conditionname' => $conditionname, 'today'=>$today]);
     }
     
     public function storereqproduct($id)
     {
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
         $product = ProductRequest::find($id);
         $product->acquired = true;
         $product->save();
@@ -307,7 +320,8 @@ class ProductsController extends Controller
         return view('products.storeRequestedProduct')->with(['product'=>$product, 'suppliers'=>$suppliers, 
                                                             'conditions'=> $conditions, 'categories'=> $categories, 
                                                             'currency' => $currency, 'categoriesname'=> $categoriesname,
-                                                             'conditionname' => $conditionname, 'requestedname'=> $requestedname]);
+                                                             'conditionname' => $conditionname, 'requestedname'=> $requestedname,
+                                                             'today'=>$today]);
     }
 
     public function markAsRead(){

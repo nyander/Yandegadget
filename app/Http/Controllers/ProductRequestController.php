@@ -33,7 +33,7 @@ class ProductRequestController extends Controller
      */
     public function create()
     {
-        $conditions = DB::table('conditions')->select('id','details','deposit')->get();
+        $conditions = DB::table('conditions')->select('id','details','deposit','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         return view('requests.create')->with(['conditions'=> $conditions, 'categories'=> $categories]);
     }

@@ -1,16 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-    
-    <div id="wrapper">
-        <div id="createsupplier" class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-5 order-md-1">
+            <br>
+            <div class="container bg-info text-white p-3">
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                    <p><b>Types</b></p>
+                    @foreach($conditions as $ct)
+                    <p><b>{{$ct->details}}</b> : {{$ct->explanation}}</p>
+                    <p>Deposit: £{{$ct->deposit}}</p>
+                    @endforeach
+            </div>
+        </div>
+        <div id="createsupplier" class="col-md-5 order-md-2">
+            <br>
             <h3>Request Product</h3>
             <form method="POST" action="/requests">
                 @csrf
                 {{-- Supplier Name field--}}
-                <div class="field">
-                    <label class="label" for="name">Product Name</label>
-                    <div class="control">
+                <div class="field row">
+                    <label class="label col-md-4 order-md-1" for="name">Product Name</label>
+                    <div class="control col-md-8 order-md-2">
                         <input class="input" type="text" name="name" id="name"> 
                     </div>
                 </div>    
@@ -18,36 +29,31 @@
                 {{-- Categories Dropdown --}}
                 {{-- <select> is a dropdown --}}
                 {{-- <option> is each option of a dropdown --}}
-                    <div class="form-group">
-                        <label class="label" for="date">Product Type</label>
-                        <select name="type" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                    <div class="form-group row">
+                        <label class="label col-md-4 order-md-1 " style="margin-right:1.5em;" for="date">Product Type</label>
+                        <select name="type" id="type" class="form-control input-lg dynamic col-md-7 order-md-2" data-dependent="labSubCat">
                             <option value="{{$categories}}">Select Type</option>
                                 @foreach($categories as $ct)
                                     <option value="{{$ct->id}}">{{$ct->type}}</option>
                                 @endforeach
                         </select>
                     </div> 
-                    
-                    {{-- <div class="form-group">
-                    <label class="label" for="type">Condition</label>
-                        <select name="condition" id="cmbitems">
-                            <option value="">Select Type</option>
-                            @foreach($conditions as $ct)
-                                    <option value="{{$ct->deposit}}">{{$ct->type}}</option>
-                            @endforeach
-                        </select>
-                        <input type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
-                    </div>  --}}
-                    <div class="form-group">
-                        <label class="label" for="type">Condition</label>
-                        <select name="condition" id="condition">
+
+                    <div class="form-group row">
+                        <label class="label col-md-4 order-md-1" for="type" style="margin-right:1.5em;" >Condition</label>
+                        <select name="condition" id="condition" class="col-md-7 order-md-2">
                             <option value="">Select Type </option>
                             @foreach($conditions as $ct)
                                 <option value="{{$ct->deposit}}">{{$ct->details}}</option>
                             @endforeach
-                        </select>
-                        £<input type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
-                    </div>               
+                        </select>                       
+                    </div>  
+                    <div class="form-group row">
+                        <label class="label col-md-4 order-md-1" for="type" style="margin-right:30px;" >Cost</label>
+                        <div class="col-md-7 order-md-2">
+                            (£) <input type="text" name="charge" id="charge" onClick="checkPrice()"  readonly>
+                        </div>
+                    </div>             
 
                 
 

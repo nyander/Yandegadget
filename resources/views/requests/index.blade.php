@@ -130,10 +130,10 @@
                                                     @endcan
                                                         {{-- after customer has made the payment, they cannot remove the requested product for reference purposes --}}
                                                     @if($request->deposit_paid == 0)
-                                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left">
-                                                        @csrf
-                                                        {{method_field('DELETE')}}
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                                            @csrf
+                                                            {{method_field('DELETE')}}
+                                                            <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                                         </form> 
                                                     @endif
                                                     @if($request->deposit_paid == 0)

@@ -17,7 +17,7 @@
         <div id="wrapper" class = "col-md-6 order-md-2">
             <div id="createproduct" class="container">
                 
-                <form method="POST" action="/reports">
+                <form method="POST" action="/reports" onsubmit="myButton.disabled = true; return true;">
                     @csrf
                     <div class="field">
                        <div class="row">
@@ -43,7 +43,7 @@
 
                     <div class="field is-grouped">
                         <div class="control">
-                            <button class="button is-link pull-right" type="submit">Submit</button>
+                            <button class="button is-link pull-right" name="myButton" type="submit">Submit</button>
                         </div>
                     </div>
                 </form>

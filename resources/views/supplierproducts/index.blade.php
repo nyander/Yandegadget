@@ -56,10 +56,10 @@
                                 <a href="{{route('supplierproducts.edit', $product->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
                                 {{-- Admin and Supplier can add product --}}
-                                <form action="{{route('supplierproducts.destroy', $product->id)}}" method="POST" class="float-left">
-                                @csrf
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <form action="{{route('supplierproducts.destroy', $product->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                    @csrf
+                                    {{method_field('DELETE')}}
+                                    <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                 </form> 
                                 @endcan
 

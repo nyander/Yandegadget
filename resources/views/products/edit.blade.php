@@ -19,9 +19,9 @@
                             <div class="carousel-item">
                                 <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" width="50" height="50">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <form action="{{ route('images.destroy', $image->id) }}" method="POST">
+                                    <form action="{{ route('images.destroy', $image->id) }}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">remove</button>
+                                        <button type="submit" name="myButton" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
 
             
             <div>
-                <form action="/images/{{$product->id}}" method="POST" class="form-group" enctype="multipart/form-data">
+                <form action="/images/{{$product->id}}" method="POST" class="form-group" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 @method('PUT')
                     <input class="input" type="text" name="productId" id="productId" value="{{$product->id}}" hidden> 
@@ -57,7 +57,7 @@
 
                     <div class="field is-grouped">
                         <div class="control">
-                            <button class="button is-link" type="submit">Update</button>
+                            <button class="button is-link" name="myButton" type="submit">Update</button>
                         </div>
                     </div> 
                 </form>
@@ -67,7 +67,7 @@
 
 
             
-            <form method="POST" action="/products/{{$product->id}}" enctype="multipart/form-data">
+            <form method="POST" action="/products/{{$product->id}}" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 @method('PUT')
                 {{-- Product Name field--}}
@@ -165,7 +165,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>                                
             </form>

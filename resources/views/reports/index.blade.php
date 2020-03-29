@@ -75,10 +75,10 @@
                             <td>{{$transaction->amount}}</td>
                             <td>             
                                 @can('manage-users')
-                                <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left">
-                                @csrf
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                    @csrf
+                                    {{method_field('DELETE')}}
+                                    <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                 </form> 
                                 @endcan
                                 

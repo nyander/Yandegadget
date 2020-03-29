@@ -16,7 +16,7 @@
             <div class="col-md-5 order-md-2">
                 <div id="createproduct" class="container">
                     <h3>Upload Products</h3>
-                    <form method="POST" action="/products"  enctype="multipart/form-data">       
+                    <form method="POST" action="/products"  enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">       
                         @csrf
 
                         
@@ -118,7 +118,7 @@
 
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link" type="submit">Submit</button>
+                                <button class="button is-link" name="myButton" type="submit">Submit</button>
                             </div>
                         </div>                                
                     </form>

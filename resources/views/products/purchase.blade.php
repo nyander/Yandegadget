@@ -6,7 +6,7 @@
 <div id="wrapper">
     <div id="createproduct" class="container">
         <h3>Update Products</h3>
-        <form method="POST" action="{{route('products.purchase',$product->id)}}">
+        <form method="POST" action="{{route('products.purchase',$product->id)}}" onsubmit="myButton.disabled = true; return true;">
             @csrf
             @method('PUT')
             <div class="field">
@@ -25,7 +25,7 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button is-link" type="submit">Confirm Purchase</button>
+                    <button class="button is-link" name="myButton" type="submit">Confirm Purchase</button>
             </div>
                                       
         </form>

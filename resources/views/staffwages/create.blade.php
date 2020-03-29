@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createwages" class="container">
             <h3>Upload Supplier</h3>
-            <form method="POST" action="/staffwages">
+            <form method="POST" action="/staffwages" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 
                 
@@ -36,7 +36,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" name="myButton" type="submit">Submit</button>
                     </div>
                 </div>                                
             </form>

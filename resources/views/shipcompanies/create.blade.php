@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createcompany" class="container">
             <h3>Add Shipment Company</h3>
-            <form method="POST" action="/shipcompanies">
+            <form method="POST" action="/shipcompanies" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 {{-- Company Name--}}
                 <div class="field">
@@ -49,7 +49,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>                                
             </form>

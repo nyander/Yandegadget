@@ -6,7 +6,7 @@
     <div id="wrapper">
         <div id="createtransaction" class="container">
             <h3>Record Transactions</h3>
-            <form method="POST" action="/transactions">
+            <form method="POST" action="/transactions" onsubmit="myButton.disabled = true; return true;">
                 @csrf
 
                 <section>
@@ -56,7 +56,7 @@
                                 <td style="border:none">
                                     <div class="field is-grouped">
                                         <div class="control">
-                                            <button class="button is-link" type="submit">Submit</button>
+                                            <button class="button is-link" name="myButton" type="submit">Submit</button>
                                         </div>
                                     </div> 
                                 </td>

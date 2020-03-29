@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createsupplier" class="container">
             <h3>Upload Supplier</h3>
-            <form method="POST" action="/suppliers">
+            <form method="POST" action="/suppliers" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 {{-- Supplier Name field--}}
                 <div class="field">
@@ -32,14 +32,6 @@
                     </div>
                 </div>
 
-                {{-- Supplier email
-                <div class="field">
-                    <label class="label" for="condition_Notes">Email</label>
-                    <div class="control">
-                        <input class="input" type="text" name="email" id="email">
-                    </div>
-                </div> --}}
-                
                 {{-- Condititon Dropdown --}}
                 <div class="form-group">
                     <label class="label" for="date">User</label>
@@ -59,7 +51,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>                                
             </form>

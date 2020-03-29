@@ -28,10 +28,10 @@
                                 <a href="{{route('categories.edit', $category->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
                                 @can('manage-users')
-                                <form action="{{route('categories.destroy', $category->id)}}" method="POST" class="float-left">
+                                <form action="{{route('categories.destroy', $category->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                 </form> 
                                 @endcan
                                 

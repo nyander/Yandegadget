@@ -72,12 +72,12 @@
                                                 <div class="btn-group">
                                                     <a href="/products/{{$product->id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
                                                     @if($product->recieved == false)
-                                                    <form action="{{route('shipments.store')}}" method="POST">
+                                                    <form action="{{route('shipments.store')}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{$product->id}}">
                                                         <input type="hidden" name="name" value="{{$product->name}}">
                                                         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Add To Cart</button>
+                                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-secondary">Add To Cart</button>
                                                     </form>
                                                     @endif
                                                 </div>

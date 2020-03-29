@@ -13,9 +13,9 @@
                 <div class="carousel-item">
                     <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" width="50" height="50">   
                     <div class="carousel-caption d-none d-md-block">
-                        <form action="{{ route('images.destroy', $image->id) }}" method="POST">
+                        <form action="{{ route('images.destroy', $image->id) }}" method="POST" onsubmit="myButton.disabled = true; return true;">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger">remove</button>
+                            <button type="submit" name="myButton" class="btn btn-danger">remove</button>
                         </form>
                     </div>                     
                 </div>
@@ -49,9 +49,9 @@
                     <input type="file" class="form-control" name="images[]" multiple >
                 </div>
 
-                <div class="field is-grouped">
+                <div class="field is-grouped" onsubmit="myButton.disabled = true; return true;">
                     <div class="control">
-                        <button class="button is-link" type="submit">Update</button>
+                        <button class="button is-link" type="submit" name="myButton">Update</button>
                     </div>
                 </div> 
             </form>
@@ -115,9 +115,9 @@
                 </div>
                 
 
-                <div class="field is-grouped">
+                <div class="field is-grouped" onsubmit="myButton.disabled = true; return true;">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>                                
             </form>

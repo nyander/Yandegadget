@@ -48,12 +48,12 @@
     </p>
     <hr> {{-- <a href="" class="button">Add To Shipment</a> --}} @if($product->ship == 0)
 
-    <form action="{{route('shipments.store')}}" method="POST">
+    <form action="{{route('shipments.store')}}" method="POST" onsubmit="myButton.disabled = true; return true;">
         @csrf
         <input type="hidden" name="id" value="{{$product->id}}">
         <input type="hidden" name="name" value="{{$product->name}}">
         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-        <button type="submit" class="button button-plain">Add To Cart</button>
+        <button type="submit" name="myButton" class="button button-plain">Add To Cart</button>
     </form>
     @endif @can('manage-products')
     <a href="/products/{{$product->id}}/edit" class="btn btn-default"> Edit </a> @endcan @can('manage-products') {!!Form::open(['action' => ['ProductsController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!} {{Form::hidden('_method', 'DELETE')}} {{Form::submit('Delete',['class' => 'btn btn-danger '])}} {!!Form::close() !!} @endcan

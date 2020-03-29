@@ -69,25 +69,7 @@
                             <div id="card-errors" role="alert"></div>
                         </div> 
 
-                        {{-- <div class="form-group">
-                            <label for="cc-number"> Credit Card Number </label>
-                            <input type="text"  class="form-control" id="cc-number" name="cc-number" value="">
-                        </div> --}}
-
-                        {{-- start of half form  --}}
-                        {{-- <div class="half-form">
-                           
-                            <div class="form-group">
-                                <label for="expiry"> Expiry </label>
-                                <input type="text"  class="form-control" id="expiry" name="expiry" value="">
-                            </div>
-
-                            
-                            <div class="form-group">
-                                <label for="cvc"> CVC Code </label>
-                                <input type="text"  class="form-control" id="cvc" name="cvc" value="">
-                            </div>
-                        </div>  --}}
+                       
                         <div class="form-group">
                             <label for="charge"> Product Name </label>
                             <input type="text"  class="form-control" id="productname" name="productname" value="{{$request->name}}" readonly>

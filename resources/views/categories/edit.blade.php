@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createproduct" class="container">
             <h3>Update Category</h3>
-            <form method="POST" action="/categories/{{$category->id}}">
+            <form method="POST" action="/categories/{{$category->id}}" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 @method('PUT')
                 {{-- Category Name/detail--}}
@@ -18,7 +18,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>   
                                    

@@ -3,7 +3,7 @@
 @section('content')
     
     <div id="wrapper">
-        <div id="createproduct" class="container">
+        <div id="createproduct" class="container" onsubmit="myButton.disabled = true; return true;">
             <h3>Create Conditions</h3>
             <form method="POST" action="/conditions/">
                 @csrf
@@ -33,7 +33,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" name="myButton" type="submit">Submit</button>
                     </div>
                 </div>   
                                    

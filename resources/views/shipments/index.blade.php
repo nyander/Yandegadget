@@ -16,15 +16,15 @@
                     </div>
                     <div class="shipment-table-row-right">
                         <div class="shipment-table-actions">
-                            <form action="{{route('shipments.destroy', $item->rowId)}}" method="POST">
+                            <form action="{{route('shipments.destroy', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="cart-options">Remove</button>
+                                <button type="submit" name="myButton" class="cart-options">Remove</button>
                             </form>
                             
-                            <form action="{{route('shipments.switchToSaveForLater', $item->rowId)}}" method="POST">
+                            <form action="{{route('shipments.switchToSaveForLater', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
-                                <button type="submit" class="cart-options">Save For Later</button>
+                                <button type="submit" name="myButton" class="cart-options">Save For Later</button>
                             </form>
                         </div>
                     </div>
@@ -70,15 +70,15 @@
                     </div>
                     <div class="shipment-table-row-light">
                         <div class="shipment-table-actions">
-                            <form action="{{route('saveForLater.destroy', $item->rowId)}}" method="POST">
+                            <form action="{{route('saveForLater.destroy', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="cart-options">Remove</button>
+                                <button type="submit" name="myButton" class="cart-options">Remove</button>
                             </form>
                             
-                            <form action="{{route('saveForLater.switchToShipment', $item->rowId)}}" method="POST">
+                            <form action="{{route('saveForLater.switchToShipment', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
-                                <button type="submit" class="cart-options">Switch To Cart</button>
+                                <button type="submit" name="myButton" class="cart-options">Switch To Cart</button>
                             </form>
                             
                         </div>

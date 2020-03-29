@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Edit {{$user->name}}</div>
                 <div class="card-body">
-                    <form action="{{route('admin.users.update', $user)}}" method="POST">
+                    <form action="{{route('admin.users.update', $user)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                         <div class="form-group row">
                             <label for="email" class="col-md-2 col-form-label text-md-right">Email</label>
 
@@ -54,7 +54,8 @@
                                 @endforeach
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" 
+                        name="myButton">
                              Update
                         </button>
                     </form>    

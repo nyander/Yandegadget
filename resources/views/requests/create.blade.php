@@ -16,7 +16,7 @@
         <div id="createsupplier" class="col-md-5 order-md-2">
             <br>
             <h3>Request Product</h3>
-            <form method="POST" action="/requests">
+            <form method="POST" action="/requests" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 {{-- Supplier Name field--}}
                 <div class="field row">
@@ -62,7 +62,7 @@
 
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link" type="submit">Submit</button>
+                                <button class="button is-link" type="submit" name="myButton">Submit</button>
                             </div>
 
                             <div class="control">

@@ -3,7 +3,7 @@
     <div id="wrapper">
         <div id="createproduct" class="container">
             <h3>Upload Products</h3>        
-            <form action="{{route('confirmations.store')}}" method="POST">
+            <form action="{{route('confirmations.store')}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                 @csrf  
                 {{-- Shipment Company Dropdown --}}
                 {{-- <select> is a dropdown --}}
@@ -50,7 +50,7 @@
                 </div> 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button type="submit" class="button-primary full-width"> Confirm</button>
+                        <button type="submit" name="myButton" class="button-primary full-width"> Confirm</button>
                     </div>
                 </div> 
             </form>

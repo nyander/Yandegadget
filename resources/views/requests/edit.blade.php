@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createsupplier" class="container">
             <h3>Edit Requested Product</h3>
-        <form method="POST" action="/requests/{{$requests->id}}">
+        <form method="POST" action="/requests/{{$requests->id}}" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 @method('PUT')
                 {{-- Supplier Name field--}}
@@ -42,7 +42,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" type="submit" name="myButton">Submit</button>
                     </div>
                 </div>                                
             </form>

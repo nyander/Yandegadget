@@ -28,10 +28,10 @@
                                 <a href="{{route('staffwages.edit', $wage->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
                                 
-                                <form action="{{route('staffwages.destroy', $wage->id)}}" method="POST" class="float-left">
-                                @csrf
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <form action="{{route('staffwages.destroy', $wage->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                  @csrf
+                                  {{method_field('DELETE')}}
+                                  <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                 </form> 
                                
                                 

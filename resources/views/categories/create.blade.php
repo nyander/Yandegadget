@@ -5,7 +5,7 @@
     <div id="wrapper">
         <div id="createproduct" class="container">
             <h3>Create Categories</h3>
-            <form method="POST" action="/categories/">
+            <form method="POST" action="/categories/" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 {{-- Category Name/detail--}}
                 <div class="field">
@@ -17,7 +17,7 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <button class="button is-link" name="myButton" type="submit">Submit</button>
                     </div>
                 </div>   
                                    

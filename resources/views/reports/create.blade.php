@@ -25,7 +25,7 @@
                                 <label class="label" for="date">Start Date</label>
                             </div>
                             <div class="control col-md-6 order-md-2">
-                                <input class="input" type="date"  max="{{$today}}" name="startdate" placeholder="Enter Start Date" > 
+                                <input class="input" type="date"  max="{{$today}}" name="startdate" placeholder="Enter Start Date" reqiured > 
                             </div>
                         </div> 
                     </div> 
@@ -36,7 +36,7 @@
                                 <label class="label" for="date">End Date</label>
                             </div>
                             <div class="control col-md-6 order-md-2">
-                                <input class="input" type="date"  max="{{$today}}" name="enddate" placeholder="Enter End Date" > 
+                                <input class="input" type="date"  max="{{$today}}" name="enddate" placeholder="Enter End Date" reqiured > 
                             </div>
                         </div>
                     </div> 

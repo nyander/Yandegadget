@@ -12,14 +12,14 @@
             <div class="field">
                 <label class="label" for="price">Price (£)</label>
                 <div class="control">
-                    <input class="input" type="number" name="price" id="price" value="{{$product->selling_Price}}"> 
+                    <input class="input" type="number" name="price" id="price" value="{{$product->selling_Price}}" required> 
                 </div>
             </div>
 
             <div class="field">
                 <label class="label" for="date">Sold Date</label>
                 <div class="control">
-                    <input class="input" type="date" max="{{$today}}" name="soldDate" placeholder="Enter Date of Purchase" > 
+                    <input class="input" type="date" max="{{$today}}" name="soldDate" placeholder="Enter Date of Purchase" required> 
                 </div>
             </div>
 

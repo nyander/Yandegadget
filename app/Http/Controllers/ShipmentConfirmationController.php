@@ -10,6 +10,7 @@ use App\ShipCompany;
 use DB;
 use App\User;
 use App\Notifications\NewShipment;
+use Carbon\Carbon;
 
 class ShipmentConfirmationController extends Controller
 {
@@ -25,7 +26,9 @@ class ShipmentConfirmationController extends Controller
     public function index()
     {
         $companies = ShipCompany::all();
-        return view('confirmations.index')->with(['companies'=>$companies]);
+        $dt = Carbon::now();
+        $today = $dt->toDateString();
+        return view('confirmations.index')->with(['companies'=>$companies, 'today'=>$today]);
     }
 
     /**

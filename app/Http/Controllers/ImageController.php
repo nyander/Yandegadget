@@ -73,6 +73,11 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[       
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
         if($request->hasfile('thumbnail'))
         {
             $thumb = $request->file('thumbnail');

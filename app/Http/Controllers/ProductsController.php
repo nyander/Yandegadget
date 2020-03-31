@@ -68,7 +68,7 @@ class ProductsController extends Controller
             return redirect(route('products.index'));
         }
         $suppliers = DB::table('suppliers')->select('id','name')->get();
-        $conditions = DB::table('conditions')->select('id','details')->get();
+        $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         $currency = '£';
         $dt = Carbon::now();
@@ -86,6 +86,18 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        $id = Auth::id();
+        $this->validate($request,[
+            'name' => 'required',
+            'cost' => 'required',
+            'catselect' => 'required',
+            'purchasedate' => 'required',
+            'price' => 'required',  
+            'featured' => 'required',        
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
         if($request->hasfile('thumbnail'))
         {
             $thumb = $request->file('thumbnail');
@@ -95,18 +107,14 @@ class ProductsController extends Controller
             $thumb->move(public_path().'/gallery/',$filename);
         }
 
-        $id = Auth::id();
-        $this->validate($request,[
-            'name' => 'required',
-            'cost' => 'required'
-        ]);
+        
 
          $product = new Product;
          $product->name = request("name");
          $product->user_id = $id;
          $product->cost = request("cost");
          $product->type = request("catselect");
-         $product->supplier = request("supselect");
+         $product->supplier = request("suspelect");
          $product->purchase_Date = request("purchasedate");
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
@@ -218,6 +226,13 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'name' => 'required',
+            'cost' => 'required',
+            'purchasedate' => 'required',
+            'price' => 'required',  
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
 
         $date = Carbon::createFromFormat('Y-m-d', request("purchasedate"))->format('d/m/Y'); 
          $product = Product::find($id);
@@ -284,6 +299,16 @@ class ProductsController extends Controller
 
     public function storesupproduct($id)
     {
+        $this->validate($request,[
+            'name' => 'required',
+            'cost' => 'required',
+            'catselect' => 'required',
+            'purchasedate' => 'required',
+            'price' => 'required',  
+            'featured' => 'required',        
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
         $product = SupplierProduct::find($id);
         $dt = Carbon::now();
         $today = $dt->toDateString();
@@ -304,6 +329,16 @@ class ProductsController extends Controller
     
     public function storereqproduct($id)
     {
+        $this->validate($request,[
+            'name' => 'required',
+            'cost' => 'required',
+            'catselect' => 'required',
+            'purchasedate' => 'required',
+            'price' => 'required',  
+            'featured' => 'required',        
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
         $dt = Carbon::now();
         $today = $dt->toDateString();
         $product = ProductRequest::find($id);

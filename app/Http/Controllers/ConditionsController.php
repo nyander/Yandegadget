@@ -50,7 +50,8 @@ class ConditionsController extends Controller
         
         $this->validate($request,[
             'details' => 'required',
-            'explanation' => 'required'
+            'explanation' => 'required',
+            'deposit' => 'required'
         ]);
 
          $condition = new Condition;
@@ -96,6 +97,11 @@ class ConditionsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'details' => 'required',
+            'explanation' => 'required',
+            'deposit' => 'required'
+        ]);
         $condition = Condition::find($id);
         $condition->details = request("details");
         $condition->explanation = request("explanation");

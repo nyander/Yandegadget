@@ -8,7 +8,7 @@
         <a class="btn btn-outline-primary" href="#">Sign up</a>
       </div>-->
       
-      <nav class="navbar navbar-expand-md navbar-light bg-yellow shadow-sm " style="background-color:yellow;">
+      <nav class="navbar navbar-expand-md navbar-light bg-yellow shadow-md " style="background-color:yellow;">
           <div class="container">
               <a class="navbar-brand" href="{{ url('/') }}">
                   {{-- {{ config('app.name', 'Laravel') }} --}}
@@ -56,11 +56,11 @@
                                 <span class="badge badge-light">{{auth()->user()->unreadNotifications -> count() }}</span>
                             </a>                          
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right pr-2 pl-2" aria-labelledby="navbarDropdown">
                                
-                                {{$checker = DB::table('role_user')->where('role_id', 2) ->where('user_id', Auth::user()->id)->exists()}}
+                                <div hidden>{{$checker = DB::table('role_user')->where('role_id', 2) ->where('user_id', Auth::user()->id)->exists()}}
                                @if ($checker)
-                                    @foreach (auth()->user()->unreadNotifications as $notification)
+                                    @foreach (auth()->user()->unreadNotifications as $notification)</div>
                                     <a class="dropdown-item card" style="background-color: lightgreen; margin-bottom:5px;" href="/ships">
                                         
                                             <div class="card-body">

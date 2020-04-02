@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href="/ships" class="btn btn-default">Back</a>
+    <a href="/ships" class="btn btn-md btn-outline-secondary mt-3 mb-3">Back</a>
     <div >
         <h5 >Shipment No: {{$ship->id}}</h5>
         <p style="max-width:50em;" >Much did had call new drew that kept. Limits expect wonder law she. 
@@ -41,9 +41,9 @@
                             <span hidden>{{$price = DB::table('products')->where('id', $product1->product_id)->value('selling_Price')}}</span> 
                             <span hidden>{{$href = DB::table('products')->where('id', $product1->product_id)->value('id')}}</span>  
                             <span hidden>{{$name = DB::table('products')->where('id', $product1->product_id)->value('name')}}</span>                            
-                            <div class="col-md-5" >
+                            <div class="col-md-6 mb-2" >
                                 <div class="card mb-7 box-shadow" >
-                                    <img class="card-img-top " src="/gallery/{{$thumbnail_path}}" style="max-height:10em; object-fit: cover;" >
+                                    <img class="card-img-top " src="/gallery/{{$thumbnail_path}}" style="max-height:15em; object-fit: cover;" >
                                     <div class="card-body">
                                         <h5 class="title"> <a href="/products/{{$href}}"> {{$name}}</a></h5>
                                         <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$price}}</p>
@@ -51,7 +51,7 @@
                                             
                                             @if($recieved == 0 and $recieved2 == 0)
                                             <div class="btn-group">
-                                                <a href="{{route('products.recieved', $href)}}"><button type="button" class="btn btn-sm btn-outline-success" style="margin-top: 1%;"> Recieved</button></a>
+                                                <a href="{{route('products.recieved', $href)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-top: 1%;"> Recieved</button></a>
                                             </div>
                                             @else
                                             <small class="text-muted">Recieved</small>

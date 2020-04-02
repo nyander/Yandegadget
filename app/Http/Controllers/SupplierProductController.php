@@ -16,6 +16,12 @@ use App\Supplier;
 
 class SupplierProductController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -56,6 +62,17 @@ class SupplierProductController extends Controller
      */
     public function store(Request $request)
     {
+        $id = Auth::id();
+        $this->validate($request,[
+            'name' => 'required', 
+            'catselect'=>'required',
+            'price' => 'required',
+            'conselect' => 'required',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+
+        ]);
+
         if($request->hasfile('thumbnail'))
         {
             
@@ -67,10 +84,7 @@ class SupplierProductController extends Controller
         }
         
 
-        $id = Auth::id();
-        $this->validate($request,[
-            'name' => 'required',            
-        ]);
+        
 
          $product = new SupplierProduct;
          $product->supplier_id = $id;    

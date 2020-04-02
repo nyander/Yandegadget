@@ -26,12 +26,12 @@
                                     <div class="shipment-table-row-right ">
                                         <form action="{{route('shipments.switchToSaveForLater', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                             @csrf
-                                            <button type="submit" name="myButton" class="btn btn-sm btn-outline-success mb-1">Save</button>
+                                            <button type="submit" name="myButton" class="btn btn-md btn-outline-success mb-1">Save</button>
                                         </form>
                                         <form action="{{route('shipments.destroy', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" name="myButton" class="btn btn-sm btn-outline-danger">Remove</button>
+                                            <button type="submit" name="myButton" class="btn btn-md btn-outline-danger">Remove</button>
                                         </form>
                                     </div>
                                 </td>
@@ -87,13 +87,13 @@
                                 <div class="shipment-table-row-right ">
                                     <form action="{{route('saveForLater.switchToShipment', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                         @csrf
-                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-success mb-1">Switch</button>
+                                        <button type="submit" name="myButton" class="btn btn-md btn-outline-success mb-1">Switch</button>
                                     </form>
 
                                     <form action="{{route('saveForLater.destroy', $item->rowId)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-danger">Remove</button>
+                                        <button type="submit" name="myButton" class="btn btn-md btn-outline-danger">Remove</button>
                                     </form>
                                     
                                 </div>

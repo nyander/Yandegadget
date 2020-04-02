@@ -60,6 +60,7 @@ class SuppliersController extends Controller
             'name' => 'required',
             'address' => 'required',            
             'contact' => 'required',
+            'contact' => 'required|regex:/(0)[0-9]{10}/'
         ]);
 
         

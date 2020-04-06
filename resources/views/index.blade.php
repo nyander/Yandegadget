@@ -13,6 +13,10 @@
         <p><a class=" btn btn-danger btn-lg" href="/login" role="button">Login</a> <a class=" btn btn-success btn-lg" href="/signup" role="button">Sign-up</a>
         @endif
     </div>
+
+
+
+    
     <br>
     <br>
     <div class="container">

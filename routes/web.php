@@ -19,68 +19,85 @@ Route::get('/richard', function () {
 });
 */
 
+//authentication related
+Auth::routes();
+
+//PageControllers
 //this route should display the index page of the website 
 Route::get('/', 'PagesController@index');
-
-
-//this route should ensure that when the end user types in website link/about - it should open the about page in the pages folder 
 Route::get('/about', 'PagesController@about');
 Route::get('/settings', 'PagesController@settings');
 
-//Route::get('/products', 'PagesController@products');
-Route::get('/welcome', function () {
-    return view('welcome'); 
-});
-
-//authentication related
-Auth::routes();
+//HomeController
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/products/markAsRead', 'ProductsController@markAsRead')->name('markAsRead'); 
 
-
-Route::resource('/supplierproducts', 'SupplierProductController');
-
+//ProductsController
+// GET|PUSH|PUT|etc
 Route::resource('/products', 'ProductsController');
+// Mark Products as read function
+Route::get('/products/markAsRead', 'ProductsController@markAsRead')->name('markAsRead');
+// Confirm product as been recieved function
 Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
+// Redirects to page to confirm purchase
 Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
+// Cofirm Product has been purchased function 
 Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name('products.purchaseupdate');
+// Function for supplier to upload product
 Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupproduct')->name('products.storesupproduct');
+//Function for customer to request product
 Route::get('/requester/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
 
+//Image Controller
 Route::resource('/images', 'ImageController');
+
+// update suppliers images
 Route::put('/images/updatesuppliers/{id}', 'ImageController@updatesuppliers')->name('updatesuppliers');
 
+//SupplierProduct Controller
+Route::resource('/supplierproducts', 'SupplierProductController');
+
+// Requested Product Controller
 Route::resource('/requests','ProductRequestController');
 
+// Staff Wage controller
 Route::resource('/staffwages', 'StaffWageController');
 
+// Conditions controller
 Route::resource('/conditions', 'ConditionsController');
 
+// Categories controller
 Route::resource('/categories', 'CategoriesController');
 
+// Suppliers controller
 Route::resource('/suppliers', 'SuppliersController');
 
+// Shipment Comapny Controller
 Route::resource('/shipcompanies', 'ShipCompanyController');
 
+// Shipment Confirmation Controller
 Route::resource('/confirmations','ShipmentConfirmationController');
 
+// Requested Product Checkout
 Route::resource('/checkouts', 'CheckoutController');
 
+// Shipped Product Controler
 Route::resource('/ships', 'ShipController');
+
+// Shipped Product has been recieved function
 Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
 
-//mark notiication as read
-// Route::post('/markAsRead','ShipController@markAsRead')->name('markAsRead');
-
-
-//Route for charts
+//Charts and Reports controller 
 Route::resource('/reports', 'ReportController');
 
+// Admin recording Business Transactions
 Route::resource('/transactions', 'TransactionController');
 
 //shipment routes
 Route::resource('/shipments', 'ShipmentController'); 
+
+// place Products for save for later shipment 
 Route::post('/shipments/switchToSaveForLater/{product}', 'ShipmentController@switchToSaveForLater')->name('shipments.switchToSaveForLater');
+
 
 Route::resource('/saveForLater', 'SaveForLaterController'); 
 Route::post('/saveForLater/switchToShipment/{product}', 'SaveForLaterController@switchToShipment')->name('saveForLater.switchToShipment');

@@ -12,6 +12,7 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        //when seeder is ran, it will remove & repopulate the table with the following information 
         Role::truncate();
         Role::create(['name'=> 'admin']);
         Role::create(['name'=> 'staff']);

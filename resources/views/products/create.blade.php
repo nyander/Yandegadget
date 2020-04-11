@@ -126,7 +126,7 @@
 
                     <div class="field is-grouped">
                         <div class="control">
-                            <button class="button is-link" name="myButton" type="submit">Submit</button>
+                            <button class="btn btn-md btn-outline-primary" name="myButton" type="submit">Submit</button>
                         </div>
                     </div>                                
                 </form>                

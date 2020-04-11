@@ -8,9 +8,15 @@
                 <p>Welcome <b>{{Auth::user()->name}},</b></p>
                 @can('supplier-role')
                     @if ($checker)
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                        <p>Please add your details to upload products</p>
                         <a href="{{ route('suppliers.create') }}"> <button class="btn btn-success" type="submit">Add Details</button> </a>
                     @else 
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                         Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                         when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
                     </p>
@@ -37,17 +43,17 @@
                                 <tr>
                                     <th scope="col">Information</th>
                                     <th scope="col">Result</th>
-                                    <th scole="col">Add product</th>
+                                    <th scole="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add Product</button></a></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Products Uploaded:</td>
-                                    <td>Hello</td>
+                                    <td>{{$supproduct}}</td>
                                 </tr>
                                 <tr>
                                     <td>Products Sold:</td>
-                                    <td>Hello 1</td>
+                                    <td>{{$soldsupproduct}}</td>
                                 </tr>
                             </tbody>
                             

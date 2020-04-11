@@ -39,7 +39,7 @@
                 <div class="form-group row">
                     <label class="label col-md-6" for="category">Product Type</label>
                     <select name="catselect" id="category" class="form-control input-lg dynamic col-md-6" data-dependent="labSubCat" required>
-                        <option value="{{$categories}}">Select Type</option>
+                        <option >Select Type</option>
                             @foreach($categories as $ct)
                                 <option value="{{$ct->id}}">{{$ct->type}}</option>
                             @endforeach
@@ -57,7 +57,7 @@
                 <div class="form-group row">
                     <label class="label col-md-6" for="date">Condition</label>
                     <select name="conselect" id="condition" class="form-control input-lg dynamic col-md-6" data-dependent="labSubCat" required>
-                    <option value="{{$conditions}}">Select Condition</option>
+                    <option value=>Select Condition</option>
                         @foreach($conditions as $cn)
                             <option value="{{$cn->id}}">{{$cn->details}}</option>
                         @endforeach

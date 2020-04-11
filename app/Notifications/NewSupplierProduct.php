@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewRequestedProduct extends Notification
+class NewSupplierProduct extends Notification
 {
     use Queueable;
 
@@ -55,7 +55,7 @@ class NewRequestedProduct extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A user has made a requested for a product.'
+            'data'=> 'A supplier has uploaded a new product. Head to Supplier Products'
         ];
     }
 }

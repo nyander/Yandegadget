@@ -22,7 +22,7 @@
                 <div class="field row">
                     <label class="label col-md-4 order-md-1" for="name">Product Name</label>
                     <div class="control col-md-8 order-md-2">
-                        <input class="input" type="text" name="name" id="name"> 
+                        <input class="input" type="text" name="name" id="name" required> 
                     </div>
                 </div>    
                 
@@ -31,8 +31,8 @@
                 {{-- <option> is each option of a dropdown --}}
                     <div class="form-group row">
                         <label class="label col-md-4 order-md-1 " style="margin-right:1.5em;" for="date">Product Type</label>
-                        <select name="type" id="type" class="form-control input-lg dynamic col-md-7 order-md-2" data-dependent="labSubCat">
-                            <option value="{{$categories}}">Select Type</option>
+                        <select name="type" id="type" class="form-control input-lg dynamic col-md-7 order-md-2" data-dependent="labSubCat" required>
+                            <option >Select Type</option>
                                 @foreach($categories as $ct)
                                     <option value="{{$ct->id}}">{{$ct->type}}</option>
                                 @endforeach
@@ -42,17 +42,17 @@
                     <div class="form-group row">
                         <label class="label col-md-4 order-md-1" for="type" style="margin-right:1.5em;" >Condition</label>
                         <select name="condition" id="condition" class="col-md-7 order-md-2">
-                            <option value="">Select Type </option>
+                            <option >Select Type </option>
                             @foreach($conditions as $ct)
                                 <option value="{{$ct->deposit}}">{{$ct->details}}</option>
                             @endforeach
                         </select>                       
                     </div>  
-                    <div class="form-group row">
-                        <label class="label col-md-4 order-md-1" for="type" style="margin-right:30px;" >Cost</label>
-                        <div class="col-md-7 order-md-2">
-                            (£) <input type="text" name="charge" id="charge" onClick="checkPrice()"  readonly>
-                        </div>
+                    
+                    <div class="field row">
+                        <label class="label col-md-5" for="type" style="margin-right:30px;" >Cost</label>
+                        <span>(£) </span> <input type="text" class="col-md-5" name="charge" id="charge" onClick="checkPrice()"  readonly>
+                        
                     </div>             
 
                 
@@ -62,11 +62,11 @@
 
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link" type="submit" name="myButton">Submit</button>
+                                <button class="btn btn-md btn-outline-primary" type="submit" name="myButton">Submit</button>
                             </div>
 
                             <div class="control">
-                                <a href="{{route('products.index')}}" class="button btn-secondary" type="button">Back To Products </a>
+                                <a href="{{route('products.index')}}" class="btn btn-md btn-outline-secondary" type="button">Back To Products </a>
                             </div>
                                               
                         </div>

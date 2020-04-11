@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
 use App\Supplier;
+use App\Notifications\NewSupplierProduct;
+use App\User;
 
 
 class SupplierProductController extends Controller
@@ -117,6 +119,12 @@ class SupplierProductController extends Controller
             }
             
         }
+
+        $staffretrieval = DB::table('role_user')->where('role_id',1)->get();
+        foreach ($staffretrieval as $staff){
+            User::find($staff->user_id)->notify(new NewSupplierProduct);
+    
+        }
         
 
          return redirect('/supplierproducts')->with('success', 'Product Uploaded');
@@ -176,7 +184,11 @@ class SupplierProductController extends Controller
     {
         // $id = Auth::id();
         $this->validate($request,[
-            'name' => 'required',            
+            'name' => 'required', 
+            'catselect'=>'required',
+            'price' => 'required',
+            'conselect' => 'required',            
+
         ]);
 
          $product = SupplierProduct::find($id);         
@@ -213,4 +225,16 @@ class SupplierProductController extends Controller
         
         return redirect('/supplierproducts')->with('success', 'The product has been deleted');
     }
+
+    public function MarkRead($id){
+        $user = \Auth::user();
+        $notification = $user->notifications()->where('id',$id)->first();
+        if ($notification)
+        {
+            $notification->delete();
+            return back();
+        }
+        else
+            return back()->withErrors('we could not found the specified notification');
+    }    
 }

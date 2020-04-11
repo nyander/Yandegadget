@@ -92,6 +92,7 @@ class ProductsController extends Controller
             'cost' => 'required',
             'catselect' => 'required',
             'purchasedate' => 'required',
+            // 'condition' => 'required',
             'price' => 'required',  
             'featured' => 'required',        
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -114,7 +115,7 @@ class ProductsController extends Controller
          $product->user_id = $id;
          $product->cost = request("cost");
          $product->type = request("catselect");
-         $product->supplier = request("suspelect");
+         $product->supplier = request("supselect");
          $product->purchase_Date = request("purchasedate");
          $product->condition = request("conselect");
          $product->condition_Notes = request("condition_Notes");
@@ -298,24 +299,14 @@ class ProductsController extends Controller
     }
 
     public function storesupproduct($id)
-    {
-        $this->validate($request,[
-            'name' => 'required',
-            'cost' => 'required',
-            'catselect' => 'required',
-            'purchasedate' => 'required',
-            'price' => 'required',  
-            'featured' => 'required',        
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+    {        
         $product = SupplierProduct::find($id);
         $dt = Carbon::now();
         $today = $dt->toDateString();
         $product->purchased = true;
         $product->save();
         $suppliers = DB::table('suppliers')->select('id','name')->get();
-        $conditions = DB::table('conditions')->select('id','details')->get();
+        $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
         $suppliername = DB::table('suppliers')->where('id', $product->supplier_id)->value('name');
@@ -329,16 +320,7 @@ class ProductsController extends Controller
     
     public function storereqproduct($id)
     {
-        $this->validate($request,[
-            'name' => 'required',
-            'cost' => 'required',
-            'catselect' => 'required',
-            'purchasedate' => 'required',
-            'price' => 'required',  
-            'featured' => 'required',        
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+        
         $dt = Carbon::now();
         $today = $dt->toDateString();
         $product = ProductRequest::find($id);
@@ -346,7 +328,7 @@ class ProductsController extends Controller
         $product->save();
         User::find($product->customer_id)->notify(new ProductAcquired);
         $suppliers = DB::table('suppliers')->select('id','name')->get();
-        $conditions = DB::table('conditions')->select('id','details')->get();
+        $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         $categoriesname = DB::table('categories')->where('id',$product->type)->value('type');
         $conditionname = DB::table('conditions')->where('id',$product->condition)->value('details');
@@ -359,8 +341,15 @@ class ProductsController extends Controller
                                                              'today'=>$today]);
     }
 
-    public function markAsRead(){
-        auth()->user()->unreadNotifications->markAsRead();
-        return redirect()->back();
-    }
+    public function MarkRead($id){
+        $user = \Auth::user();
+        $notification = $user->notifications()->where('id',$id)->first();
+        if ($notification)
+        {
+            $notification->delete();
+            return back();
+        }
+        else
+            return back()->withErrors('we could not found the specified notification');
+    }    
 }

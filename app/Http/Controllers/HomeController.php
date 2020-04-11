@@ -28,8 +28,10 @@ class HomeController extends Controller
     {
         $suppliers = DB::table('suppliers')->where('supplier_id', Auth::user()->id)->value('id');
         //this is to check whether the current user's ID does not exist in the table. 
+        $supproduct = DB::table('supplier_products')->where('supplier_id',Auth::user()->id)->count();
+        $soldsupproduct = DB::table('supplier_products')->where('supplier_id',Auth::user()->id)->where('purchased',1)->count();
         $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
-        return view('home')->with(['suppliers' => $suppliers, 'checker' => $checker]);
+        return view('home')->with(['suppliers' => $suppliers, 'checker' => $checker,'supproduct'=> $supproduct, 'soldsupproduct'=> $soldsupproduct]);
     }
 
     

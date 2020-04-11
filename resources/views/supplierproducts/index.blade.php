@@ -36,7 +36,7 @@
                             <td ><a class="text-white" href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
                             <td ><a class="text-white" href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
                             <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
-                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                            <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
                             <td>£ {{$product->selling_Price}}</td>
                             <td>                          
                                 <b>Purchased</b>
@@ -48,7 +48,7 @@
                             <td ><a  href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
                             <td ><a  href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
                             <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
-                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                            <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
                             <td>£ {{$product->selling_Price}}</td>
                             <td>                          
                                 @can('upload-edit-supplier-products')

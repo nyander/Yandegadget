@@ -35,7 +35,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 // GET|PUSH|PUT|etc
 Route::resource('/products', 'ProductsController');
 // Mark Products as read function
-Route::get('/products/markAsRead', 'ProductsController@markAsRead')->name('markAsRead');
+Route::get('products/notifications/{id}','ProductsController@MarkRead');
 // Confirm product as been recieved function
 Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
 // Redirects to page to confirm purchase
@@ -55,6 +55,8 @@ Route::put('/images/updatesuppliers/{id}', 'ImageController@updatesuppliers')->n
 
 //SupplierProduct Controller
 Route::resource('/supplierproducts', 'SupplierProductController');
+//marks notification as read 
+Route::get('supproduct/notifications/{id}','SupplierProductController@MarkRead');
 
 // Requested Product Controller
 Route::resource('/requests','ProductRequestController');

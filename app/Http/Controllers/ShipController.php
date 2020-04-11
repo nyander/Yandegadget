@@ -25,26 +25,6 @@ class ShipController extends Controller
         return view('ships.index')->with(['ships'=> $ships]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -70,44 +50,4 @@ class ShipController extends Controller
         auth()->user()->unreadNotifications->where('id', $id1)->markAsRead(); 
         return redirect()->route('ships.index')->with('success','A Shipment has been recieved');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    // public function markAsRead(Request $r ){
-    //     auth()->user()->unreadNotifications->find($r->not_id)->markAsRead();
-    //     return back();
-    // }
-
   }

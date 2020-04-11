@@ -56,7 +56,7 @@
         <button type="submit" name="myButton" class="button button-plain">Add To Cart</button>
     </form>
     @endif @can('manage-products')
-    <a href="/products/{{$product->id}}/edit" class="btn btn-default"> Edit </a> @endcan @can('manage-products') {!!Form::open(['action' => ['ProductsController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!} {{Form::hidden('_method', 'DELETE')}} {{Form::submit('Delete',['class' => 'btn btn-danger '])}} {!!Form::close() !!} @endcan
+    <a href="/products/{{$product->id}}/edit" class="btn btn-md btn-outline-default"> Edit </a> @endcan @can('manage-products') {!!Form::open(['action' => ['ProductsController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!} {{Form::hidden('_method', 'DELETE')}} {{Form::submit('Delete',['class' => 'btn btn-danger '])}} {!!Form::close() !!} @endcan
 
 </div>
 

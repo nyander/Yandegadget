@@ -1,61 +1,88 @@
 @extends('layouts.app')
 
 @section ('content')
+     
+    <div class="checkout-section my-5">
+        <div>
+        <form action="{{route('checkouts.update',$request->id)}}" method="POST" id="payment-form">
+            @method('PUT')
+            {{ csrf_field() }}
+                <h2> Billing Details </h2>
+                <div class="row">
+                    <div class="col-md-4 order-md-2 mb-4">
+                        <h3 class="list-group-item d-flex justify-content-between lh-condensed row">Requested Product</h3>
+                        <div class="list-group-item d-flex justify-content-between lh-condensed row">
+                            <label for="charge" class="col-md-6"> Product Name </label>
+                            <input type="text"  class="form-control col-md-6" id="productname" name="productname" value="{{$request->name}}" readonly>
+                        </div>
+                        <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
+                            <label for="charge" class="col-md-6"> Type </label>
+                            <input type="text"  class="form-control col-md-6" id="type" name="type" value="{{$categoriesname}}" readonly>
+                        </div>
+                        <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
+                            <label for="charge" class="col-md-6"> Condition </label>
+                            <input type="text"  class="form-control col-md-6" id="condition" name="condition" value="{{$conditionname}}" readonly>
+                        </div>
+                        <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
+                            <label for="charge" class="col-md-6"> Total Price </label>
+                            <input type="text"  class="form-control col-md-6" id="charge" name="charge" value="{{$request->charge}}" readonly>
+                        </div>
+                    </div>   
 
-        <div class="container">
-            <h1 class="checkout-heading stylish-heading"> Checkout </h1>
-            <div class="checkout-section">
-                <div>
-                <form action="{{route('checkouts.update',$request->id)}}" method="POST" id="payment-form">
-                    @method('PUT')
-                    {{ csrf_field() }}
-                        <h2> Billing Details </h2>
-
+                    <div class="col-md-8 order-md-1">
                         <input type="hidden" id="custId" name="custId" value="1">
-                            <div class="form-group">
-                            <label for="email"> Email Address </label>
-                            <input type="email"  class="form-control" id="email" name="email" value="{{old('email')}}">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="name"> Name </label>
-                            <input type="text"  class="form-control" id="name" name="name" value="{{old('name')}}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="address"> Address </label>
-                            <input type="text"  class="form-control" id="address" name="address" value="{{old('address')}}">
-                        </div>
-
-                        <div class="half-form">
-                            <label for="city"> City </label>
-                            <input type="text"  class="form-control" id="city" name="city" value="{{old('city')}}">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="name" > Full Name </label>
+                                <input type="text"  class="form-control" id="name" name="name" value="{{old('name')}}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-5">
+                                <label for="email"> Email Address </label>
+                                <input type="email"  class="form-control" id="email" name="email" value="{{old('email')}}" required>
+                            </div>
                         </div>
                         
-                        <div class="form-form">
-                            <label for="postcode"> Postcode </label>
-                            <input type="text"  class="form-control" id="postcode" name="postcode" value="{{old('postcode')}}">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="address"> Address </label>
+                                <input type="text"  class="form-control" id="address" name="address" value="{{old('address')}}" required>
+                            </div>
+
+                            <div class="form-group col-md-5">
+                                <label for="city"> City </label>
+                                <input type="text"  class="form-control" id="city" name="city" value="{{old('city')}}" required>
+                            </div>
                         </div>
-                        
-                        <div class="form-form">
-                            <label for="phone"> Phone </label>
-                            <input type="text"  class="form-control" id="phone" name="phone" value="{{old('phone')}}">
+
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="postcode"> Postcode </label>
+                                <input type="text"  class="form-control" id="postcode" name="postcode" value="{{old('postcode')}}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-5">
+                                <label for="phone"> Phone </label>
+                                <input type="text"  class="form-control" id="phone" name="phone" value="{{old('phone')}}" required>
+                            </div>
                         </div>
 
                         <div class="spacer"></div>
 
-                        <h2> Payment Details </h2>
+                        <h2 class="my-3"> Payment Details </h2>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="name_on_card"> Name on Card </label>
+                                <input type="text"  class="form-control" id="name_on_card" name="name_on_card" value="" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="name_on_card"> Name on Card </label>
-                            <input type="text"  class="form-control" id="name_on_card" name="name_on_card" value="">
+                            <div class="form-group col-md-5">
+                                <label for="address"> Address </label>
+                                <input type="text"  class="form-control" id="address" name="address" value="" required>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="address"> Address </label>
-                            <input type="text"  class="form-control" id="address" name="address" value="">
-                        </div>
-
+                        
                         {{-- STRIPE payment method input fields for the user card details --}}
                         <div class="form-group">
                             <label for="card-element">
@@ -67,38 +94,21 @@
                         
                             <!-- Used to display form errors. -->
                             <div id="card-errors" role="alert"></div>
-                        </div> 
-
-                       
-                        <div class="form-group">
-                            <label for="charge"> Product Name </label>
-                            <input type="text"  class="form-control" id="productname" name="productname" value="{{$request->name}}" readonly>
                         </div>
-                        <div class="form-group">
-                            <label for="charge"> Type </label>
-                            <input type="text"  class="form-control" id="type" name="type" value="{{$categoriesname}}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="charge"> Condition </label>
-                            <input type="text"  class="form-control" id="condition" name="condition" value="{{$conditionname}}" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="charge"> Total Price </label>
-                            <input type="text"  class="form-control" id="charge" name="charge" value="{{$request->charge}}" readonly>
-                        </div>                      
-
-                        <div class="spacer"></div>
-                        <button type="submit" id="complete-order" class="button-primary full-width"> Confirm</button>
-                        
-                    </form>
+                    </div>                    
                 </div>
-
-                <div class="checkout-table-container">
-                    
-                </div>
-
-            </div>
+                <div class="spacer"></div>
+                <button type="submit" id="complete-order" class="btn btn-outline-primary my-3"> Confirm</button>
+                
+            </form>
         </div>
+
+        <div class="checkout-table-container">
+            
+        </div>
+
+    </div>
+        
 @endsection
 
 @section('extra-js')

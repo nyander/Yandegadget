@@ -41,7 +41,7 @@
      @if ($product->request_from)
      <p>Requested By: {{$product->request_from}}
     @endif </p>
-    <p>Shipped?: {{$product->recieved}}</p>
+    <p>Shipped?: {{$product->received}}</p>
     <p>Shipment: {{$product->shipment}}</p>
     <p>Featured: @if($product->featured = true) Yes @else No @endif
 
@@ -53,7 +53,7 @@
         <input type="hidden" name="id" value="{{$product->id}}">
         <input type="hidden" name="name" value="{{$product->name}}">
         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-        <button type="submit" name="myButton" class="button button-plain">Add To Cart</button>
+        <button type="submit" name="myButton" class="button button-plain">Ship Product</button>
     </form>
     @endif @can('manage-products')
     <a href="/products/{{$product->id}}/edit" class="btn btn-md btn-outline-default"> Edit </a> @endcan @can('manage-products') {!!Form::open(['action' => ['ProductsController@destroy', $product->id], 'method' => 'POST', 'class' => 'pull-right'])!!} {{Form::hidden('_method', 'DELETE')}} {{Form::submit('Delete',['class' => 'btn btn-danger '])}} {!!Form::close() !!} @endcan

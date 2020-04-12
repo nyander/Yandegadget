@@ -69,7 +69,7 @@
                 <tbody>
                     @foreach (Cart::content() as $item)            
                         <tr>                    
-                            <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em;"></td>
+                            <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em; object-fit: contain;"></td>
                             <td>                        
                                 <p><b>Product:</b> <a href="/products/{{$item->id}}" class="text-dark">{{ $item->model->name}}</a></p>                        
                                 <p><b>Cost:</b> £{{$item->model->cost}}</p>

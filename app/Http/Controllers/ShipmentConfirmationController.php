@@ -51,14 +51,15 @@ class ShipmentConfirmationController extends Controller
     {
         $this->addToOrdersTable($request);
 
+        //when successful it will remove the items from the cart
+        Cart::instance('default')->destroy();
+
         $staffretrieval = DB::table('role_user')->where('role_id',2)->get();
         foreach ($staffretrieval as $staff){
             User::find($staff->user_id)->notify(new NewShipment);
     
         }
-
-        //when successful it will remove the items from the cart
-        Cart::instance('default')->destroy();
+        
         return redirect()->route('ships.index')->with('success', 'Shipment has been confirmed'); 
     }
 
@@ -83,48 +84,5 @@ class ShipmentConfirmationController extends Controller
         } 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

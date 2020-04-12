@@ -57,7 +57,7 @@ class NewShipment extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A New Shipment has been made. Confirm if it has been recieved ',
+            'data' => 'A New Shipment has been made. Confirm if it has been received ',
         ];
     }
 }

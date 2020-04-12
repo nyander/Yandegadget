@@ -7,12 +7,12 @@
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide" style="max-height:15em; object-fit: cover;" >
+                    <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide" style="max-height:15em; object-fit: contain;" >
                 </div>
                 <p hidden>{{$images = DB::table('images')->where('supplierproduct_id',$product->id)->get()}}</p>
                     @foreach ( $images as $image)
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" width="50" height="50" style="max-height:15em; object-fit: cover;">   
+                            <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" width="50" height="50" style="max-height:15em; object-fit: contain;">   
                             <div class="carousel-caption d-none d-md-block">
                                 <form action="{{ route('images.destroy', $image->id) }}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                     @csrf @method('DELETE')

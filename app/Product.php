@@ -7,7 +7,7 @@ use App\Product;
 
 class Product extends Model
 {
-protected $fillable = ['name','type','cost','supplier','purchase_Date','condition','condition_Notes','selling_Price','recieved','sold'];
+protected $fillable = ['name','type','cost','supplier','purchase_Date','condition','condition_Notes','selling_Price','received','sold'];
     
     public function supplier(){
         return $this->belongsTo('App\Supplier');

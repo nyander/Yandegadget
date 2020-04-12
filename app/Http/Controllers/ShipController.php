@@ -40,14 +40,14 @@ class ShipController extends Controller
         return view('ships.show')->with(['ship'=>$ship, 'products1'=> $products1]);
     }
 
-    public function recieved($id){
-        // when called, it will set the specific shipment's recieved to true
+    public function received($id){
+        // when called, it will set the specific shipment's received to true
         $ship = Ship::find($id);
-        $ship->recieved = true;
+        $ship->received = true;
         $ship->save();
         
         $id1 = auth()->user()->unreadNotifications[0]->id;
         auth()->user()->unreadNotifications->where('id', $id1)->markAsRead(); 
-        return redirect()->route('ships.index')->with('success','A Shipment has been recieved');
+        return redirect()->route('ships.index')->with('success','A Shipment has been received');
     }
   }

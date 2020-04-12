@@ -35,7 +35,7 @@
     <p>Condition: {{$condition}}</p>
     <p>Condition Notes: {{$product->condition_Notes}}</p>
     <p>Requested By: {{$product->request_from}}</p>
-    <p>Shipped?: {{$product->recieved}}</p>
+    <p>Shipped?: {{$product->received}}</p>
     <p>Shipment: {{$product->shipment}}</p>
     <p>Featured: @if($product->featured = true)
                  Yes

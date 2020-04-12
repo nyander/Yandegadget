@@ -36,8 +36,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/products', 'ProductsController');
 // Mark Products as read function
 Route::get('products/notifications/{id}','ProductsController@MarkRead');
-// Confirm product as been recieved function
-Route::get('/products/recieved/{id}', 'ProductsController@recieved')->name('products.recieved');
+// Confirm product as been received function
+Route::get('/products/received/{id}', 'ProductsController@received')->name('products.received');
 // Redirects to page to confirm purchase
 Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
 // Cofirm Product has been purchased function 
@@ -85,8 +85,8 @@ Route::resource('/checkouts', 'CheckoutController');
 // Shipped Product Controler
 Route::resource('/ships', 'ShipController');
 
-// Shipped Product has been recieved function
-Route::get('/ships/recieved/{id}', 'ShipController@recieved')->name('ships.recieved');
+// Shipped Product has been received function
+Route::get('/ships/received/{id}', 'ShipController@received')->name('ships.received');
 
 //Charts and Reports controller 
 Route::resource('/reports', 'ReportController');

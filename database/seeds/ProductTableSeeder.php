@@ -30,7 +30,8 @@ class ProductTableSeeder extends Seeder
                          'purchase_Date' => '18/04/2020',
                          'condition' => $condition,
                          'selling_Price' => '50' ,
-                         'featured' => 'true'                           
+                         'featured' => 'true',
+                         'thumbnail_path' => 'LG TB-1586622730.jpg'
                          ]); 
         $supplier2 = Supplier::select('id')->where('id', '2')->value('id');
         $categories2 = Category::select('id')->where('id', '2')->value('id');
@@ -43,7 +44,8 @@ class ProductTableSeeder extends Seeder
                          'purchase_Date' => '18/04/2020',
                          'condition' => $condition2,
                          'selling_Price' => '50',
-                         'featured' => 'true'                         
+                         'featured' => 'true',
+                         'thumbnail_path' => 'Iphone-1586622759.jpg'                         
                          ]); 
         $supplier3 = Supplier::select('id')->where('id', '3')->value('id');
         $categories3 = Category::select('id')->where('id', '3')->value('id');
@@ -56,7 +58,8 @@ class ProductTableSeeder extends Seeder
                          'purchase_Date' => '18/04/2020',
                          'condition' =>  $condition3,
                          'selling_Price' => '50',
-                         'featured' => 'true'                            
+                         'featured' => 'true',
+                         'thumbnail_path' => 'Macbook-1586622814.jpg'                            
                          ]);
 
     }

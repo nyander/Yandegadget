@@ -27,11 +27,7 @@ class ShipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -45,48 +41,11 @@ class ShipmentController extends Controller
         });
 
         if($duplicates->isNotEmpty()){
-            return redirect()->route('shipments.index')->with('success', 'Product is alreeady in your shipment list!');
+            return redirect()->route('shipments.index')->with('success', 'Product is already in your shipment list!');
         }
 
         Cart::add($request->id, $request->name ,1, $request->selling_Price)->associate('App\Product');
         return redirect()->route('shipments.index')->with('success','Product has been added for shipment');
-    }
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**

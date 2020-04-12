@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
 
 class PagesController extends Controller
 {
@@ -15,7 +16,8 @@ class PagesController extends Controller
     //this public method/function is available and accessible anywhere, this function will return the index page as a view
     public function about() {
         $title = 'About Us';
-        return view('about')->with('title',$title);
+        $categories = Category::all();
+        return view('about')->with(['title' => $title, 'categories' => $categories]);
     }
 
     //this public method/function is available and accessible anywhere, this function will return the index page as a view

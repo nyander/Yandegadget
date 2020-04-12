@@ -16,7 +16,7 @@
                     <tbody>
                         @foreach (Cart::content() as $item)            
                             <tr>                    
-                                <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em;"></td>
+                                <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em;object-fit: contain;"></td>
                                 <td>                        
                                     <p><b>Product:</b> <a href="/products/{{$item->id}}" class="text-dark">{{ $item->model->name}}</a></p>                        
                                     <p><b>Cost:</b> £{{$item->model->cost}}</p>
@@ -54,9 +54,11 @@
         <a href="/products" class="btn  btn-outline-primary">Add More Products</a>
         <a href="/confirmations" class="btn btn-outline-success">Confirm Shipment</a>   
     @else
-        <h3>No items for shipment</h3> 
+        <h3 class="d-flex justify-content-center mt-5">No items for shipment</h3> 
         <div class="spacer"></div>
-        <a href="{{route('products.index')}}" class="btn  btn-outline-primary">Back to shop</a>
+       <div class="d-flex justify-content-center mx-auto">
+           <a href="{{route('products.index')}}" class="btn  btn-outline-primary ">Products</a>
+        </div> 
         <div class="spacer"></div>
     @endif
 
@@ -77,7 +79,7 @@
                 <tbody>
                     @foreach(Cart::instance('saveForLater')->content() as $item)
                         <tr>
-                            <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em;"></td>
+                            <td><img class="card-img-top" src="/gallery/{{$item->model->thumbnail_path}}" style="max-width: 20em; max-height: 10em; object-fit: contain;"></td>
                             <td>                        
                                 <p><b>Product:</b> <a href="/products/{{$item->id}}" class="text-dark">{{ $item->model->name}}</a></p>                        
                                 <p><b>Cost:</b> £{{$item->model->cost}}</p>
@@ -104,6 +106,6 @@
             </table>  
         </div>
     @else
-        <h2> You have no items saved for shipment </h2>
+        <h2 class="d-flex justify-content-center"> You have no items saved for shipment</h2>
     @endif
 @endsection

@@ -21,7 +21,7 @@
                     <p><b>Shipment Company:</b> {{$ship->shipment_company}}</p>
                     <p><b>Date of Shipment:</b> {{$ship->shipment_date}} 
                     <p><b>Cost of Shipment:</b> {{$ship->shipment_cost}}</p>  
-                    <p><b>Shipment Recieved?:</b> @if($ship->recieved == 1) Yes @else No @endif</p>  
+                    <p><b>Shipment received?:</b> @if($ship->received == 1) Yes @else No @endif</p>  
                     <p><b>Extra Information:</b></p>
                     <p>{{$ship->shipment_notes}}</p>
                     <br>
@@ -35,26 +35,26 @@
                 <div class="container">
                     <div class="row">
                         @foreach ($products1 as $product1)
-                            <span hidden>{{$recieved = DB::table('products')->where('id', $product1->product_id)->value('recieved')}}</span>
-                            <span hidden>{{$recieved2 = DB::table('shipped_product')->where('product_id', $product1->product_id)->value('recieved')}}</span>   
+                            <span hidden>{{$received = DB::table('products')->where('id', $product1->product_id)->value('received')}}</span>
+                            <span hidden>{{$received2 = DB::table('shipped_product')->where('product_id', $product1->product_id)->value('received')}}</span>   
                             <span hidden>{{$thumbnail_path = DB::table('products')->where('id', $product1->product_id)->value('thumbnail_path')}}</span> 
                             <span hidden>{{$price = DB::table('products')->where('id', $product1->product_id)->value('selling_Price')}}</span> 
                             <span hidden>{{$href = DB::table('products')->where('id', $product1->product_id)->value('id')}}</span>  
                             <span hidden>{{$name = DB::table('products')->where('id', $product1->product_id)->value('name')}}</span>                            
                             <div class="col-md-6 mb-2" >
                                 <div class="card mb-7 box-shadow" >
-                                    <img class="card-img-top " src="/gallery/{{$thumbnail_path}}" style="max-height:15em; object-fit: cover;" >
+                                    <img class="card-img-top " src="/gallery/{{$thumbnail_path}}" style="max-height:15em; object-fit: contain;" >
                                     <div class="card-body">
                                         <h5 class="title"> <a href="/products/{{$href}}"> {{$name}}</a></h5>
                                         <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$price}}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             
-                                            @if($recieved == 0 and $recieved2 == 0)
+                                            @if($received == 0 and $received2 == 0)
                                             <div class="btn-group">
-                                                <a href="{{route('products.recieved', $href)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-top: 1%;"> Recieved</button></a>
+                                                <a href="{{route('products.received', $href)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-top: 1%;"> received</button></a>
                                             </div>
                                             @else
-                                            <small class="text-muted">Recieved</small>
+                                            <small class="text-muted">received</small>
                                             @endif  
                                         </div>
                                     </div>

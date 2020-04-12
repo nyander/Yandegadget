@@ -22,7 +22,7 @@ class CreateShipsTable extends Migration
             $table->date('shipment_date')->nullable(); 
             $table->unsignedDecimal('shipment_cost')->nullable();  
             $table->string('shipment_notes')->nullable();
-            $table->boolean('recieved')->default(false);      
+            $table->boolean('received')->default(false);      
             $table->timestamps();
         });
     }

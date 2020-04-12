@@ -17,8 +17,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Shipment Company</th>
                             <th scope="col">Date of Shipment</th>
-                            <th scope="col">Package Recieved</th> 
-                            <th scope="col">Items Recieved</th>                            
+                            <th scope="col">Package received</th> 
+                            <th scope="col">Items received</th>                            
                             <th scope ="col">Action</th>                          
                                                         
                           </tr>
@@ -27,33 +27,33 @@
                         @foreach ($ships as $ship)
 
                         <p hidden>
-                           {{$amountrecieved = DB::table('shipped_product')->where('shipment_id', $ship->id)->where('recieved', 1)->count()}} 
+                           {{$amountreceived = DB::table('shipped_product')->where('shipment_id', $ship->id)->where('received', 1)->count()}} 
                            {{$totalamount = DB::table('shipped_product')->where('shipment_id', $ship->id)->count()}}
                         </p>
 
-                        @if($ship->recieved == 0)
+                        @if($ship->received == 0)
                         <tr style="background-color:#FA8072;">
                           <th scope="row">{{$ship->id}}</th>
                           <td>{{$ship->shipment_company}}</td>
                           <td>{{$ship->shipment_date}}</td>
                           <td>No</td>
-                          <td>{{$amountrecieved}}/{{$totalamount}}</td>                          
+                          <td>{{$amountreceived}}/{{$totalamount}}</td>                          
                           <td>                          
                             <a href="{{route('ships.show', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-primary">View</button></a>
                             @can('staff-shipment')
-                            <a href="{{route('ships.recieved', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-left: 5px;"> Recieved</button></a>                            
+                            <a href="{{route('ships.received', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-left: 5px;"> received</button></a>                            
                             @endcan
                           </td>
                         </tr>
 
                         @else
-                        @if($amountrecieved < $totalamount )
+                        @if($amountreceived < $totalamount )
                         <tr style="background-color: #ffcb6b;">
                           <th scope="row">{{$ship->id}}</th>
                           <td>{{$ship->shipment_company}}</td>
                           <td>{{$ship->shipment_date}}</td>
                           <td>Yes</td>
-                          <td>{{$amountrecieved}}/{{$totalamount}}</td>
+                          <td>{{$amountreceived}}/{{$totalamount}}</td>
                           <td>                          
                             <a href="{{route('ships.show', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-primary">View</button></a>
                                                         
@@ -65,7 +65,7 @@
                           <td>{{$ship->shipment_company}}</td>
                           <td>{{$ship->shipment_date}}</td>
                           <td>Yes</td>
-                          <td>{{$amountrecieved}}/{{$totalamount}}</td>
+                          <td>{{$amountreceived}}/{{$totalamount}}</td>
                           <td>                          
                             <a href="{{route('ships.show', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-success">View</button></a>                                                        
                           </td>

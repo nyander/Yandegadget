@@ -204,18 +204,18 @@ class ProductsController extends Controller
                                             'today' => $today ]);  
     }
 
-    public function recieved($id){
-        // when called, it will set the specific shipment's recieved to true
+    public function received($id){
+        // when called, it will set the specific shipment's received to true
         $product = Product::find($id);
-        $product->recieved = true;
+        $product->received = true;
         $product->save();
         
-        $recievedshipprod = ShippedProduct::where('product_id', $id)->get();
-        foreach($recievedshipprod as $prod){
-        $prod->recieved =true;
+        $receivedshipprod = ShippedProduct::where('product_id', $id)->get();
+        foreach($receivedshipprod as $prod){
+        $prod->received =true;
         $prod->save(); 
         }
-        return redirect()->back()->with('success','A Product has been recieved');
+        return redirect()->back()->with('success','A Product has been received');
     }
 
     /**
@@ -280,7 +280,7 @@ class ProductsController extends Controller
 
 
     public function purchase($id){
-        // when called, it will set the specific shipment's recieved to true
+        // when called, it will set the specific shipment's received to true
         $dt = Carbon::now();
         $today = $dt->toDateString();
         $product = Product::find($id); 

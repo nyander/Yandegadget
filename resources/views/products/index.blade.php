@@ -47,7 +47,7 @@
                             @forelse ($products as $product)
 
                                 <div hidden style="display: none;">
-                                    @if($product->recieved == true)   
+                                    @if($product->received == true)   
                                         @if($product->sold ==true)
                                             {{$color = '#DCF4CC'}}
                                             {{$status = 'SOLD'}}
@@ -55,7 +55,7 @@
                                             {{$color = '#FFFFFF'}}
                                             {{$status = 'SHIPPED'}}
                                         @endif
-                                    @elseif($product->recieved == false)
+                                    @elseif($product->received == false)
                                         {{$color = '#D3D3D3'}}
                                         {{$status = 'NOT SHIPPED'}}
                                     @endif
@@ -71,13 +71,13 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="btn-group">
                                                     <a href="/products/{{$product->id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
-                                                    @if($product->recieved == false)
+                                                    @if($product->received == false)
                                                     <form action="{{route('shipments.store')}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{$product->id}}">
                                                         <input type="hidden" name="name" value="{{$product->name}}">
                                                         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-                                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-secondary">Add To Cart</button>
+                                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-primary">Ship Product</button>
                                                     </form>
                                                     @endif
                                                 </div>
@@ -119,7 +119,7 @@
                                 @endif
                             
                             </div>
-                            @if($product->recieved == true)
+                            @if($product->received == true)
                                 <div class="col-md-4" >
                                     <div class="card mb-4 box-shadow" style=" background-color: {{$color}};">
                                         <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: cover;">
@@ -158,7 +158,7 @@
                 <div class="container">
                     <div class="row">
                         @forelse ($products as $product)
-                        @if($product->recieved == true)
+                        @if($product->received == true)
                             @if($product->sold == false)        
                             <div class="col-md-4" >
                                 <div class="card mb-4 box-shadow" >

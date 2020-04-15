@@ -26,53 +26,16 @@ class AuthServiceProvider extends ServiceProvider
         // user management
         $this->registerPolicies();
 
-        Gate::define('manage-users', function($user){
+        Gate::define('admin-role', function($user){
             return $user->hasRole('admin');
         });
 
-        Gate::define('manage-requests', function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('manage-products', function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('sub-manage-products', function($user){
+        Gate::define('staff-role', function($user){
             return $user->hasRole('staff');
-        }); 
-
-        Gate::define('manage-suppliers', function($user){
-            return $user->hasRole(['admin']);
         });
 
         Gate::define('supplier-role', function($user){
             return $user->hasRole(['supplier']);
-        });
-
-
-        //shipment management
-
-        Gate::define('manage-shipment', function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('staff-shipment', function($user){
-            return $user->hasRole('staff');
-        });
-
-        //request management
-
-        Gate::define('manage-productRequest', function($user){
-            return $user->hasRole(['admin', 'customer']);
-        });
-
-        Gate::define('upload-edit-supplier-products', function($user){
-            return $user->hasRole(['supplier']);
-        });
-
-        Gate::define('notifications', function($user){
-            return $user->hasRole(['staff']);
         });
     }
 }

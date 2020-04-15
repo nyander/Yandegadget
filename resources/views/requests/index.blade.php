@@ -125,7 +125,7 @@
                                                     @endif
                                                 </td>      
                                                 <td>                          
-                                                    @can('manage-requests')
+                                                    @can('admin-role')
                                                         <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                                     @endcan
                                                         {{-- after customer has made the payment, they cannot remove the requested product for reference purposes --}}

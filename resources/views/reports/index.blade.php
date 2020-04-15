@@ -74,7 +74,7 @@
                             <td>{{$transaction->description}}</td>
                             <td>{{$transaction->amount}}</td>
                             <td>             
-                                @can('manage-users')
+                                @can('admin-role')
                                 <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
                                     @csrf
                                     {{method_field('DELETE')}}

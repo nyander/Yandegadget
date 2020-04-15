@@ -29,7 +29,7 @@
                                 
                                 <a href="{{route('conditions.edit', $condition->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
-                                @can('manage-users')
+                                @can('admin-role')
                                 <form action="{{route('conditions.destroy', $condition->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 {{method_field('DELETE')}}

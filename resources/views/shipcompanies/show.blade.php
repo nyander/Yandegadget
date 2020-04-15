@@ -10,7 +10,7 @@
     <p>Number: {{$company->number}}</p>
     <p>Extra Infroamtion: {{$company->extra_information}}</p>    
     <hr>
-    @can('manage-suppliers')
+    @can('admin-role')
     <a href="/shipcompanies/{{$company->id}}/edit" class="btn btn-default"> Edit </a>
     @endcan
 </div> 

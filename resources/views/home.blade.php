@@ -23,6 +23,15 @@
                     <a href="{{route('suppliers.edit', $suppliers)}}"> <button class="btn btn-success" type="submit">Manage Details</button> </a>
                     @endif
                 @endcan
+                @can('admin-role')
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                    </p>
+                    <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success " >Filter Products</button></a>
+                    <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary " >Record Transactions</button></a>
+                @endcan
             </div>            
         </div>
         <div class="col-md-7 order-md-2">
@@ -37,16 +46,30 @@
                     @endif
                     
                     {{-- Suppliers View --}}
-                    @can('supplier-role')
+                    
                         <table class="table">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Information</th>
-                                    <th scope="col">Result</th>
-                                    <th scole="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add Product</button></a></th>
+                                    <th scope="col">Result</th>                                    
+                                    <th scole="col">
+                                        @can('supplier-role')
+                                            <a href="{{route('supplierproducts.create')}}">
+                                                <button type="button" class="btn btn-success" >Add Product</button>
+                                            </a>
+                                        @endcan 
+                                        @can('admin-role')
+                                        <a href="{{route('products.create')}}">
+                                            <button type="button" class="btn btn-success" >Upload Product</button>
+                                        </a>
+                                        @endcan   
+                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
+                                {{-- supplier table --}}
+                                @can('supplier-role')
                                 <tr>
                                     <td>Products Uploaded:</td>
                                     <td>{{$supproduct}}</td>
@@ -55,10 +78,50 @@
                                     <td>Products Sold:</td>
                                     <td>{{$soldsupproduct}}</td>
                                 </tr>
+                                @endcan
+
+                                {{-- Admin table --}}
+                                @can('admin-role')
+                                <tr>
+                                    <td>Requested Products</td>
+                                    <td>{{$requestedProducts}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Purchases</td>
+                                    <td>{{$purchasedProducts}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Supplier Products available</td>
+                                    <td>{{$supplierProducts}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Products Uploaded</td>
+                                    <td>{{$uploadedProducts}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Signed Customers</td>
+                                    <td>{{$signedCustomers}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Suppliers</td>
+                                    <td>{{$suppliersAmount}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Suppliers with Accounts</td>
+                                    <td>{{$signedSuppliers}}</td>
+                                    @if($signedSuppliers>$suppliersAmount)
+                                        <td class="text-danger">Atleast {{$signedSuppliers - $suppliersAmount}} Suppliers not uploaded details</td>
+                                    @endif
+                                </tr>
+                                <tr>
+                                    <td>Transactions</td>
+                                    <td>{{$transactionCount}}</td>
+                                </tr>
+                                @endcan
                             </tbody>
                             
                         </table>
-                    @endcan
+                    
                 </div>
                 
                 

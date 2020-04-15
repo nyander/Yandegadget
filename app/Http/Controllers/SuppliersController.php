@@ -21,7 +21,7 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-        // if(Gate::denies('manage-suppliers')){
+        // if(Gate::denies('admin-role')){
         //     return redirect(route('products.index'));
         // }
         $suppliers = Supplier::all();
@@ -36,7 +36,7 @@ class SuppliersController extends Controller
     public function create()
     {
         
-        // if(Gate::denies('manage-suppliers')){
+        // if(Gate::denies('admin-role')){
         //     return redirect(route('products.index'));
         // }
         $suppliersrole = DB::table('role_user')->where('user_id',4)->get();
@@ -71,7 +71,7 @@ class SuppliersController extends Controller
         $supplier->contact = request("contact");
         $supplier->supplier_id = request("supplier_id");
         $supplier->save();
-        if(Gate::denies('manage-suppliers')){
+        if(Gate::denies('admin-role')){
             return redirect(route('home'));
         }
         else {
@@ -88,7 +88,7 @@ class SuppliersController extends Controller
     public function show($id)
     {
         
-        // if(Gate::denies('manage-suppliers')){
+        // if(Gate::denies('admin-role')){
         //     return redirect(route('products.index'));
         // }
         $supplier = Supplier::find($id);
@@ -103,7 +103,7 @@ class SuppliersController extends Controller
      */
     public function edit($id)
     {
-        // if(Gate::denies('manage-suppliers')){
+        // if(Gate::denies('admin-role')){
         //     return redirect(route('products.index'));
         // }
         $suppliersrole = DB::table('role_user')->where('user_id',4)->get();
@@ -136,7 +136,7 @@ class SuppliersController extends Controller
         $supplier->supplier_id = request("supplier_id");
         $supplier->save();
         
-        if(Gate::denies('manage-suppliers')){
+        if(Gate::denies('admin-role')){
             return redirect(route('home'))->with('success', 'Your Details has been updated');
         }
         else {

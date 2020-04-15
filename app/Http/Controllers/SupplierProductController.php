@@ -31,7 +31,7 @@ class SupplierProductController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('manage-products')){
+        if(Gate::denies('admin-role')){
         $products = SupplierProduct::where('supplier_id', Auth::id()) ->get();
         return view('supplierproducts.index')->with(['products'=> $products]);
         }

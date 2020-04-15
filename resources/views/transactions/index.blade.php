@@ -31,7 +31,7 @@
                             <td>                          
                                 
                                 
-                                @can('manage-users')
+                                @can('admin-role')
                                 <form action="{{route('transactions.destroy', $transaction->id)}}" method="POST" class="float-left">
                                 @csrf
                                 {{method_field('DELETE')}}

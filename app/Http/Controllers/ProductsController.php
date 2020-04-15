@@ -64,7 +64,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('manage-products')){
+        if(Gate::denies('admin-role')){
             return redirect(route('products.index'));
         }
         $suppliers = DB::table('suppliers')->select('id','name')->get();
@@ -176,7 +176,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {   
-        if(Gate::denies('manage-products')){
+        if(Gate::denies('admin-role')){
         return redirect(route('products.index'));
         }
         $dt = Carbon::now();
@@ -259,7 +259,7 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {   
-        if(Gate::denies('manage-products')){
+        if(Gate::denies('admin-role')){
             return redirect(route('products.index'));
         }
         $product = Product::find($id);

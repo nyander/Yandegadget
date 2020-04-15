@@ -9,7 +9,7 @@
     <p>Address: {{$supplier->address}}</p>  
     <p>Associated Account: {{Auth::user($supplier->supplier_id)->name}}</p>    
     <hr>
-    @can('manage-suppliers')
+    @can('admin-role')
     <a href="/suppliers/{{$supplier->id}}/edit" class="btn btn-default"> Edit </a>
     @endcan
 </div> 

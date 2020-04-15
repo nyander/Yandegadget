@@ -130,28 +130,28 @@
                                                    document.getElementById('logout-form').submit();">
                                       {{ __('Logout') }}
                                   </a>
-                                <a class="dropdown-item" href="{{route('home')}}">
-                                    Dashboard
-                                </a>
-                                  <a class="dropdown-item" href="{{route('products.create')}}">
-                                    Upload Product
-                                </a>
-                                <a class="dropdown-item" href="{{route('requests.index')}}">
-                                    Requested Products
-                                </a>
-                                 <a class="dropdown-item" href="{{ route('reports.index') }}">
-                                    Reports 
-                                 </a> 
-                                 <a class="dropdown-item" href="{{ route('ships.index') }}">
-                                    Shipped Product Management 
-                                  </a> 
-                                  <a class="dropdown-item" href="/settings">
-                                    Settings
-                                </a>
-                                                                     
-                                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                      @csrf
-                                  </form>
+                                    <a class="dropdown-item" href="{{route('home')}}">
+                                        Dashboard
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('products.create')}}">
+                                        Upload Product
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('requests.index')}}">
+                                        Requested Products
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('reports.index') }}">
+                                        Reports 
+                                    </a> 
+                                    <a class="dropdown-item" href="{{ route('ships.index') }}">
+                                        Shipped Product Management 
+                                    </a> 
+                                    <a class="dropdown-item" href="/settings">
+                                        Settings
+                                    </a>
+                                                                        
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                               </div>
                           </li>
                       @endguest

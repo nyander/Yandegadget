@@ -111,7 +111,7 @@ Route::get('empty', function(){
 
 
 // adding a prefix adds admin to the start of the URL and the name adds the admin. to the routes entered. it applies middleware so when the user logs in it checks whther it is a staff or an admin 
-Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:manage-users')->group(function(){
+Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admin-role')->group(function(){
     Route::resource('/users', 'UsersController',['except'=>['show','create','store']]);
     
 });

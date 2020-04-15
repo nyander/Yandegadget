@@ -20,10 +20,10 @@
                             <th scope="col">Condition</th>
                             <th scope="col">Price</th>  
                             {{-- Only Suppliers can add new products --}}
-                            @can('upload-edit-supplier-products')
+                            @can('supplier-role')
                             <th scope="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
                             @endcan
-                            @can('manage-products')
+                            @can('admin-role')
                             <th>Manage  </th> 
                             @endcan
                         </tr>
@@ -51,7 +51,7 @@
                             <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
                             <td>£ {{$product->selling_Price}}</td>
                             <td>                          
-                                @can('upload-edit-supplier-products')
+                                @can('supplier-role')
                                 {{-- ONly Supplier should be able to edit Product  --}}
                                 <a href="{{route('supplierproducts.edit', $product->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
@@ -63,7 +63,7 @@
                                 </form> 
                                 @endcan
 
-                                @can('manage-products')
+                                @can('admin-role')
                                     <a href="{{route('products.storesupproduct', $product->id)}}"><button type="button" class="btn btn-primary float-left">Purchased</button></a>
                                 @endcan
                             </td>

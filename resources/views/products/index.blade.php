@@ -37,7 +37,7 @@
 
         {{-- Products Section --}}
 
-        @if(Gate::allows('manage-products'))
+        @if(Gate::allows('admin-role'))
             {{-- Displayed Category Name --}}
             <div class="col-md-10 order-md-2">
                 <h3>{{$categoryname}}</h3>
@@ -101,7 +101,7 @@
             {{$products->appends(request()->input())->links()}}
 
         {{-- Staff Member View --}}
-        @elseif(Gate::allows('sub-manage-products'))
+        @elseif(Gate::allows('staff-role'))
         <div class="col-md-10 order-md-2">
             <h3>{{$categoryname}}</h3>
             <div class="album py-5 bg-light">

@@ -40,7 +40,7 @@
                           <td>{{$amountreceived}}/{{$totalamount}}</td>                          
                           <td>                          
                             <a href="{{route('ships.show', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-primary">View</button></a>
-                            @can('staff-shipment')
+                            @can('staff-role')
                             <a href="{{route('ships.received', $ship->id)}}"><button type="button" class="btn btn-md btn-outline-success" style="margin-left: 5px;"> received</button></a>                            
                             @endcan
                           </td>

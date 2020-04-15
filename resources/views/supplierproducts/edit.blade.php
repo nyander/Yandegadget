@@ -62,7 +62,7 @@
     
     <div class="col-md-6 order-md-2 ">
         <div id="updateproduct" class="container">
-            <h3>Upload Products</h3>
+            <h3>Edit Product</h3>
             <form method="POST" action="/supplierproducts/{{$product->id}}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

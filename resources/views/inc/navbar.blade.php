@@ -9,7 +9,7 @@
       </div>-->
       
       <nav class="navbar navbar-expand-md navbar-light bg-yellow shadow-md " style="background-color:yellow;">
-          <div class="container">
+          <div class="container my-auto">
               <a class="navbar-brand" href="{{ url('/') }}">
                   {{-- {{ config('app.name', 'Laravel') }} --}}
                   <img class="brand_logo" src="/images/YandeGadgets.png">

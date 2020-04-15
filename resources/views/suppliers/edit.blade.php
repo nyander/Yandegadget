@@ -4,7 +4,7 @@
     
     <div id="wrapper">
         <div id="createsupplier" class="container">
-            <h3>Upload Supplier</h3>
+            <h3>Edit Supplier</h3>
             <form method="POST" action="/suppliers/{{$supplier->id}}" onsubmit="myButton.disabled = true; return true;">
                 @csrf
                 @method('PUT')

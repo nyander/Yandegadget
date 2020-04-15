@@ -11,13 +11,13 @@
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide">
+                            <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide" style="max-height:17.5em; max-width:auto; object-fit: cover;">
                         </div>
                         <p hidden>{{$images = DB::table('images')->where('product_id',$product->id)->get()}}
                             <p>
                                 @foreach ( $images as $image)
                                 <div class="carousel-item">
-                                    <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" style="max-height:80px; max-width:auto;">
+                                    <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" style="max-height:17.5em; max-width:auto; object-fit: cover;">
                                     <div class="carousel-caption d-none d-md-block">
                                         <form action="{{ route('images.destroy', $image->id) }}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                             @csrf @method('DELETE')

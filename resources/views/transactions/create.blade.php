@@ -3,9 +3,16 @@
 @section('content')
 
     
-    <div id="wrapper">
+    <div class=" my-5">
         <div id="createtransaction" class="container">
-            <h3>Record Transactions</h3>
+            
+            <h3 class="text-center">Record Transactions</h3>
+            <p class="bg-success p-4 mx-2 text-light text-center">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            </p> 
+   
             <form method="POST" action="/transactions" onsubmit="myButton.disabled = true; return true;">
                 @csrf
 
@@ -28,7 +35,7 @@
                                 <input class="input" type="text" name="description[]" class="form-control"> 
                             </td>
                             <td>
-                                <select name="type[]" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat">
+                                <select name="type[]" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat" required>
                                     <option value="">Select</option>
                                         @foreach($types as $cn)
                                             <option value="{{$cn->id}}">{{$cn->type}}</option>
@@ -36,10 +43,10 @@
                                 </select> 
                             </td>
                             <td>
-                                <input class="input" type="number" name="amount[]" id="amount"> 
+                                <input class="input" type="number" name="amount[]" id="amount" required> 
                             </td>
                             <td>
-                                <input class="input" type="date" name="date[]" max="{{$today}}" placeholder="Enter Date of Purchase">  
+                                <input class="input" type="date" name="date[]" max="{{$today}}" placeholder="Enter Date of Purchase" required>  
                             </td>
                             <td>
                                 <a href="#" class="btn btn-danger remove">x</a>
@@ -81,10 +88,10 @@
         function addRow()
         {
             var tr = '<tr>' +
-            ' <td><input class="input" type="text" name="description[]" class="form-control"></td>'+
-            '<td><select name="type[]" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat"><option value="">Select</option>@foreach($types as $cn)<option value="{{$cn->id}}">{{$cn->type}}</option>@endforeach</select></td>'+
-            '<td><input class="input" type="number" name="amount[]" id="amount"></td>'+
-            '<td><input class="input" type="date" max="{{$today}}" name="date[]" placeholder="Enter Date of Purchase"></td>'+
+            ' <td><input class="input" type="text" name="description[]" class="form-control" required></td>'+
+            '<td><select name="type[]" id="type" class="form-control input-lg dynamic" data-dependent="labSubCat" required><option value="">Select</option>@foreach($types as $cn)<option value="{{$cn->id}}">{{$cn->type}}</option>@endforeach</select></td>'+
+            '<td><input class="input" type="number" name="amount[]" id="amount" required></td>'+
+            '<td><input class="input" type="date" max="{{$today}}" name="date[]" placeholder="Enter Date of Purchase" required></td>'+
             '<td><a href="#" class="btn btn-danger remove">x</a></td>'
             '</tr>';
             $('tbody').append(tr);

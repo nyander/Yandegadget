@@ -80,6 +80,10 @@ class ReportController extends Controller
     {
         $startdate = request('startdate');
         $enddate = request('enddate');
+
+        if($enddate < $startdate){
+            return redirect()->back()->with('error','End Date must be later than Start Date');
+        }
         
         //Sales Based on Type from {{$startdate}} to {{$enddate}}
         $sold_products_category_1  = Product::where('sold', true)->where('sold_Date','>=', $startdate )->where('sold_Date','<=', $enddate)->where('type','1')->count();

@@ -55,8 +55,10 @@
         @include('inc.navbar')
         <div class="container">
                 @include('inc.messages')
+            
                 {{-- this is will return the value and saves the content in its state --}}      
                 @yield('content')
+            
         </div> 
         @yield('index')      
 
@@ -79,7 +81,11 @@
     
                         <!-- Content -->
                         <h5 class="text-uppercase text-light">Yande Gadgets</h5>
-                        <p class="text-light">Here you can use rows and columns to organize your footer content.</p>
+                        <p class="text-light">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        </p>
     
                     </div>
                     <!-- Grid column -->
@@ -90,21 +96,19 @@
                     <div class="col-md-3 mb-md-0 mb-3">
     
                         <!-- Links -->
-                        <h5 class="text-uppercase text-light">Links</h5>
+                        <h5 class="text-uppercase text-light">Products</h5>
     
                         <ul class="list-unstyled text-light">
                             <li>
-                                <a href="#!" class="text-light">Link 1</a>
+                                <a href="/products" class="text-light">Products</a>
                             </li>
                             <li>
-                                <a href="#!" class="text-light">Link 2</a>
+                                <a href="/requests" class="text-light">Product Requests</a>
                             </li>
                             <li>
-                                <a href="#!"class="text-light">Link 3</a>
+                                <a href="/requests/create"class="text-light">Request a Product</a>
                             </li>
-                            <li>
-                                <a href="#!" class="text-light">Link 4</a>
-                            </li>
+                            
                         </ul>
     
                     </div>
@@ -114,20 +118,17 @@
                     <div class="col-md-3 mb-md-0 mb-3">
     
                         <!-- Links -->
-                        <h5 class="text-uppercase text-light" >Links</h5>
+                        <h5 class="text-uppercase text-light" >About Us</h5>
     
                         <ul class="list-unstyled">
                             <li>
-                                <a href="#!" class="text-light">Link 1</a>
+                                <a href="/login" class="text-light">Login</a>
                             </li>
                             <li>
-                                <a href="#!" class="text-light">Link 2</a>
+                                <a href="/register" class="text-light">Register</a>
                             </li>
                             <li>
-                                <a href="#!" class="text-light">Link 3</a>
-                            </li>
-                            <li>
-                                <a href="#!" class="text-light">Link 4</a>
+                                <a href="/about" class="text-light">About Us</a>
                             </li>
                         </ul>
     

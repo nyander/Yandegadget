@@ -36,6 +36,9 @@
 
                 <div class="col-md-4 my-auto">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.412449682287!2d-0.1811137854828162!3d5.6533232959020125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9c7eaac8b6d5%3A0x63e1fd54f881e500!2sLegon%20City%20Mall!5e0!3m2!1sen!2suk!4v1586722932153!5m2!1sen!2suk" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    <p class= "mt-3"><b>Address:</b> 27 Ayawaso, Legon Boundary, Accra, Ghana</p>
+                    <p><b>Contact:</b> <a href="tel:01234567890">01234567890</a></p>
+                    <p><b>Email:</b><a href="mailto:enquiries@yandegadgets.com"> Enquiries@Yandegadgets.com</a></p>
                 </div>
             </div>
            

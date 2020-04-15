@@ -41,6 +41,13 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'description.*' => 'required',
+            'type.*' => 'required',
+            'amount.*' => 'required',
+            'date.*' => 'required',  
+        ]);
+
         $data = $request->all();    
         // Transaction::create($data)->id;    
         if(count($request->description) >= 0)
@@ -52,53 +59,12 @@ class TransactionController extends Controller
                 $transaction->type = $request->type[$item];
                 $transaction->amount = $request->amount[$item];
                 $transaction->save();
-                // $data2 = array(
-                //     'date'=> $request ->date[$trans],
-                //     'description' => $request->type[$trans],                    
-                //     'type' => $request->type[$trans],
-                //     'amount' => $request->amount[$trans]
-                // );
-                // Transaction::insert($data2);
             };
         };
         
         return redirect('/transactions')->with('success', 'Transaction Recorded');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *

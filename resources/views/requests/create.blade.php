@@ -3,7 +3,10 @@
 @section('content')
     <div class="row justify-content-md-center">
         <div class="col-md-5 order-md-1">
-            <br>
+            <div class="control my-2">
+                <a href="{{route('products.index')}}" class="btn btn-md btn-outline-secondary" type="button">Back To Products </a>
+            </div>
+                       
             <div class="container bg-info text-white p-3">
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
                     <p><b>Types</b></p>
@@ -41,7 +44,7 @@
 
                     <div class="form-group row">
                         <label class="label col-md-4 order-md-1" for="type" style="margin-right:1.5em;" >Condition</label>
-                        <select name="condition" id="condition" class="col-md-7 order-md-2">
+                        <select name="condition" id="condition" class=" form-control input-lg dynamic col-md-7 order-md-2" required>
                             <option >Select Type </option>
                             @foreach($conditions as $ct)
                                 <option value="{{$ct->deposit}}">{{$ct->details}}</option>
@@ -50,9 +53,10 @@
                     </div>  
                     
                     <div class="field row">
-                        <label class="label col-md-5" for="type" style="margin-right:30px;" >Cost</label>
-                        <span>(£) </span> <input type="text" class="col-md-5" name="charge" id="charge" onClick="checkPrice()"  readonly>
-                        
+                        <label class="label col-md-5" for="type" >Cost</label>
+                        <div class="col-md-7 row">
+                            <span class="col-md-2">(£) </span> <input class="input col-md-10" type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
+                        </div>
                     </div>             
 
                 
@@ -65,9 +69,7 @@
                                 <button class="btn btn-md btn-outline-primary" type="submit" name="myButton">Submit</button>
                             </div>
 
-                            <div class="control">
-                                <a href="{{route('products.index')}}" class="btn btn-md btn-outline-secondary" type="button">Back To Products </a>
-                            </div>
+                            
                                               
                         </div>
                     </div>

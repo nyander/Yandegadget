@@ -4,7 +4,7 @@
 <br>
 <br>
 <div class="container col-md-10">
-    <h3>Upload Products</h3>
+    <h3>Select Filter</h3>
     
     <div class="row">
         <div class="col-md-6 order-md-1 bg-success p-3 text-light">
@@ -25,7 +25,7 @@
                                 <label class="label" for="date">Start Date</label>
                             </div>
                             <div class="control col-md-6 order-md-2">
-                                <input class="input" type="date"  max="{{$today}}" name="startdate" placeholder="Enter Start Date" reqiured > 
+                                <input class="input" type="date"  max="{{$today}}" name="startdate" placeholder="Enter Start Date" required> 
                             </div>
                         </div> 
                     </div> 
@@ -36,7 +36,7 @@
                                 <label class="label" for="date">End Date</label>
                             </div>
                             <div class="control col-md-6 order-md-2">
-                                <input class="input" type="date"  max="{{$today}}" name="enddate" placeholder="Enter End Date" reqiured > 
+                                <input class="input" type="date"  max="{{$today}}" name="enddate" placeholder="Enter End Date" required> 
                             </div>
                         </div>
                     </div> 

@@ -83,10 +83,8 @@ class SupplierProductController extends Controller
             $filename =  $name.'-'.time().'.'.$thumb->getClientOriginalExtension();
             $location = public_path('./publc/photos/' . $filename);
             $thumb->move(public_path().'/gallery/',$filename);
-        }
-        
+        }    
 
-        
 
          $product = new SupplierProduct;
          $product->supplier_id = $id;    

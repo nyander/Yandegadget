@@ -1,8 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container my-5">
+    
+    <div class="bg-danger p-4 mx-6 text-light text-center my-2">
+        <h5 >Can't Find Product you are looking for?</h5>
+        <p>
+            If you cannot find a particular product, why not try one of these 2nd digital marketplaces.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+        <div class="row justify-content-center">
+            <a href="https://uk.webuy.com/" target="_blank">
+                <button type="submit" class="btn text-light mr-2 ml-2" style="background-color:red;" name="myButton">
+                    CEX
+                </button>
+            </a>
+
+            <a href="https://www.ebay.co.uk/" target="_blank">
+                <button type="submit" class="btn text-light  mr-2 ml-2" style="background-color:#f4ae02;" name="myButton">
+                    Ebay
+                </button>
+            </a>
+
+            <a href="https://en-gb.facebook.com/marketplace/" target="_blank">
+                <button type="submit" class="btn text-light  mr-2 ml-2" style="background-color:#0063d1;" name="myButton">
+                    Facebook
+                </button>
+            </a>
+
+            <a href="http://www.bootgroup.com/" target="_blank">
+                <button type="submit" class="btn text-light  mr-2 ml-2" style="background-color:black;" name="myButton">
+                    Bootsale
+                </button>
+            </a>
+
+            <a href="https://www.shpock.com/en-gb" target="_blank">
+                <button type="submit" class="btn text-light  mr-2 ml-2" style="background-color:#3cce69;" name="myButton">
+                    Shpock
+                </button>
+            </a>
+        </div> 
+    </div>
+    <div class="row justify-content-center ">
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">Supplier Products</div>               

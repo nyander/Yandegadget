@@ -58,7 +58,7 @@ class ProductRequestController extends Controller
          $productrequ->condition = $condition = DB::table('conditions')->where('deposit',request("condition"))->value('id');
          $productrequ->deposit_paid = false;  
          $productrequ->acquired = false;
-         $productrequ->charge= request("charge");       
+         $productrequ->deposit= request("deposit");       
          $productrequ->save();
 
          return redirect('/requests')->with('success', 'Request has been made');

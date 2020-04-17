@@ -53,9 +53,9 @@
                     </div>  
                     
                     <div class="field row">
-                        <label class="label col-md-5" for="type" >Cost</label>
+                        <label class="label col-md-5" for="type" >Deposit</label>
                         <div class="col-md-7 row">
-                            <span class="col-md-2">(£) </span> <input class="input col-md-10" type="text" name="charge" id="charge" onClick="checkPrice()" readonly>
+                            <span class="col-md-2">(£) </span> <input class="input col-md-10" type="text" name="deposit" id="deposit" onClick="checkPrice()" readonly>
                         </div>
                     </div>             
 
@@ -84,7 +84,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var select = document.getElementById('condition');
-            var input = document.getElementById('charge');
+            var input = document.getElementById('deposit');
             select.onchange = function() {
             input.value = select.value;
         }

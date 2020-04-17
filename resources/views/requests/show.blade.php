@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <p class="col-md-6"><b>Deposit Amount:</b></p>
-                <p class="col-md-6">£{{$requests->charge}}</p>
+                <p class="col-md-6">£{{$requests->deposit}}</p>
             </div>
     </div>
 </div>

@@ -12,20 +12,20 @@
                     <div class="col-md-4 order-md-2 mb-4">
                         <h3 class="list-group-item d-flex justify-content-between lh-condensed row">Requested Product</h3>
                         <div class="list-group-item d-flex justify-content-between lh-condensed row">
-                            <label for="charge" class="col-md-6"> Product Name </label>
+                            <label for="Product Name" class="col-md-6"> Product Name </label>
                             <input type="text"  class="form-control col-md-6" id="productname" name="productname" value="{{$request->name}}" readonly>
                         </div>
                         <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
-                            <label for="charge" class="col-md-6"> Type </label>
+                            <label for="type" class="col-md-6"> Type </label>
                             <input type="text"  class="form-control col-md-6" id="type" name="type" value="{{$categoriesname}}" readonly>
                         </div>
                         <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
-                            <label for="charge" class="col-md-6"> Condition </label>
+                            <label for="Condition" class="col-md-6"> Condition </label>
                             <input type="text"  class="form-control col-md-6" id="condition" name="condition" value="{{$conditionname}}" readonly>
                         </div>
                         <div class="form-group list-group-item d-flex justify-content-between lh-condensed row">
-                            <label for="charge" class="col-md-6"> Total Price </label>
-                            <input type="text"  class="form-control col-md-6" id="charge" name="charge" value="{{$request->charge}}" readonly>
+                            <label for="total" class="col-md-6"> Total Price </label>
+                            <input type="text"  class="form-control col-md-6" id="charge" name="charge" value="{{$request->deposit}}" readonly>
                         </div>
                     </div>   
 

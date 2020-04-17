@@ -84,9 +84,7 @@ class CheckoutController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $productreq = ProductRequest::find($id);
-        $productreq->deposit_paid = 1;        
-        $productreq->save();   
+        
         
         
         $this->validate($request,[
@@ -125,6 +123,9 @@ class CheckoutController extends Controller
             }            
             //this is going to set the deposit paid field to true           
             //successful
+            $productreq = ProductRequest::find($id);
+            $productreq->deposit_paid = 1;        
+            $productreq->save();   
                           
             return redirect()->route('requests.index')->with('success', 'Thank you! Your Payment has been successful');
         } catch (CardErrorException $e) {

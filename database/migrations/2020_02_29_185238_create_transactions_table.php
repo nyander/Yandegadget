@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->date('date');
             $table->string('description');
             $table->unsignedBigInteger('type');
+                $table->foreign('type')->references('id')->on('transaction_types');
             $table->unsignedDecimal('amount')->nullable();
             $table->timestamps();
         });

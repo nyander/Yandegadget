@@ -73,10 +73,10 @@
                 
             </div>
             <div class="col-md-6 order-md-2">
-                @if ($product->request_from)
+                @if ($product->requested_by)
                     <div class="row">
                         <p class="col-md-6"><b>Requested By:</b></p>
-                        <p class="col-md-6">{{$product->request_from}}</p>
+                        <p class="col-md-6">{{$product->requested_by}}</p>
                     </div>
                 @endif 
                 @if($product->recieved == 0)   

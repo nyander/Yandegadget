@@ -16,11 +16,9 @@ class CreateShippedProductTable extends Migration
         Schema::create('shipped_product', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('shipment_id')->unsigned()->nullable();
-            $table->foreign('shipment_id')->references('id')->on('ships')->onUpdate('cascade')->onDelete('set null');
-            
-
+                $table->foreign('shipment_id')->references('id')->on('ships')->onUpdate('cascade')->onDelete('set null');
             $table->integer('product_id')->unsigned()->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('set null');
+                $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('set null');
             $table->boolean('received')->default(false)->nullable();
             $table->timestamps();
         });

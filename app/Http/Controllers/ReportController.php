@@ -147,14 +147,14 @@ class ReportController extends Controller
                             $totalwage = $diff_in_days * $wage->wage;                                
                             $sum = $sum + $totalwage;
                             
-                    }
-                    elseif($enddate <= $wage->endDate && $enddate > $wage->startDate){
-                        $from = Carbon::createFromFormat('Y-m-d',$wage->startDate ); 
-                            $to = Carbon::createFromFormat('Y-m-d',$enddate );    
-                            $diff_in_days = $to->diffInDays($from);
-                            $diff_in_days;                            
-                            $totalwage = $diff_in_days * $wage->wage;                                
-                            $sum = $sum + $totalwage;
+                        }
+                        elseif($enddate <= $wage->endDate && $enddate > $wage->startDate){
+                            $from = Carbon::createFromFormat('Y-m-d',$wage->startDate ); 
+                                $to = Carbon::createFromFormat('Y-m-d',$enddate );    
+                                $diff_in_days = $to->diffInDays($from);
+                                $diff_in_days;                            
+                                $totalwage = $diff_in_days * $wage->wage;                                
+                                $sum = $sum + $totalwage;
                     }
                 }
                 elseif($startdate >= $wage->startDate){
@@ -166,15 +166,15 @@ class ReportController extends Controller
                             $totalwage = $diff_in_days * $wage->wage;                                
                             $sum = $sum + $totalwage;
                     }
-                    elseif($enddate > $wage->endDate && $startdate < $wage->endDate){
-                        $from = Carbon::createFromFormat('Y-m-d',$startdate ); 
-                            $to = Carbon::createFromFormat('Y-m-d',$wage->endDate );    
-                            $diff_in_days = $to->diffInDays($from);
-                            $diff_in_days;                            
-                            $totalwage = $diff_in_days * $wage->wage;                                
-                            $sum = $sum + $totalwage;
+                        elseif($enddate > $wage->endDate && $startdate < $wage->endDate){
+                            $from = Carbon::createFromFormat('Y-m-d',$startdate ); 
+                                $to = Carbon::createFromFormat('Y-m-d',$wage->endDate );    
+                                $diff_in_days = $to->diffInDays($from);
+                                $diff_in_days;                            
+                                $totalwage = $diff_in_days * $wage->wage;                                
+                                $sum = $sum + $totalwage;
+                    }
                 }
-            }
         };
             
                 

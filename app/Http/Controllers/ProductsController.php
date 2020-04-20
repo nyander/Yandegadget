@@ -122,7 +122,7 @@ class ProductsController extends Controller
          $product->selling_Price = request("price");
          $product->featured = request("featured");
          if($request->requestedby){
-           $product->request_from = request("requestedby");
+           $product->requested_by = request("requestedby");
          }
          $product->thumbnail_path = $filename;
          $product->save();

@@ -15,7 +15,7 @@
         </p>
     </div>
     <div class = "col-md-7 order-md-2">
-        <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success mr-2 pull-right" >Filter Products</button></a>
+        <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success mr-2 pull-right" >Review Performance</button></a>
         <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary mr-2 pull-right" >Record Transactions</button></a>
     </div>
 </div>
@@ -98,9 +98,9 @@
 <script>
     // USER SIGN UPS    
     function GetMonthName(monthNumber) {
-        monthNumber = monthNumber < 0 ? 11 : monthNumber;
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[monthNumber];
+        // monthNumber = monthNumber < 0 ? 11 : monthNumber;
+        // var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // return months[monthNumber];
         }
         
     var d = new Date();

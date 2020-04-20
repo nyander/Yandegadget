@@ -44,7 +44,7 @@
                         
                     @else
                         <option value="{{$suppliersrole}}">Select User</option>
-                        <option> No Account</option> 
+                        <option value=""> No Account</option> 
                         @foreach($suppliersrole as $supplier)
                             <option value="{{DB::table('users')->where('id', $supplier->user_id)->value('id')}}">{{DB::table('users')->where('id', $supplier->user_id)->value('name')}}</option>
                         @endforeach

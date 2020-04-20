@@ -19,6 +19,7 @@ class CreateSuppliersTable extends Migration
             $table->string('address');
             $table->string('contact');
             $table->unsignedBigInteger('supplier_id')->nullable();
+                $table->foreign('supplier_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

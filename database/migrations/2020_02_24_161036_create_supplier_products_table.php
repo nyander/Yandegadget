@@ -15,10 +15,13 @@ class CreateSupplierProductsTable extends Migration
     {
         Schema::create('supplier_products', function (Blueprint $table) {
             $table->bigIncrements('id');            
-            $table->unsignedBigInteger('supplier_id')->nullable();            
+            $table->unsignedBigInteger('supplier_id')->nullable();
+                $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->string('name')->nullable();
             $table->unsignedBigInteger('type')->nullable();
+                $table->foreign('type')->references('id')->on('categories');
             $table->unsignedBigInteger('condition')->nullable();
+                $table->foreign('condition')->references('id')->on('conditions');
             $table->string('condition_Notes')->nullable();
             $table->unsignedDecimal('selling_Price')->nullable();            
             $table->boolean('purchased');

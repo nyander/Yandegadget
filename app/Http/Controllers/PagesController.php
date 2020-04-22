@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use Gate;
 
 class PagesController extends Controller
 {
@@ -34,7 +35,9 @@ class PagesController extends Controller
     }
 
     public function settings() {
-        
+        if(Gate::denies('admin-role')){
+            return redirect(route('products.index'));
+        }        
         return view('settings');
     }
 }

@@ -160,6 +160,12 @@ class ProductsController extends Controller
     public function show($id)
     {
         $post = Product::find($id);
+        if ($post->received == false){
+            if(Gate::denies('admin-role')){
+                return redirect(route('products.index'));   
+            }          
+        } 
+        
         $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
         $categories = DB::table('categories')->where('id',$post->type)->value('type');
         $condition = DB::table('conditions')->where('id',$post->condition)->value('details');

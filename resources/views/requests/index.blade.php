@@ -18,7 +18,9 @@
                                 <th scope="col">Customer Name</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Deposit Paid</th>                            
-                                <th scope="col"><a href="{{route('requests.create')}}"><button type="button" class="btn btn-success" >Add Request</button></a></th>                            
+                                <th scope="col">                                    
+                                    <a href="{{route('requests.create')}}"><button type="button" class="btn btn-success" style="">Add Request</button></a>                                    
+                                </th>                            
                             </tr>
                             </thead>
                             <tbody>      
@@ -53,14 +55,23 @@
                                                     No
                                                 @endif
                                             </td>
-                                            <td>                                
-                                                <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
-                                                
-                                                <a href="{{route('products.storereqproduct', $request->id)}}"><button type="button" class="btn btn-info float-left">Acquired</button></a>
-                                                @endif
-                                                
+                                            <td> 
+                                                <div class="text-center">
+                                                    @if($request->deposit_paid == 0)                               
+                                                        <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left mr-1">Edit</button></a>  
+                                                    @endif                                              
+                                                    <a href="{{route('products.storereqproduct', $request->id)}}"><button type="button" class="btn btn-info float-left mr-1 text-center">Acquired</button></a>
+                                                    @if($request->deposit_paid == 0) 
+                                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left " onsubmit="myButton.disabled = true; return true;">
+                                                            @csrf
+                                                            {{method_field('DELETE')}}
+                                                            <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
+                                                        </form> 
+                                                    @endif
+                                                </div>
                                             </td>
-                                        </tr>    
+                                        </tr>  
+                                        @endif  
                                     @endforeach 
                                 @else    
                                     @foreach ($requests as $request)

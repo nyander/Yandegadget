@@ -22,6 +22,9 @@ class UsersController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('admin-role')){
+            return redirect(route('index'));
+        }
         $users = User::all();
         return view('admin.users.index')->with('users', $users);
     }
@@ -36,7 +39,7 @@ class UsersController extends Controller
     {
         // this checks the Gate in the AuthServiceProvider by checking the hasRole in User role, if the gate is denied (if user is not admin, it should redirect them to index page)  
         if(Gate::denies('admin-role')){
-            return redirect(route('admin.users.index'));
+            return redirect(route('index'));
         }
         $roles = Role::all();
         return view('admin.users.edit')->with([

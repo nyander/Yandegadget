@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Ship;
 use App\ShippedProduct;
 use App\Product;
+use Gate;
 
 class ShipController extends Controller
 {
@@ -21,6 +22,12 @@ class ShipController extends Controller
      */
     public function index()
     {
+        if(Gate::denies(['admin-role']))
+        {
+            if(Gate::denies(['staff-role'])) {
+                return redirect(route('products.index'));
+            }            
+        }
         $ships = Ship::all();
         return view('ships.index')->with(['ships'=> $ships]);
     }
@@ -34,6 +41,12 @@ class ShipController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies(['admin-role']))
+        {
+            if(Gate::denies(['staff-role'])) {
+                return redirect(route('products.index'));
+            }            
+        }
         $ship = Ship::find($id);
         $products1 = ShippedProduct::where('shipment_id', $ship->id)->get();
         // $products = ShippedProduct::where('shipment_id', $ship->id)->get();

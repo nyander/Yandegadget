@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Shipment;
 use Cart;
+use Gate;
 
 class ShipmentController extends Controller
 {
@@ -19,14 +20,13 @@ class ShipmentController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('admin-role'))
+        {
+            return redirect(route('products.index'));
+        }
         return view('shipments.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     
     /**
      * Store a newly created resource in storage.
@@ -36,6 +36,10 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
+        if(Gate::denies('admin-role'))
+        {
+            return redirect(route('products.index'));
+        }
         $duplicates = Cart::search(function($shipmentItem, $rowId) use($request){
             return $shipmentItem->id === $request->id;
         });
@@ -56,6 +60,10 @@ class ShipmentController extends Controller
      */
     public function destroy($id)
     {
+        if(Gate::denies('admin-role'))
+        {
+            return redirect(route('products.index'));
+        }
         Cart::remove($id);
         return back()->with('success', 'product has been removed');
     }

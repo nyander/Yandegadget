@@ -31,9 +31,13 @@ class SupplierProductController extends Controller
      */
     public function index()
     {
+        
+        if(Gate::denies('supproducts')){
+            return redirect('/home');
+        }
         if(Gate::denies('admin-role')){
-        $products = SupplierProduct::where('supplier_id', Auth::id()) ->get();
-        return view('supplierproducts.index')->with(['products'=> $products]);
+            $products = SupplierProduct::where('supplier_id', Auth::id())->get();
+            return view('supplierproducts.index')->with(['products'=> $products]);
         }
         $products = SupplierProduct::all();
         return view('supplierproducts.index')->with(['products'=> $products]);
@@ -45,6 +49,10 @@ class SupplierProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()    {
+        if(Gate::denies('supplier-role')){
+            return back();
+        }
+
         $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
         if ($checker){
             return redirect('/home')->with('error', 'Add Your Details to enable product management')->with(['checker'=> $checker]);
@@ -152,6 +160,9 @@ class SupplierProductController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('supplier-role')){
+            return back();
+        }
         $product = SupplierProduct::find($id);
         
         $conditions = DB::table('conditions')->select('id','details')->get();
@@ -209,6 +220,9 @@ class SupplierProductController extends Controller
      */
     public function destroy($id)
     {
+        if(Gate::denies('supproducts')){
+            return back();
+        }
         $product = SupplierProduct::find($id);
         File::delete(public_path('/gallery/'.$product->thumbnail_path));
         $product->delete();

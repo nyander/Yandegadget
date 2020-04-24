@@ -11,6 +11,7 @@ use App\User;
 use App\Ship;
 use App\Transaction;
 use App\StaffWage;
+use Gate;
 
 class ReportController extends Controller
 {
@@ -25,6 +26,9 @@ class ReportController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('admin-role')){
+            return redirect(route('products.index'));   
+        } 
         //users report
         $current_month_users = User::whereMonth('created_at', Carbon::now()->month)->count(); 
         $last_month_users = User::whereMonth('created_at', Carbon::now()->subMonth(1))->count();      
@@ -65,6 +69,9 @@ class ReportController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('admin-role')){
+            return redirect(route('products.index'));   
+        } 
         $dt = Carbon::now();
         $today = $dt->toDateString(); 
         return view('reports.create')->with(['today'=>$today]);
@@ -78,6 +85,9 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
+        if(Gate::denies('admin-role')){
+            return redirect(route('products.index'));   
+        } 
         $startdate = request('startdate');
         $enddate = request('enddate');
 

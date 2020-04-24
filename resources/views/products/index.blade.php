@@ -77,7 +77,9 @@
                                                         <input type="hidden" name="id" value="{{$product->id}}">
                                                         <input type="hidden" name="name" value="{{$product->name}}">
                                                         <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-                                                        <button type="submit" name="myButton" class="btn btn-sm btn-outline-primary">Ship Product</button>
+                                                        @can("admin-role")
+                                                            <button type="submit" name="myButton" class="btn btn-sm btn-outline-primary">Ship Product</button>
+                                                        @endcan    
                                                     </form>
                                                     @endif
                                                 </div>

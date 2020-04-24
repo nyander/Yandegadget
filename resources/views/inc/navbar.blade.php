@@ -28,15 +28,22 @@
                   <ul class="navbar-nav ml-auto font-weight-bold">
                       <a class="nav-link" href="/">Home</a>
                       <a class="nav-link" href="/products">Products</a>
-                      <a class="nav-link" href="/about">About Us</a>  
-                      <a class="nav-link" href="/supplierproducts">Supplier Products</a> 
-                      <a class="nav-link" href="/requests/create">Request Product</a>
+                      <a class="nav-link" href="/about">About Us</a> 
+                      @can('supproducts') 
+                        <a class="nav-link" href="/supplierproducts">Supplier Products</a> 
+                      @endcan
+                      @can('managing-requests')
+                        <a class="nav-link" href="/requests/create">Request Product</a>
+                      @endcan
 
-                      <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
-                        @if(Cart::instance('default')->count() > 0) 
-                        <span class="badge badge-light">{{Cart::instance('default')->count()}}</span></span>    
-                        @endif                    
-                        </a>     
+                      @can("admin-role")
+                        <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
+                            @if(Cart::instance('default')->count() > 0) 
+                            <span class="badge badge-light">{{Cart::instance('default')->count()}}</span></span>    
+                            @endif                    
+                        </a>
+                      @endcan   
+
                       <!-- Authentication Links -->
                       @guest
                           <li class="nav-item">
@@ -137,16 +144,26 @@
                                         <a class="dropdown-item" href="{{route('products.create')}}">
                                             Upload Product
                                         </a>
-                                    @endcan    
-                                    <a class="dropdown-item" href="{{route('requests.index')}}">
-                                        Requested Products
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('reports.index') }}">
-                                        Reports 
-                                    </a> 
-                                    <a class="dropdown-item" href="{{ route('ships.index') }}">
-                                        Shipped Product Management 
-                                    </a> 
+                                    @endcan 
+                                    
+                                    @can('managing-requests')
+                                        <a class="dropdown-item" href="{{route('requests.index')}}">
+                                            Requested Products
+                                        </a>
+                                    @endcan
+
+                                    @can('admin-role')
+                                        <a class="dropdown-item" href="{{ route('reports.index') }}">
+                                            Reports 
+                                        </a> 
+                                    @endcan
+
+                                    @can('manage-shipped-products')
+                                        <a class="dropdown-item" href="{{ route('ships.index') }}">
+                                            Shipped Product Management 
+                                        </a> 
+                                    @endcan
+                                    
                                     @can("admin-role")
                                         <a class="dropdown-item" href="/settings">
                                             Settings

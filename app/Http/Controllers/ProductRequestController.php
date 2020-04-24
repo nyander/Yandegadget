@@ -6,6 +6,7 @@ use Auth;
 use DB;
 use App\ProductRequest;
 use Illuminate\Http\Request;
+use Gate;
 
 
 class ProductRequestController extends Controller
@@ -21,8 +22,10 @@ class ProductRequestController extends Controller
      */
     public function index()
     {
-        $requests = ProductRequest::all();           
-            
+        if(Gate::denies('request-products')){
+                return redirect(route('products.index'));
+        } 
+        $requests = ProductRequest::all();       
         return view('requests.index')->with(['requests'=>$requests]);
     }
 
@@ -33,6 +36,10 @@ class ProductRequestController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('request-products')){
+                return redirect(route('products.index'));   
+            
+        } 
         $conditions = DB::table('conditions')->select('id','details','deposit','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         return view('requests.create')->with(['conditions'=> $conditions, 'categories'=> $categories]);
@@ -72,6 +79,9 @@ class ProductRequestController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('request-products')){
+                return redirect(route('products.index'));   
+        }
         $requests = ProductRequest::find($id);
         $categories = DB::table('categories')->where('id',$requests->type)->value('type');
         $condition = DB::table('conditions')->where('id',$requests->condition)->value('details');
@@ -86,6 +96,9 @@ class ProductRequestController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('request-products')){
+                return redirect(route('products.index'));   
+        } 
         $requests = ProductRequest::find($id);
         $conditions = DB::table('conditions')->select('id','details')->get();
         $categories = DB::table('categories')->select('id','type')->get();

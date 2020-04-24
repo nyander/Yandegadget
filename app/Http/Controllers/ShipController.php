@@ -22,11 +22,9 @@ class ShipController extends Controller
      */
     public function index()
     {
-        if(Gate::denies(['admin-role']))
+        if(Gate::denies(['manage-shipped-products']))
         {
-            if(Gate::denies(['staff-role'])) {
                 return redirect(route('products.index'));
-            }            
         }
         $ships = Ship::all();
         return view('ships.index')->with(['ships'=> $ships]);
@@ -41,11 +39,9 @@ class ShipController extends Controller
      */
     public function show($id)
     {
-        if(Gate::denies(['admin-role']))
+        if(Gate::denies(['manage-shipped-products']))
         {
-            if(Gate::denies(['staff-role'])) {
-                return redirect(route('products.index'));
-            }            
+                return redirect(route('products.index'));     
         }
         $ship = Ship::find($id);
         $products1 = ShippedProduct::where('shipment_id', $ship->id)->get();

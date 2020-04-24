@@ -106,7 +106,9 @@
             <input type="hidden" name="id" value="{{$product->id}}">
             <input type="hidden" name="name" value="{{$product->name}}">
             <input type="hidden" name="selling_Price" value="{{$product->selling_Price}}">
-            <button type="submit" name="myButton" class="btn btn-md btn-outline-success pull-right">Ship Product</button>
+            @can("admin-role")
+                <button type="submit" name="myButton" class="btn btn-md btn-outline-success pull-right">Ship Product</button>
+            @endcan    
             <br>
             <br>
         </form>

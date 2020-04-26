@@ -8,7 +8,7 @@
     </div> 
     <div class="row mt-2">
         <div id="createproduct" class="col-md-5 order-md-1">
-            <h3>Upload Products</h3>        
+            <h3>Shipment Confirmation</h3>        
             <form action="{{route('confirmations.store')}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                 @csrf   
                 

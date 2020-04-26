@@ -8,13 +8,13 @@
     <div id="carouselExampleControls" class="carousel slide col-md-5 order-md-1 mr-5" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide">
+                <img class="d-block w-100" src="/gallery/{{$product->thumbnail_path}}" alt="First slide" style="max-height:17.5em; max-width:auto; object-fit: contain;">
             </div>
             <p hidden>{{$images = DB::table('images')->where('product_id',$product->id)->get()}}
                 <p>
                     @foreach ( $images as $image)
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" style="max-height:17.5em; max-width:auto; object-fit: cover;">                        
+                        <img class="d-block w-100" src="/gallery/{{$image->path}}" alt="First slide" style="max-height:17.5em; max-width:auto; object-fit: contain;">                        
                     </div>
                     @endforeach
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -76,7 +76,7 @@
                 @if ($product->requested_by)
                     <div class="row">
                         <p class="col-md-6"><b>Requested By:</b></p>
-                        <p class="col-md-6">{{$product->requested_by}}</p>
+                        <p class="col-md-6">{{DB::table('users')->where('id',$product->requested_by)->value('name')}}</p>
                     </div>
                 @endif 
                 @if($product->recieved == 0)   

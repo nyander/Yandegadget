@@ -42,7 +42,7 @@
                             <div class="row">
                               <a href="{{route('ships.show', $ship->id)}}"><button type="button" class="btn btn-md btn-primary ">View</button></a>                            
                               @can('staff-role')
-                              <a href="{{route('ships.received', $ship->id)}}"><button type="button" class="btn btn-md btn-success mt-2 "> Recieved</button></a>                            
+                              <a href="{{route('ships.received', $ship->id)}}"><button type="button" class="btn btn-md btn-success mt-2 "> received</button></a>                            
                               @endcan
                             </div>
                           </td>

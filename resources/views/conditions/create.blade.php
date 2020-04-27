@@ -17,7 +17,7 @@
 
                 {{-- Condition Explanation--}}
                 <div class="field">
-                    <label class="label" for="cost">Condition Explanation</label>
+                    <label class="label" for="cost">Condition Abreviation</label>
                     <div class="control">
                         <input class="input" type="textarea" name="explanation" id="explanation" > 
                     </div>

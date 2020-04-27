@@ -75,17 +75,7 @@
                         <p class="col-md-6">{{$product->requested_by}}</p>
                     </div>
                 @endif 
-                @if($product->recieved == 0)   
-                    <div class="row">
-                        <p class="col-md-6"><b>Shipped:</b></p>
-                        <p class="col-md-6">No</p>
-                    </div>        
-                @else
-                <div class="row">
-                    <p class="col-md-6"><b>Shipped:</b></p>
-                    <p class="col-md-6">Yes</p>
-                </div> 
-                @endif
+                
 
                 <div class="row">
                     <p class="col-md-6"><b>Featured:</b></p>

@@ -29,6 +29,7 @@
             <div class="field is-grouped">
                 <div class="control">
                     <button class=" btn btn-sm btn-outline-primary float-right" name="myButton" type="submit">Confirm Purchase</button>
+                </div>
             </div>
                                       
         </form>

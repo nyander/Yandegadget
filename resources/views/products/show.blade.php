@@ -79,7 +79,7 @@
                         <p class="col-md-6">{{DB::table('users')->where('id',$product->requested_by)->value('name')}}</p>
                     </div>
                 @endif 
-                @if($product->recieved == 0)   
+                @if($product->received == 0)   
                     <div class="row">
                         <p class="col-md-6"><b>Shipped:</b></p>
                         <p class="col-md-6">No</p>

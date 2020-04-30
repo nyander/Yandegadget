@@ -2,21 +2,36 @@
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 @section('content')
 
-    <h3> Results </h3>
-    <br>
-    <div class="row">
-        <div class=" col-md-6 order-md-1 " id="balanceSheet" style="">
-            <div class="bg-primary text-light p-3">
-                <p>
-                    orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-                    since the 1500s, when an unknown printer took a galley of type and scrambled
-                </p>
+    
+    <div class="row my-5">
+        <div class=" col-md-6 order-md-1 " id="balanceSheet" >
+            <div class="p-2">
+                @if($totalassets > $totalequityliability)
+                    <b class="text-danger">
+                        Total Assets is greater than your Total Equity & Liability, please check that
+                        all equities and liabilities have been recorded 
+                    </b>
+                @elseif($totalequityliability > $totalassets)
+                    <b class="text-danger">
+                        Total Equity & Liability is greater than your Total Assets, please check that
+                        all assets have been recorded 
+                    </b>
+                @else
+                    <p class="text-success">
+                        Financial status of company below
+                    </p>    
+                @endif
             </div>
-            <h6 class="card-header bg-primary text-light"> 
-                Financial Balance Sheet for period 
+            <h6 class="card-header bg-success text-light"> 
+                Income Statement for the Period: 
                 <br>
                 {{$startdate}} to {{$enddate}} 
             </h6>
+            {{-- <h6 class="card-header bg-primary text-light"> 
+                Financial Balance Sheet for period 
+                <br>
+                {{$startdate}} to {{$enddate}} 
+            </h6> --}}
             <div class="statementsection">
                 <div class="currentAsset">                    
                     <h5  class="mt-2"> Assets <h5>
@@ -122,13 +137,21 @@
                     <b class="leftstatment"> Total Equity & Liability  </b> <span class="rightstatment">£ {{$totalequityliability}}</span>
             </div>
         </div>
+
         <div class=" col-md-6 order-md-2 " id="incomestatement">
-            <div class="bg-success text-light p-3">
-                <p>
-                    orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-                    since the 1500s, when an unknown printer took a galley of type and scrambled
-                </p>
+
+            <div class="p-2">
+                @if($gross_profit - $totalexpenses - $totalotherincome < 10)
+                    <b class="text-danger">
+                        The Net Income is very low, recommendation would be to reduce incurring cost & increase sales
+                    </b>
+                @else
+                    <b class="text-success">
+                        Net Income is Positive
+                    </b>
+                @endif
             </div>
+            
             <h6 class="card-header bg-success text-light"> 
                 Income Statement for the Period: 
                 <br>

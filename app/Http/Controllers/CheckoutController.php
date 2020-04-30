@@ -117,7 +117,8 @@ class CheckoutController extends Controller
             ]);
 
             $adminretrieval = DB::table('role_user')->where('role_id',1)->get();
-            foreach ($adminretrieval as $admin){
+            foreach ($adminretrieval as $admin)
+            {
                 User::find($admin->user_id)->notify(new NewRequestedProduct);
         
             }            

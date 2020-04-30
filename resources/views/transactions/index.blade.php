@@ -16,7 +16,8 @@
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Description</th> 
+                            <th scope="col">Description</th>
+                            <th scope="col">Type</th> 
                             <th scope="col">Amount</th>                           
                             <th scope="col"><a href="{{route('transactions.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
                           </tr>
@@ -27,6 +28,7 @@
                             <th scope="row">{{$transaction->id}}</th>
                             <td>{{$transaction->date}}</td>
                             <td>{{$transaction->description}}</td>
+                            <td>{{DB::table('transaction_types')->where('id',$transaction->type)->value('type')}}</td>
                             <td>{{$transaction->amount}}</td>
                             <td>                          
                                 

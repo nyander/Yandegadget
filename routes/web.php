@@ -20,7 +20,7 @@ Route::get('/richard', function () {
 */
 
 //authentication related
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 //PageControllers
 //this route should display the index page of the website 

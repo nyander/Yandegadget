@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use App\Ship;
 use App\ShippedProduct;
 use App\Product;
+use App\User;
 use Gate;
+use DB; 
+use App\Notifications\ShipmentReceived;
 
 class ShipController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth','verified']);
     }
 
     /**
@@ -57,6 +60,12 @@ class ShipController extends Controller
         
         $id1 = auth()->user()->unreadNotifications[0]->id;
         auth()->user()->unreadNotifications->where('id', $id1)->markAsRead(); 
+
+        $adminretrieval = DB::table('role_user')->where('role_id',1)->get();
+            foreach ($adminretrieval as $admin)
+            {
+                User::find($admin->user_id)->notify(new ShipmentReceived);        
+            }  
         return redirect()->route('ships.index')->with('success','A Shipment has been received');
     }
   }

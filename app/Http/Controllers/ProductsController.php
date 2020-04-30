@@ -352,7 +352,7 @@ class ProductsController extends Controller
         $notification = $user->notifications()->where('id',$id)->first();
         if ($notification)
         {
-            $notification->delete();
+            $notification->markAsRead();
             return back();
         }
         else

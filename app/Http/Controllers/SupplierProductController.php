@@ -21,7 +21,7 @@ class SupplierProductController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth','verified']);
     }
     
     /**
@@ -243,7 +243,7 @@ class SupplierProductController extends Controller
         $notification = $user->notifications()->where('id',$id)->first();
         if ($notification)
         {
-            $notification->delete();
+            $notification->markAsRead();
             return back();
         }
         else

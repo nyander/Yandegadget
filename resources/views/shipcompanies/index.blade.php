@@ -12,8 +12,8 @@
                     <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Contact</th>
-                    <th scope="col">Email</th> 
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th> 
                     <th scope="col"><a href="{{route('shipcompanies.create')}}"> <button type="button" class="btn btn-success" >Add</button></a>                          
                     {{-- <th scope="col"><a href="{{route('shipcompanies.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                             --}}
                     </tr>

@@ -23,7 +23,7 @@
                 @endif
             </div>
             <h6 class="card-header bg-success text-light"> 
-                Income Statement for the Period: 
+                Balance Sheet for the Period: 
                 <br>
                 {{$startdate}} to {{$enddate}} 
             </h6>

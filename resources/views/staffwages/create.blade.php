@@ -20,7 +20,7 @@
 
                 {{-- Wages field--}}
                 <div class="field">
-                    <label class="label" for="wages">Wages ({{$currency}})</label>
+                    <label class="label" for="wages">Wage per day({{$currency}})</label>
                     <div class="control">
                         <input class="input" type="number" name="wages" id="wages"> 
                     </div>

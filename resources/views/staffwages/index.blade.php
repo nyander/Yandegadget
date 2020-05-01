@@ -25,7 +25,6 @@
                             <td>{{$wage->endDate}}</td>
                             <td>                          
                                 
-                                <a href="{{route('staffwages.edit', $wage->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                 
                                 
                                 <form action="{{route('staffwages.destroy', $wage->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">

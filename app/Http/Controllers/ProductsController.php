@@ -311,6 +311,7 @@ class ProductsController extends Controller
         $today = $dt->toDateString();
         $product->purchased = true;
         $product->save();
+        $users = DB::table('role_user')->where('role_id',3)->get();
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
@@ -321,7 +322,8 @@ class ProductsController extends Controller
         return view('products.storeSupplierProduct')->with(['product'=>$product, 'suppliers'=>$suppliers, 
                                                             'conditions'=> $conditions, 'categories'=> $categories, 
                                                             'currency' => $currency, 'categoriesname'=> $categoriesname,
-                                                            'suppliername' => $suppliername, 'conditionname' => $conditionname, 'today'=>$today]);
+                                                            'suppliername' => $suppliername, 'conditionname' => $conditionname, 
+                                                            'today'=>$today, 'users'=>$users ]);
     }
     
     public function storereqproduct($id)

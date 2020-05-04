@@ -55,6 +55,16 @@
                     </select>
                 </div> 
 
+                <div class="form-group row">
+                    <label class="label col-md-6" for="requestedby">Requested By</label>
+                    <select name="requestedby" id="requestedby" class="form-control input-lg dynamic col-md-6" data-dependent="labSubCat">
+                    <option value="">Select User</option>                     
+                        @foreach($users as $users)
+                            <option value="{{DB::table('users')->where('id',$users->user_id)->value('id')}}">{{DB::table('users')->where('id',$users->user_id)->value('name')}}</option>
+                        @endforeach                       
+                    </select>
+                </div> 
+
                 {{-- Supplier Dropdown --}}
                 <div class="form-group row">
                     <label class="label col-md-6" for="date">Supplier</label>

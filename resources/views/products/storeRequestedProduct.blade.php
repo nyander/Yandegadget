@@ -9,6 +9,7 @@
                     text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It 
                     has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
                 </p>
+                <a href="/products"><button class="btn btn-md btn-outline-light">Already Recorded</button></a>
             </div>
             <br>
             <div class="container bg-success text-white p-3">

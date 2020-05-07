@@ -17,10 +17,10 @@
             <div class="card">
                 <h5 class="card-header bg-danger text-light">Shipment Details</h5>
                 <div class="card-body">
-                    <p><b>Shipped by:</b> {{$ship->user_id}}</p>
-                    <p><b>Shipment Company:</b> {{$ship->shipment_company}}</p>
+                    <p><b>Shipped by:</b> {{DB::table('users')->where('id',$ship->user_id)->value('name')}}</p>
+                    <p><b>Shipment Company:</b> {{DB::table('ship_companies')->where('id',$ship->shipment_company)->value('name')}}</p>
                     <p><b>Date of Shipment:</b> {{$ship->shipment_date}} 
-                    <p><b>Cost of Shipment:</b> {{$ship->shipment_cost}}</p>  
+                    <p><b>Cost of Shipment:</b> £{{$ship->shipment_cost}}</p>  
                     <p><b>Shipment received?:</b> @if($ship->received == 1) Yes @else No @endif</p>  
                     <p><b>Extra Information:</b></p>
                     <p>{{$ship->shipment_notes}}</p>

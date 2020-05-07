@@ -67,7 +67,7 @@
                                         <img class="card-img-top " src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;" >
                                         <div class="card-body">
                                             <h5 class="title"> {{$product->name}}</h5>
-                                            <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
+                                            <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('currencies')->where('id',1)->value('rate')}}GHS</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="btn-group">
                                                     <a href="/products/{{$product->id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
@@ -127,7 +127,7 @@
                                         <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;">
                                         <div class="card-body">
                                             <h5 class="title"> {{$product->name}}</h5>
-                                            <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
+                                            <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('currencies')->where('id',1)->value('rate')}}GHS</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="btn-group">
                                                     <a href="/products/{{$product->id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
@@ -167,7 +167,7 @@
                                     <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;">
                                     <div class="card-body">
                                         <h5 class="title"> {{$product->name}}</h5>
-                                        <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}</p>
+                                        <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('currencies')->where('id',1)->value('rate')}}GHS</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 <a href="/products/{{$product->id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>

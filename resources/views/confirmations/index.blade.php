@@ -34,7 +34,7 @@
 
                 {{-- Cost field--}}
                 <div class="field row">
-                    <label class="label col-md-6" for="cost">Shipment Cost</label>
+                    <label class="label col-md-6" for="cost">Shipment Cost (£) </label>
                     <input class="input col-md-6" type="number" name="cost" id="cost" required> 
                 </div> 
 

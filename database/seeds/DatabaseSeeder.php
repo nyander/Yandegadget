@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductTableSeeder::class);
         $this->call(TransactionTypeSeeder::class);
         $this->call(ShipmentCompanySeeder::class); 
-        $this->call(TransactionTableSeeder::class);       
+        $this->call(TransactionTableSeeder::class); 
+        $this->call(CurrencySeeder::class); 
+              
     }
 }

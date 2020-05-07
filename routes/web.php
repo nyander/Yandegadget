@@ -108,6 +108,7 @@ Route::get('empty', function(){
     Cart::instance('saveForLater')->destroy();
 });
 
+Route::resource('/currencies', 'CurrencyController');
 
 
 // adding a prefix adds admin to the start of the URL and the name adds the admin. to the routes entered. it applies middleware so when the user logs in it checks whther it is a staff or an admin 

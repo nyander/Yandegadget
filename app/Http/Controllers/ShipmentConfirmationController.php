@@ -69,7 +69,7 @@ class ShipmentConfirmationController extends Controller
         $ship = Ship::create([
             'user_id' => auth()->user() ? auth()->user()->id : null,
             'shipped' => true,
-            'shipment_company' => request("shipmentcompany"),
+            'shipment_company' => request("shipselect"),
             'shipment_date' => request("shipmentdate"),
             'shipment_cost' => request("cost"),
             'shipment_notes' => request("shipment_Notes"),   

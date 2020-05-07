@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
 use App\Notifications\ProductAcquired;
 use Carbon\Carbon;
-
+use App\Currency;
 
 class ProductsController extends Controller
 {
@@ -107,7 +107,6 @@ class ProductsController extends Controller
             $location = public_path('./publc/photos/' . $filename);
             $thumb->move(public_path().'/gallery/',$filename);
         }
-
         
 
          $product = new Product;
@@ -289,14 +288,22 @@ class ProductsController extends Controller
         // when called, it will set the specific shipment's received to true
         $dt = Carbon::now();
         $today = $dt->toDateString();
-        $product = Product::find($id); 
-        return view('products.purchase')->with(['product'=>$product, 'today' => $today]);
+        $product = Product::find($id);         
+        $conversionrate = Currency::find(1);
+        $ghanaconversion = $product->selling_Price * $conversionrate;
+        $result = $ghanaconversion - ($ghanaconversion * 0.3); 
+        return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result]);
     }
 
     public function purchaseupdate(Request $request, $id)
     {
-         $product = Product::find($id);         
-         $product->selling_Price = request("price");
+         $product = Product::find($id);   
+         $result = $product->selling_Price - ($product->selling_Price * 0.3); 
+         $price = request("price");
+         if($price<$result){
+            return back()->withErrors('sold price cannot be less than £'.$result);
+         }     
+         $product->selling_Price = $price;
          $product->sold_Date = request("soldDate");
          $product->sold = true;
          $product->save();

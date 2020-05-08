@@ -17,8 +17,8 @@
             @csrf
             @method('PUT')
             <div class="field row">
-                <label class="label col-md-6" for="price">Price (£)</label>                
-                <input class="input col-md-6" type="number" name="price" id="price" value="{{$product->selling_Price}}" required>                 
+                <label class="label col-md-6" for="price">Price (GHS)</label>                
+                <input class="input col-md-6" type="number" name="price" id="price" value="{{$ghanaconversion}}" required>                 
             </div>
 
             <div class="field row">

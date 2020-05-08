@@ -290,20 +290,24 @@ class ProductsController extends Controller
         $today = $dt->toDateString();
         $product = Product::find($id);         
         $conversionrate = Currency::find(1);
-        $ghanaconversion = $product->selling_Price * $conversionrate;
+        $ghanaconversion = $product->selling_Price * $conversionrate->rate;
         $result = $ghanaconversion - ($ghanaconversion * 0.3); 
-        return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result]);
+        return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result, 'ghanaconversion'=>$ghanaconversion]);
     }
 
     public function purchaseupdate(Request $request, $id)
     {
          $product = Product::find($id);   
-         $result = $product->selling_Price - ($product->selling_Price * 0.3); 
+         $conversionrate = Currency::find(1);
+         $ghanaconversion = $product->selling_Price * $conversionrate->rate;
+         $result = $ghanaconversion - ($ghanaconversion * 0.3); 
          $price = request("price");
          if($price<$result){
-            return back()->withErrors('sold price cannot be less than £'.$result);
-         }     
-         $product->selling_Price = $price;
+            return back()->withErrors('sold price cannot be less than GHS'.$result);
+         }  
+
+         $bps = $price/$conversionrate->rate;
+         $product->selling_Price = $bps;
          $product->sold_Date = request("soldDate");
          $product->sold = true;
          $product->save();

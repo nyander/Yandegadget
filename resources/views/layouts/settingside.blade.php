@@ -14,7 +14,7 @@
                         <a class="list-group-item list-group-item-action" id="list-settings-list"  href="/categories" role="tab" aria-controls="settings">Category</a>
                         <a class="list-group-item list-group-item-action" id="list-settings-list"  href="/staffwages" role="tab" aria-controls="settings">Staff Wages</a> 
                         <a class="list-group-item list-group-item-action" id="list-settings-list"  href="/shipcompanies" role="tab" aria-controls="settings">Shipment Company</a>
-                        <a class="list-group-item list-group-item-action" id="list-settings-list"  href="/currencies" role="tab" aria-controls="settings">Currency</a>
+                        <a class="list-group-item list-group-item-action" id="list-settings-list"  href="/currencies" role="tab" aria-controls="settings">Conversion Rate</a>
                     </div>
                 </div>
                 <div class="col-md-9 order-md-2">

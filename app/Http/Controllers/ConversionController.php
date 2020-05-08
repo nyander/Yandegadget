@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Currency;
+use App\Conversion;
 use Gate;
 
-class CurrencyController extends Controller
+class ConversionController extends Controller
 {
     public function index()
     {
@@ -15,8 +15,8 @@ class CurrencyController extends Controller
                 return redirect(route('products.index'));
         }
        
-        $currencies = Currency::all();
-        return view('currencies.index')->with(['currencies'=> $currencies]);
+        $conversions = Conversion::all();
+        return view('conversions.index')->with(['conversions'=> $conversions]);
     }
     /**
     * Show the form for creating a new resource.
@@ -25,17 +25,17 @@ class CurrencyController extends Controller
     */
     public function edit($id)
     {
-        $currency = Currency::find($id);
-        return view('currencies.edit')->with(['currency'=> $currency]);
+        $currency = Conversion::find($id);
+        return view('conversions.edit')->with(['currency'=> $currency]);
     }
     
 
     public function update(Request $request, $id)
     {
-        $currency = Currency::find($id);         
+        $currency = Conversion::find($id);         
         $currency->rate = request("rate");  
         $currency->save();
 
-        return redirect('/currencies')->with('success', 'Rate Updated');
+        return redirect('/conversions')->with('success', 'Rate Updated');
     }
 }

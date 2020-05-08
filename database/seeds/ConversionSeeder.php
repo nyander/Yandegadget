@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Currency;
+use App\Conversion;
 
-class CurrencySeeder extends Seeder
+class ConversionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        Currency::truncate();
-        Currency::create(['rate'=> '7']);
+        Conversion::truncate();
+        Conversion::create(['rate'=> '7']);
     }
 }

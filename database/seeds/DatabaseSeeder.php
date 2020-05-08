@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TransactionTypeSeeder::class);
         $this->call(ShipmentCompanySeeder::class); 
         $this->call(TransactionTableSeeder::class); 
-        $this->call(CurrencySeeder::class); 
+        $this->call(ConversionSeeder::class); 
+        
+        
               
     }
 }

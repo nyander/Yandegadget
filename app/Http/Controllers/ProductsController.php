@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\File;
 use App\ShippedProduct;
 use App\Notifications\ProductAcquired;
 use Carbon\Carbon;
-use App\Currency;
+use App\Conversion;
 
 class ProductsController extends Controller
 {
@@ -289,7 +289,7 @@ class ProductsController extends Controller
         $dt = Carbon::now();
         $today = $dt->toDateString();
         $product = Product::find($id);         
-        $conversionrate = Currency::find(1);
+        $conversionrate = Conversion::find(1);
         $ghanaconversion = $product->selling_Price * $conversionrate->rate;
         $result = $ghanaconversion - ($ghanaconversion * 0.3); 
         return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result, 'ghanaconversion'=>$ghanaconversion]);
@@ -298,7 +298,7 @@ class ProductsController extends Controller
     public function purchaseupdate(Request $request, $id)
     {
          $product = Product::find($id);   
-         $conversionrate = Currency::find(1);
+         $conversionrate = Conversion::find(1);
          $ghanaconversion = $product->selling_Price * $conversionrate->rate;
          $result = $ghanaconversion - ($ghanaconversion * 0.3); 
          $price = request("price");

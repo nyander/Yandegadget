@@ -4,7 +4,7 @@
 
 <div class="p-4 mx-6 text-center my-2">
     <div class="col-md-5 order-md-2">
-        <form method="POST" action="/currencies/{{$currency->id}}" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
+        <form method="POST" action="/conversions/{{$currency->id}}" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;">
             @csrf
             @method('PUT')
 

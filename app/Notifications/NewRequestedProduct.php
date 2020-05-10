@@ -55,7 +55,7 @@ class NewRequestedProduct extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A user has made a requested for a product.'
+            'data' => 'A user has made a request for a product.'
         ];
     }
 }

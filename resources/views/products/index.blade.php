@@ -7,13 +7,16 @@
         <div class="row">
             <div class="container">
                 <div class="products-header float-left">         
-                    <p style="max-width:410em; ">Currys is a British electrical retailer operating in the United Kingdom and Republic of Ireland, owned by Dixons Carphone. It specialises in selling home electronics and household appliances, with 295 megastores and 73 high street shops.</p>
+                    <p style="max-width:410em; ">
+                        Yande Gadgets is a second-hand electrical retailer based in Ghana which 
+                        specializes in Technology, Appliances such as phones, computers, and TVs’. 
+                    </p>
                 </div> 
                 {{-- Sort By on the right --}}
                 <div class="products-header float-right">         
                     <div >
-                        <strong class="stylish-heading">Price</strong>
-                        <a href="{{route('products.index', ['category' => request()->category, 'sort'=> 'low_high'] )}}">Low to High</a>
+                        <strong class="stylish-heading">Price Ordering:</strong>
+                        <a href="{{route('products.index', ['category' => request()->category, 'sort'=> 'low_high'] )}}">Low to High</a> /
                         <a href="{{route('products.index', ['category' => request()->category, 'sort'=> 'high_low'] )}}">High to Low</a>
                     </div>
                 </div> 

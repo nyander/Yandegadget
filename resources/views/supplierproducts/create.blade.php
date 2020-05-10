@@ -7,9 +7,10 @@
         <form method="POST" class="row" action="/supplierproducts" enctype="multipart/form-data" onsubmit="myButton.disabled = true; return true;" >
             <div class="col-md-5 order-md-1 my-3">
                 <div class="container bg-info text-white p-3 mr-auto">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy 
-                        text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It 
-                        has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                    <p>
+                        Upload your products you would like to sell to Yande Gadgets. Please fill all fields to ensure 
+                        all information has been provided. 
+                    </p>
                 </div>
 
                 <div class="row mt-2">

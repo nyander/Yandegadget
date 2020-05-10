@@ -55,7 +55,7 @@ class NewSupplierProduct extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data'=> 'A supplier has uploaded a new product. Head to Supplier Products'
+            'data'=> 'A supplier has uploaded a new product. Head to Supplier Products page for more details'
         ];
     }
 }

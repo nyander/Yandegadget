@@ -10,16 +10,19 @@
                 @can('supplier-role')
                     @if ($checker)
                         <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                            <b>Supplier:</b>
+                            As an Supplier you can upload and manage products you would like to sell.
+                            Any product sold to Yande Gadgtes will be recorded by the Admin.  
+                            The Dashboard products recorded & sold.
                         </p>
                         <p>Please add your details to upload products</p>
                         <a href="{{ route('suppliers.create') }}"> <button class="btn btn-success" type="submit">Add Details</button> </a>
                     @else 
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        <b>Supplier:</b>
+                        As an Supplier you can upload and manage products you would like to sell.
+                        Any product sold to Yande Gadgtes will be recorded by the Admin.  
+                        The Dashboard products recorded & sold. 
                     </p>
                     <a href="{{route('suppliers.edit', $suppliers)}}"> <button class="btn btn-success" type="submit">Manage Details</button> </a>
                     @endif
@@ -27,9 +30,10 @@
                 {{-- Admin View --}}
                 @can('admin-role')
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        <b>Admin:</b>
+                        As an Admin you can manage and ship products, manage requests as well as 
+                        review company performance.  The Dashboard table displays the progress 
+                        within business as well as the website. 
                     </p>
                     <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success " >Filter Products</button></a>
                     <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary " >Record Transactions</button></a>
@@ -37,19 +41,21 @@
 
                 {{-- Customer View --}}
                 @can('customer-role')
+                    <b>Customer:</b>
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        As an Customer you can make and manage requests.
+                        You will then be notified when the product has been acquired.  
+                        The Dashboard products requested and those that have been acquired. 
                     </p>                    
                 @endcan
 
                 {{-- Staff View --}}
                 @can('staff-role')
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        <b>Staff:</b>
+                        As an Staff you can confirm shipments as well as recording purchases.
+                        You will then be notified when the product has been acquired.  
+                        The Dashboard displays the company progress in sales and shipments.  
                     </p>                    
                 @endcan
             </div>            

@@ -3,12 +3,7 @@
 @section('content')
     <a href="/ships" class="btn btn-md btn-outline-secondary mt-3 mb-3">Back</a>
     <div >
-        <h5 >Shipment No: {{$ship->id}}</h5>
-        <p style="max-width:50em;" >Much did had call new drew that kept. Limits expect wonder law she. 
-            Now has you views woman noisy match money rooms. 
-            To up remark it eldest length oh passed. Off because yet mistake feeling has men. 
-            Consulted disposing to moonlight ye extremity. Engage piqued in on coming. 
-        </p>
+        <h5 >Shipment No: {{$ship->id}}</h5>        
     </div>
     <br>
 

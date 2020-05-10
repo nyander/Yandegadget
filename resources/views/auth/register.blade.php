@@ -6,9 +6,8 @@
     <div class="row my-2 p-3">
         <div class="col-md-5 order-md-1 ">
             <div class="container text-white p-3" style="background-color:green;">
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy 
-                    text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It 
-                    has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                <h3>Find The Product For You</h3>
+                <p>Sign up or Log in to request products and find the best product for you. Yande Gadgets gives you the opportunity to request and manage products. </p>
             </div>
         </div>
         <div class="container col-md-7 order-md-2">

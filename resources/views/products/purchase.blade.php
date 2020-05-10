@@ -6,8 +6,11 @@
 <div class="row mt-5">
     <div class="col-md-6 order-md-1">
         <div class="container bg-info text-white p-3">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy 
-                text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+            <p>
+                Please record purchase of the particular product. If the product is being purchased by the
+                user who requested the product (seen in the product view page), they pay the dividends and the purchase
+                should be recorded as the full price.                 
+            </p>
                 <p><b>Product cannot be sold at a price less than {{$result}}GHS</b></p>
         </div>
     </div>

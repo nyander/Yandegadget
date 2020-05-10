@@ -82,9 +82,8 @@
                         <!-- Content -->
                         <h5 class="text-uppercase text-light">Yande Gadgets</h5>
                         <p class="text-light">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                            Yande Gadgets is a second-hand electrical retailer based in Ghana 
+                            which specializes in Technology, Appliances such as phones, computers, and TVs’.
                         </p>
     
                     </div>

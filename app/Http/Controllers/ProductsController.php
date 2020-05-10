@@ -32,20 +32,21 @@ class ProductsController extends Controller
     {
         $pagination = 9;
         $categories = Category::all();
-        //categories 
+        //if a request for a category has been made 
         if(request()->category) {
             //this will return the products based on the requested category            
             $products = Product::where('type', request()->category);
-            $categories ;
+            $categories;
             $categoryname = optional($categories->where('id', request()->category)->first())->type;
-        } else
-        {        //Pagination
-        $products = Product::where('featured', 'true');
-        $categories;        
-        $categoryname = 'Featured';
+        } 
+        else
+        {        
+            $products = Product::where('featured', 'true');
+            $categories;        
+            $categoryname = 'Featured';
         }
         
-        //sort development
+        //if the request made is by low to high or vice versa
         if(request()->sort == 'low_high'){
             $products = $products->OrderBy('selling_Price', 'asc')->paginate($pagination);
 
@@ -64,13 +65,17 @@ class ProductsController extends Controller
      */
     public function create()
     {
+        // only the admin can create products
         if(Gate::denies('admin-role')){
             return redirect(route('products.index'));
         }
+
+        // in the following tables, select the following fields
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();
         $currency = '£';
+        // This returns current date. Carbon is an external framework for dates 
         $dt = Carbon::now();
         $today = $dt->toDateString();
         return view('products.create')->with(['suppliers'=>$suppliers, 'conditions'=> $conditions, 
@@ -86,6 +91,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        // THis will validate the submitted form before storing into the tables.   
         $id = Auth::id();
         $this->validate($request,[
             'name' => 'required',
@@ -99,11 +105,15 @@ class ProductsController extends Controller
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        // if the is a file within the thumbnail,   
         if($request->hasfile('thumbnail'))
         {
+            // Create image name using through the filename, date followed by the extension 
             $thumb = $request->file('thumbnail');
             $name = pathinfo($thumb->getClientOriginalName(), PATHINFO_FILENAME);
             $filename =  $name.'-'.time().'.'.$thumb->getClientOriginalExtension();
+
+            // store the file into the gallery image within public folder
             $location = public_path('./publc/photos/' . $filename);
             $thumb->move(public_path().'/gallery/',$filename);
         }
@@ -120,6 +130,8 @@ class ProductsController extends Controller
          $product->condition_Notes = request("condition_Notes");
          $product->selling_Price = request("price");
          $product->featured = request("featured");
+
+         // if a field with a requestedby field has been passed in, then add it to the requested_by field
          if($request->requestedby){
            $product->requested_by = request("requestedby");
          }
@@ -138,6 +150,7 @@ class ProductsController extends Controller
                 // width - height
                 // Images::make($image)->resize(640, 480)->save($location);
 
+                //create an image record, product ID is used to refer to product  
                 $photo = new Image;
                 $photo->product_id = $product->id;
                 $photo->path = $filename;
@@ -158,19 +171,21 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        $post = Product::find($id);
-        if ($post->received == false){
+        $product = Product::find($id);
+
+        //if the product has not been recieved and they dont have an admin role     
+        if ($product->received == false){
             if(Gate::denies('admin-role')){
                 return redirect(route('products.index'));   
             }          
         } 
         
-        $supplier = DB::table('suppliers')->where('id', $post->supplier)->value('name');
-        $categories = DB::table('categories')->where('id',$post->type)->value('type');
-        $condition = DB::table('conditions')->where('id',$post->condition)->value('details');
-        $adminname= DB::table('users')->where('id',$post->user_id)->value('name');
+        $supplier = DB::table('suppliers')->where('id', $product->supplier)->value('name');
+        $categories = DB::table('categories')->where('id',$product->type)->value('type');
+        $condition = DB::table('conditions')->where('id',$product->condition)->value('details');
+        $adminname= DB::table('users')->where('id',$product->user_id)->value('name');
         $currency = '£';        
-        return view('products.show')->with(['adminname'=>$adminname,'product' => $post, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency, 'condition'=>$condition, 'user_id']);
+        return view('products.show')->with(['adminname'=>$adminname,'product' => $product, 'supplier'=> $supplier, 'categories'=> $categories, 'currency'=>$currency, 'condition'=>$condition, 'user_id']);
     }
 
     /**
@@ -181,6 +196,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {   
+        // only admin can edit products
         if(Gate::denies('admin-role')){
         return redirect(route('products.index'));
         }
@@ -209,16 +225,18 @@ class ProductsController extends Controller
                                             'today' => $today ]);  
     }
 
+    // This function will run when the staff member confirms the products have been recieved.  
     public function received($id){
         // when called, it will set the specific shipment's received to true
         $product = Product::find($id);
         $product->received = true;
         $product->save();
         
-        $receivedshipprod = ShippedProduct::where('product_id', $id)->get();
-        foreach($receivedshipprod as $prod){
-        $prod->received =true;
-        $prod->save(); 
+        $receivedproduct = ShippedProduct::where('product_id', $id)->get();
+        foreach($receivedproduct as $prod)
+        {
+            $prod->received =true;
+            $prod->save(); 
         }
         return redirect()->back()->with('success','A Product has been received');
     }
@@ -264,6 +282,7 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {   
+        // only admin can delete products
         if(Gate::denies('admin-role')){
             return redirect(route('products.index'));
         }
@@ -297,15 +316,20 @@ class ProductsController extends Controller
 
     public function purchaseupdate(Request $request, $id)
     {
-         $product = Product::find($id);   
+        
+         $product = Product::find($id);  
+        //  get the conversion rate 
          $conversionrate = Conversion::find(1);
+        //  to get GHS , multiply the GBS selling price by the conversion rate 
          $ghanaconversion = $product->selling_Price * $conversionrate->rate;
+        //  The result cannot be lower than the 30% of the GHS
          $result = $ghanaconversion - ($ghanaconversion * 0.3); 
          $price = request("price");
+        //  if the purchase amount is lower than the result, send a warning 
          if($price<$result){
             return back()->withErrors('sold price cannot be less than GHS'.$result);
          }  
-
+        //  Otherwise, divide the requested price by the conversion rate to get the GBP
          $bps = $price/$conversionrate->rate;
          $product->selling_Price = $bps;
          $product->sold_Date = request("soldDate");
@@ -360,6 +384,7 @@ class ProductsController extends Controller
                                                              'today'=>$today]);
     }
 
+    // Function to markk the product as read as an admin
     public function MarkRead($id){
         $user = \Auth::user();
         $notification = $user->notifications()->where('id',$id)->first();

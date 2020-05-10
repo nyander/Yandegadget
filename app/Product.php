@@ -13,25 +13,19 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
         return $this->belongsTo('App\Supplier');
     }
     
-        public function category(){
+    public function category(){
         return $this->belongsTo('App\Category');
     }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }    
 
     public function condition(){
         return $this->belongsTo('App\Condition');
     }
 
-    // public function request(){
-    //     return $this->belongsTo('App\ProductRequest');
-    // }
     
-    // public function customer(){
-    //     return $this->belongsTo('App\Customer');
-    // }
-
-    // public function shipmentlist(){
-    //     return $this->belongsTo('App\ShipmentList');
-    // }
     public function images()
     {
         return $this->hasMany('App\Image');

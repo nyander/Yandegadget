@@ -7,8 +7,7 @@
         <h5 >Can't Find Product you are looking for?</h5>
         <p>
             If you cannot find a particular product, why not try one of these 2nd digital marketplaces.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            
         </p>
         <div class="row justify-content-center">
             <a href="https://uk.webuy.com/" target="_blank">

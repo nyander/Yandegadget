@@ -8,9 +8,11 @@
         <div class="row">
             <div class="col-md-5 order-md-1 mr-5">
                 <div class="container bg-info text-white p-3">
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy 
-                        text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It 
-                        has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                    <p>
+                        Upload your products into the Yande Gadgets to record Yande Gagdets latest product. 
+                        This will enable you to record shipments and record any sales for the particular product. 
+                        Please fill in ALL fields of the forms.      
+                    </p>
                 </div>
                 <br>
                 <div class="container bg-success text-white p-3">

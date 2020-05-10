@@ -9,10 +9,7 @@
 </div>
 <div class="row">
     <div class = "col-md-5 order-md-1">
-        <h2 class="header">Report</h2>
-        <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-            since the 1500s, when an unknown printer took a galley of type and scrambled
-        </p>
+        <h2 class="header">Report</h2>        
     </div>
     <div class = "col-md-7 order-md-2">
         <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success mr-2 pull-right" >Review Performance</button></a>
@@ -23,9 +20,9 @@
 <div class="row">
     <div class="col-md-5 order-md-1 bg-success p-3 text-light">
         <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+            This section displays the performance of Yande Gagets. Below is the performance of number of sign-ups and sales. Additionally,
+            Transactions are also recorded and displayed. To record transacions, click the add button on the right. This information is then 
+            used to generate accurate performance. To view performance, select green button on the right.
         </p>
     </div>
     <div id="chartContainer" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
@@ -33,9 +30,14 @@
 <hr>
 <div class="row">
     <div class="col-md-5 order-md-2 bg-success p-3 text-light">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        <p>
+            Balance Sheeet is a statement of the assets, liabilities, and capital of a business 
+            or other organization at a particular point in time, detailing the balance of income and expenditure over the preceding period.
+        </p>
+        <p>
+            An income statement or profit and
+            loss account is one of the financial statements of a company and 
+            shows the company's revenues and expenses during a particular period.
         </p>
     </div>
     <div id="chartContainer1" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
@@ -45,9 +47,7 @@
 <div class="container text-center">
     <h3 class="container text-center">Transactions</h3>
     <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever 
-            since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        Below is all the transactions made. With the most recent recorded are at the top 
     </p>
 </div>
 <div class="container">

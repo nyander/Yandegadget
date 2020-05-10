@@ -7,12 +7,7 @@
         <div id="createtransaction" class="container">
             
             <h3 class="text-center">Record Transactions</h3>
-            <p class="bg-success p-4 mx-2 text-light text-center">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            </p> 
-   
+            
             <form method="POST" action="/transactions" onsubmit="myButton.disabled = true; return true;">
                 @csrf
 

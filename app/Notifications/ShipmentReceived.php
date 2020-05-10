@@ -55,7 +55,7 @@ class ShipmentReceived extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A Shipment has been received. Head over to shipments page for more details ',
+            'data' => 'A shipment has been received. Head over to shipments page for more details ',
         ];
     }
 }

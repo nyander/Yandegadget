@@ -55,7 +55,7 @@ class ProductAcquired extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'A Product you have requested has be acquired. Head to Requested Products',
+            'data' => 'A Product you have requested has been acquired. Head to Requested Products for more information',
         ];
     }
 }

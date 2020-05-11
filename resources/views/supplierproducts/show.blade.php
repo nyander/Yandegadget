@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<a href="/supplierproducts" class="btn btn-md btn-outline-secondary my-3">Back</a>
+<a href="{{ URL::previous() }}" class="btn btn-md btn-outline-secondary my-3">Back</a>
 
 <div class="row">
 

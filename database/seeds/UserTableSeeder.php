@@ -26,27 +26,27 @@ class UserTableSeeder extends Seeder
 
         // create users
         $admin = User::create([
-            'name' => 'Admin User',
+            'name' => 'David Nyande',
             'email' => 'admin@admin.com',
             'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),
         ]);
 
         $staff = User::create([
-            'name' => 'Staff User',
+            'name' => 'Morris Chestnut',
             'email' => 'staff@staff.com',
             'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),
         ]);
 
         $customer = User::create([
-            'name' => 'Customer User',
+            'name' => 'Jamal Jones',
             'email' => 'customer@customer.com',
             'password' => Hash::make('richard'),
         ]);
 
         $supplier = User::create([
-            'name' => 'Supplier User',
+            'name' => 'James Smith',
             'email' => 'supplier@supplier.com',
             'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),

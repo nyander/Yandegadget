@@ -106,6 +106,6 @@
             </table>  
         </div>
     @else
-        <h2 class="d-flex justify-content-center"> You have no items saved for shipment</h2>
+        <h2 class="d-flex justify-content-center"> You have no items saved for later shipment</h2>
     @endif
 @endsection

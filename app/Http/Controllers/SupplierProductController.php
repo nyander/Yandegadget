@@ -225,8 +225,6 @@ class SupplierProductController extends Controller
         }
         $product = SupplierProduct::find($id);
         File::delete(public_path('/gallery/'.$product->thumbnail_path));
-        $product->delete();
-
         $image = DB::table('images')->where('supplierproduct_id', $id)->get();
         foreach($image as $im){            
             File::delete(public_path('/gallery/'.$im->path));

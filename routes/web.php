@@ -45,7 +45,7 @@ Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name
 // Function for supplier to upload product
 Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupproduct')->name('products.storesupproduct');
 //Function for customer to request product
-Route::get('/requester/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
+Route::get('/prodrequest/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
 
 //Image Controller
 Route::resource('/images', 'ImageController');

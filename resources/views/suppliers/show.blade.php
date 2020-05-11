@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<a href="/suppliers" class="btn btn-default">Back</a>
+<a href="{{ URL::previous() }}" class="btn btn-default">Back</a>
 <h3>{{$supplier->name}}</h3>
 <div>
     <p>Address: {{$supplier->address}}</p>

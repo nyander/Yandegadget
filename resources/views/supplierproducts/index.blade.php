@@ -58,6 +58,7 @@
                             <th scope="col">Type</th>
                             <th scope="col">Condition</th>
                             <th scope="col">Price</th>  
+                            <th scope="col">Supplier</th>
                             {{-- Only Suppliers can add new products --}}
                             @can('supplier-role')
                             <th scope="col"><a href="{{route('supplierproducts.create')}}"><button type="button" class="btn btn-success" >Add</button></a></th>                            
@@ -70,43 +71,49 @@
                         <tbody>
                         @foreach ($products as $product)
                         @if($product->purchased == true)
-                        <tr class="bg-secondary text-white">
-                            <th class="text-white" scope="row">{{$product->id}}</th>
-                            <td ><a class="text-white" href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
-                            <td ><a class="text-white" href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
-                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
-                            <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
-                            <td>£ {{$product->selling_Price}}</td>
-                            <td>                          
-                                <b>Purchased</b>
-                            </td>
-                        </tr>    
+                            <tr class="bg-secondary text-white">
+                                <th class="text-white" scope="row">{{$product->id}}</th>
+                                <td ><a class="text-white" href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
+                                <td ><a class="text-white" href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
+                                <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                                <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
+                                <td>£ {{$product->selling_Price}}</td>
+                                <td>{{DB::table('suppliers')->where('supplier_id',$product->supplier_id)->value('name')}}</td>
+                                <td>                          
+                                    <b>Purchased</b>
+                                </td>
+                            </tr>    
                         @else
-                        <tr >
-                            <th  scope="row">{{$product->id}}</th>
-                            <td ><a  href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
-                            <td ><a  href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
-                            <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
-                            <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
-                            <td>£ {{$product->selling_Price}}</td>
-                            <td>                          
-                                @can('supplier-role')
-                                {{-- ONly Supplier should be able to edit Product  --}}
-                                <a href="{{route('supplierproducts.edit', $product->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
-                                
-                                {{-- Admin and Supplier can add product --}}
-                                <form action="{{route('supplierproducts.destroy', $product->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
-                                    @csrf
-                                    {{method_field('DELETE')}}
-                                    <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
-                                </form> 
-                                @endcan
+                            <tr >
+                                <th  scope="row">{{$product->id}}</th>
+                                <td ><a  href="/supplierproducts/{{$product->id}}"><img src="/gallery/{{$product->thumbnail_path}}" style="height:40px; width:auto;"></a></td>
+                                <td ><a  href="/supplierproducts/{{$product->id}}">{{$product->name}}</a></td>
+                                <td>{{DB::table('categories')->where('id',$product->type)->value('type')}}</td>
+                                <td>{{DB::table('categories')->where('id',$product->condition)->value('type')}}</td>
+                                <td>£ {{$product->selling_Price}}</td>                                
+                                <td>
+                                    <a class="text-dark" href="/suppliers/{{$supplierID = DB::table('suppliers')->where('supplier_id',$product->supplier_id)->value('id')}}">
+                                        {{$supplierID = DB::table('suppliers')->where('supplier_id',$product->supplier_id)->value('name')}}
+                                    </a>    
+                                </td>
+                                <td>                          
+                                    @can('supplier-role')
+                                    {{-- ONly Supplier should be able to edit Product  --}}
+                                    <a href="{{route('supplierproducts.edit', $product->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
+                                    
+                                    {{-- Admin and Supplier can add product --}}
+                                    <form action="{{route('supplierproducts.destroy', $product->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                        @csrf
+                                        {{method_field('DELETE')}}
+                                        <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
+                                    </form> 
+                                    @endcan
 
-                                @can('admin-role')
-                                    <a href="{{route('products.storesupproduct', $product->id)}}"><button type="button" class="btn btn-primary float-left">Purchased</button></a>
-                                @endcan
-                            </td>
-                        </tr>    
+                                    @can('admin-role')
+                                        <a href="{{route('products.storesupproduct', $product->id)}}"><button type="button" class="btn btn-primary float-left">Purchased</button></a>
+                                    @endcan
+                                </td>
+                            </tr>    
                         @endif
                         @endforeach   
                                                

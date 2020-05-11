@@ -41,7 +41,6 @@
                                                     <td >
                                                         <b >Acquired<b>
                                                     </td>
-
                                             </tr>
                                         @else 
                                             <tr>

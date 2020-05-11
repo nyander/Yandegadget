@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<a href="/requests" ><button class="btn btn-md btn-outline-secondary my-4">Back</button></a>
+<a href="{{ URL::previous() }}" ><button class="btn btn-md btn-outline-secondary my-4">Back</button></a>
 
 <div class="card justify-content-center " style="max-width:40em;">
     <div class="card-header">

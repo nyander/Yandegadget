@@ -2,12 +2,16 @@
 
 @section('content')
 
-    <a href="/home" class="btn btn-sm btn-outline-secondary mt-3 mb-2">Back</a>
+    <a href="{{ URL::previous() }}" class="btn btn-sm btn-outline-secondary mt-3 mb-2">Back</a>
     <div class="row ">
         
         <div class="col-md-5 order-md-1 my-auto">
             <div class="container bg-info text-white p-3 mr-auto">
-               
+               <p>
+                Upload your details into the Yande Gadgets to enable you to upload products. 
+                This information is required for Yande Gadgets to contact you. 
+                Please fill in ALL fields of the forms. 
+               </p>
             </div>
         </div>
         <div class="col-md-5 order-md-2">

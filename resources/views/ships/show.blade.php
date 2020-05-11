@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href="/ships" class="btn btn-md btn-outline-secondary mt-3 mb-3">Back</a>
+    <a href="{{ URL::previous() }}" class="btn btn-md btn-outline-secondary mt-3 mb-3">Back</a>
     <div >
         <h5 >Shipment No: {{$ship->id}}</h5>        
     </div>

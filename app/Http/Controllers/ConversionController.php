@@ -8,6 +8,11 @@ use Gate;
 
 class ConversionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth','verified']);
+    }
+    
     public function index()
     {
         if(Gate::denies(['admin-role']))

@@ -14,6 +14,10 @@ use App\Notifications\NewRequestedProduct;
 class CheckoutController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware(['auth','verified']);
+    }
     /**
      * Display the specified resource.
      *

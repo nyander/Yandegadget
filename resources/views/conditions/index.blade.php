@@ -27,13 +27,13 @@
                             <td>{{$currency}} {{$condition->deposit}}</td>
                             <td>                          
                                 
-                                <a href="{{route('conditions.edit', $condition->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
+                                <a href="{{route('conditions.edit', $condition->id)}}"><button type="button" class="btn btn-sm btn-outline-primary float-left">Edit</button></a>
                                 
                                 @can('admin-role')
-                                <form action="{{route('conditions.destroy', $condition->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                <form action="{{route('conditions.destroy', $condition->id)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 {{method_field('DELETE')}}
-                                <button type="submit" name="myButton" class="btn btn-danger">Delete</button>
+                                <button type="submit" name="myButton" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form> 
                                 @endcan
                                 

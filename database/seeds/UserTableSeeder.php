@@ -28,12 +28,14 @@ class UserTableSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin User',
             'email' => 'admin@admin.com',
+            'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),
         ]);
 
         $staff = User::create([
             'name' => 'Staff User',
             'email' => 'staff@staff.com',
+            'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),
         ]);
 
@@ -46,6 +48,7 @@ class UserTableSeeder extends Seeder
         $supplier = User::create([
             'name' => 'Supplier User',
             'email' => 'supplier@supplier.com',
+            'email_verified_at' => '2020-05-11 13:46:35',
             'password' => Hash::make('richard'),
         ]);
 

@@ -13,15 +13,15 @@ class ShipmentCompanySeeder extends Seeder
     public function run()
     {
         ShipCompany::truncate();
-        ShipCompany::create(['name' => 'Shipment 1',
-                             'address' => 'Address road 1',
-                             'postcode' => 'SC1 1CS',
-                             'number' => '12345678910',
-                             'extra_information' => 'This company are negotiable']);  
-        ShipCompany::create(['name' => 'Shipment 2',
+        ShipCompany::create(['name' => 'DFS Wordwide Logistics',
+                             'address' => 'Unit 7, Marlin Park Central Way Feltham',
+                             'postcode' => 'TW14 0XD',
+                             'number' => '01618189600',
+                             'extra_information' => 'Email: sales@dfsworldwide.com']);  
+        ShipCompany::create(['name' => 'MANC Global Logistics',
                              'address' => 'Address road 2',
-                             'postcode' => 'SC2 2CS',
+                             'postcode' => 'M22 4RW',
                              'number' => '12345678910',
-                             'extra_information' => 'This company are negotiable']);   
+                             'extra_information' => 'hello@manclogistics.co.uk']);   
     }
 }

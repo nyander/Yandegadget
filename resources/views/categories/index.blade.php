@@ -25,13 +25,13 @@
                             <td>{{$category->type}}</td>
                             <td>                          
                                 
-                                <a href="{{route('categories.edit', $category->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
+                                <a href="{{route('categories.edit', $category->id)}}"><button type="button" class="btn btn-sm btn-outline-primary float-left">Edit</button></a>
                                 
                                 @can('admin-role')
-                                <form action="{{route('categories.destroy', $category->id)}}" method="POST" class="float-left" onsubmit="myButton.disabled = true; return true;">
+                                <form action="{{route('categories.destroy', $category->id)}}" method="POST" onsubmit="myButton.disabled = true; return true;">
                                 @csrf
                                 {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger" name="myButton">Delete</button>
                                 </form> 
                                 @endcan
                                 

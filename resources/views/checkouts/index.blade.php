@@ -95,6 +95,7 @@
                             <!-- Used to display form errors. -->
                             <div id="card-errors" role="alert"></div>
                         </div>
+                        {{-- END OF STRIPE HTML --}}
                     </div>                    
                 </div>
                 <div class="spacer"></div>

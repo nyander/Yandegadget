@@ -43,14 +43,17 @@
                         <div class="form-group row">
                             <label for="roles" class="col-md-2 col-form-label text-md-right">Roles</label>
                             <div class="col-md-6">
-                                {{-- select roles --}}
+                                {{-- select roles CHECKBOX--}}
                                 @foreach ($roles as $role)
+                                
                                     <div class="form-check">
                                         <input type="checkbox" name="roles[]" value="{{$role->id}}"
-                                        {{-- if the current users role, we pluck out the id of the roles --}}
-                                        @if($user->roles->pluck('id')->contains($role->id)) checked @endif>
+                                            {{-- if the current users role, we pluck out the id of the roles check the role --}}
+                                            @if($user->roles->pluck('id')->contains($role->id)) checked @endif
+                                            >
                                         <label>{{$role->name}}</label>
                                     </div>
+                                    
                                 @endforeach
                             </div>
                         </div>

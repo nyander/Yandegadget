@@ -366,10 +366,13 @@ class ProductsController extends Controller
         
         $dt = Carbon::now();
         $today = $dt->toDateString();
+
         $product = ProductRequest::find($id);
         $product->acquired = true;
         $product->save();
+
         User::find($product->customer_id)->notify(new ProductAcquired);
+        
         $suppliers = DB::table('suppliers')->select('id','name')->get();
         $conditions = DB::table('conditions')->select('id','details','explanation')->get();
         $categories = DB::table('categories')->select('id','type')->get();

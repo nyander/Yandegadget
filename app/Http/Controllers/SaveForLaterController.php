@@ -19,8 +19,10 @@ class SaveForLaterController extends Controller
         return back()->with('success', 'product has been removed');
     }
 
+    // THis will add the product back into the shipment list 
     public function switchToShipment($id)
     {
+        // find the product within the 
         $product = Cart::instance('saveForLater')->get($id);
         Cart::instance('saveForLater')->remove($id);
 

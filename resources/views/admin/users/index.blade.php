@@ -24,6 +24,8 @@
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
                             {{-- get the roles, then display it using plunk in an array, this is important for large list of roles  --}}
+                            {{-- The comma is the the seperator, for each user get their roles and pluck the names --}}
+                            {{-- the toArray returns the roles as an array reather than a collection  --}}
                             <td>{{implode(',',$user->roles()->get()->pluck('name')->toArray())}}</td>
                             <td>
                                 @can('admin-role')
@@ -32,9 +34,9 @@
 
                                 @can('admin-role')
                                 <form action="{{route('admin.users.destroy', $user)}}" method="POST" class="float-left">
-                                @csrf
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                  @csrf
+                                  {{method_field('DELETE')}}
+                                  <button type="submit" class="btn btn-danger">Delete</button>
                                 </form> 
                                 @endcan
                             </td>

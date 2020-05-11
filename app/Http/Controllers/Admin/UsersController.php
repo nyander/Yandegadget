@@ -41,6 +41,7 @@ class UsersController extends Controller
         if(Gate::denies('admin-role')){
             return redirect(route('index'));
         }
+        
         $roles = Role::all();
         return view('admin.users.edit')->with([
             'user' => $user,
@@ -58,7 +59,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // as we pass array of roles, we use sync, from our request we gain the roles
+        // as we pass array of(multiple) roles, we use sync, to  attach each role checked to the user
         $user->roles()->sync($request->roles);
 
         $user->name = $request->name;

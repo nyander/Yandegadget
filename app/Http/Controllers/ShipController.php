@@ -25,6 +25,8 @@ class ShipController extends Controller
      */
     public function index()
     {
+        //checks whether the user can manage shipped products - seen in providers/authserviceproviders
+        // manage-shipped-products = admin & staff
         if(Gate::denies(['manage-shipped-products']))
         {
                 return redirect(route('products.index'));

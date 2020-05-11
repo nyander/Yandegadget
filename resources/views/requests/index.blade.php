@@ -44,33 +44,33 @@
 
                                             </tr>
                                         @else 
-                                        <tr>
-                                            <th scope="row">{{$request->id}}</th>
-                                            <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
-                                            <td><a href="/requests/{{$request->id}}">{{$request->name}}</a></td>
-                                            <td>
-                                                @if($request->deposit_paid == 1)
-                                                    Yes
-                                                @else
-                                                    No
-                                                @endif
-                                            </td>
-                                            <td> 
-                                                <div class="text-center">
-                                                    @if($request->deposit_paid == 0)                               
-                                                        <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left mr-1">Edit</button></a>  
-                                                    @endif                                              
-                                                    <a href="{{route('products.storereqproduct', $request->id)}}"><button type="button" class="btn btn-info float-left mr-1 text-center">Acquired</button></a>
-                                                    @if($request->deposit_paid == 0) 
-                                                        <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left " onsubmit="myButton.disabled = true; return true;">
-                                                            @csrf
-                                                            {{method_field('DELETE')}}
-                                                            <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
-                                                        </form> 
+                                            <tr>
+                                                <th scope="row">{{$request->id}}</th>
+                                                <td>{{DB::table('users')->where('id', $request->customer_id)->value('name')}}</td>
+                                                <td><a href="/requests/{{$request->id}}">{{$request->name}}</a></td>
+                                                <td>
+                                                    @if($request->deposit_paid == 1)
+                                                        Yes
+                                                    @else
+                                                        No
                                                     @endif
-                                                </div>
-                                            </td>
-                                        </tr>  
+                                                </td>
+                                                <td> 
+                                                    <div class="text-center">
+                                                        @if($request->deposit_paid == 0)                               
+                                                            <a href="{{route('requests.edit', $request->id)}}"><button type="button" class="btn btn-primary float-left mr-1">Edit</button></a>  
+                                                        @endif                                              
+                                                        <a href="{{route('products.storereqproduct', $request->id)}}"><button type="button" class="btn btn-info float-left mr-1 text-center">Acquired</button></a>
+                                                        @if($request->deposit_paid == 0) 
+                                                            <form action="{{route('requests.destroy', $request->id)}}" method="POST" class="float-left " onsubmit="myButton.disabled = true; return true;">
+                                                                @csrf
+                                                                {{method_field('DELETE')}}
+                                                                <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
+                                                            </form> 
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>  
                                         @endif  
                                     @endforeach 
                                 @else    
@@ -132,8 +132,6 @@
                                                                 {{method_field('DELETE')}}
                                                                 <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                                             </form> 
-                                                        @endif
-                                                        @if($request->deposit_paid == 0)
                                                             <a href="{{route('checkouts.index')}}/{{$request->id}}"><button type="button" class="btn btn-success float-left">Pay</button></a>
                                                         @endif
                                                             

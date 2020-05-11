@@ -26,6 +26,8 @@ class AuthServiceProvider extends ServiceProvider
         // user management
         $this->registerPolicies();
 
+        // Defining a gate - this name of the gate is admin-role which uses a function using the user
+        //  returns the role admin - so when called. the Gate admin role will check if the user hasRole of admin 
         Gate::define('admin-role', function($user){
             return $user->hasRole('admin');
         });

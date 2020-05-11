@@ -17,7 +17,7 @@
     </div>
 </div>
 <br>
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-5 order-md-1 bg-success p-3 text-light">
         <p>
             This section displays the performance of Yande Gagets. Below is the performance of number of sign-ups and sales. Additionally,
@@ -25,10 +25,12 @@
             used to generate accurate performance. To view performance, select green button on the right.
         </p>
     </div>
-    <div id="chartContainer" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
+    <div id="chartContainer" class="col-md-5 order-md-2" style="height: 300px; width: 100%;"></div>
 </div>
+
 <hr>
-<div class="row">
+
+<div class="row justify-content-center">
     <div class="col-md-5 order-md-2 bg-success p-3 text-light">
         <p>
             Balance Sheeet is a statement of the assets, liabilities, and capital of a business 
@@ -40,7 +42,7 @@
             shows the company's revenues and expenses during a particular period.
         </p>
     </div>
-    <div id="chartContainer1" class="col-md-7 order-md-2" style="height: 300px; width: 100%;"></div>
+    <div id="chartContainer1" class="col-md-5 order-md-2 " style="height: 300px; width: 100%;"></div>
 </div>
 <br>
 <br>

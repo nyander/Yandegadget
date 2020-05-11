@@ -67,7 +67,7 @@
                                                 
                                 <div class="col-md-4" >
                                     <div class="card mb-4 box-shadow" style=" background-color: {{$color}};">
-                                        <img class="card-img-top " src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;" >
+                                        <img class="card-img-top " src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: cover;" >
                                         <div class="card-body">
                                             <h5 class="title"> {{$product->name}}</h5>
                                             <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('conversions')->where('id',1)->value('rate')}}GHS</p>
@@ -127,7 +127,7 @@
                             @if($product->received == true)
                                 <div class="col-md-4" >
                                     <div class="card mb-4 box-shadow" style=" background-color: {{$color}};">
-                                        <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;">
+                                        <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: cover;">
                                         <div class="card-body">
                                             <h5 class="title"> {{$product->name}}</h5>
                                             <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('conversions')->where('id',1)->value('rate')}}GHS</p>
@@ -167,7 +167,7 @@
                             @if($product->sold == false)        
                             <div class="col-md-4" >
                                 <div class="card mb-4 box-shadow" >
-                                    <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: contain;">
+                                    <img class="card-img-top" src="/gallery/{{$product->thumbnail_path}}" style="max-height:10em; object-fit: cover;">
                                     <div class="card-body">
                                         <h5 class="title"> {{$product->name}}</h5>
                                         <p class="card-text">Price: <span class= "pricesmbl">£</span>{{$product->selling_Price}}/{{$product->selling_Price * DB::table('conversions')->where('id',1)->value('rate')}}GHS</p>

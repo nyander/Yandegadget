@@ -309,9 +309,10 @@ class ProductsController extends Controller
         $today = $dt->toDateString();
         $product = Product::find($id);         
         $conversionrate = Conversion::find(1);
-        $ghanaconversion = $product->selling_Price * $conversionrate->rate;
+        $rate = $conversionrate->rate;
+        $ghanaconversion = $product->selling_Price * $rate;
         $result = $ghanaconversion - ($ghanaconversion * 0.3); 
-        return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result, 'ghanaconversion'=>$ghanaconversion]);
+        return view('products.purchase')->with(['product'=>$product, 'today' => $today, 'result'=>$result, 'ghanaconversion'=>$ghanaconversion, 'rate'=>$rate]);
     }
 
     public function purchaseupdate(Request $request, $id)

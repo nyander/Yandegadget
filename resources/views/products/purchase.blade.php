@@ -6,12 +6,12 @@
 <div class="row mt-5">
     <div class="col-md-6 order-md-1">
         <div class="container bg-info text-white p-3">
-            <p>
-                Please record purchase of the particular product. If the product is being purchased by the
-                user who requested the product (seen in the product view page), they pay the dividends and the purchase
-                should be recorded as the full price.                 
-            </p>
-                <p><b>Product cannot be sold at a price less than {{$result}}GHS</b></p>
+            
+            <p>Please record purchase of the particular product. </p>
+            <p>  If customer purchasing product is: {{DB::table('users')->where('id',$product->requested_by)->value('name')}}</p>
+            <p>They will only have to pay {{$ghanaconversion - (DB::table('conditions')->where('id',$product->condition)->value('deposit') * $rate)}} GHS  </p>
+            <p>Then reord it as full price</p> 
+            <p><b>Product cannot be sold at a price less than {{$result}}GHS</b></p>
         </div>
     </div>
     <div id="createproduct" class="col-md-4 order-md-2">

@@ -37,6 +37,7 @@ class HomeController extends Controller
         $supproduct = DB::table('supplier_products')->where('supplier_id',Auth::user()->id)->count();
         $soldsupproduct = DB::table('supplier_products')->where('supplier_id',Auth::user()->id)->where('purchased',1)->count();
         $checker = Supplier::where('supplier_id', Auth::user()->id)->doesntExist();
+        
         // admin dashboard
         $requestedProducts =DB::table('product_requests')->where('acquired',0)->where('deposit_paid',1)->count();
         $purchasedProducts =DB::table('products')->where('sold',1)->count();  

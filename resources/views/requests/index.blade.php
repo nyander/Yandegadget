@@ -131,7 +131,8 @@
                                                                 {{method_field('DELETE')}}
                                                                 <button type="submit" class="btn btn-danger" name="myButton">Delete</button>
                                                             </form> 
-                                                            <a href="{{route('checkouts.index')}}/{{$request->id}}"><button type="button" class="btn btn-success float-left">Pay</button></a>
+                                                            
+                                                            <a href="{{route('checkouts.show',$request->id)}}"><button type="button" class="btn btn-success float-left">Pay</button></a>
                                                         @endif
                                                             
                                                     </td>

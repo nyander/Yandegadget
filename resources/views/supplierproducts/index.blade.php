@@ -6,7 +6,7 @@
     <div class="bg-danger p-4 mx-6 text-light text-center my-2">
         <h5 >Can't Find Product you are looking for?</h5>
         <p>
-            If you cannot find a particular product, why not try one of these 2nd digital marketplaces.
+            If you cannot find a particular product, why not try one of these 2nd hand digital marketplaces.
             
         </p>
         <div class="row justify-content-center">

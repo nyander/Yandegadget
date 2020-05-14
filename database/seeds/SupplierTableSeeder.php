@@ -27,14 +27,14 @@ class SupplierTableSeeder extends Seeder
                         
         Supplier::create(['name' => 'Bootsale',
                           'address' => 'Colchester',
-                          'contact' => '',]);  
+                          'contact' => '01206 242409',]);  
                               
         Supplier::create(['name' => 'CEX',
                           'address' => 'Colchester',
-                          'contact' => '',]);  
+                          'contact' => '0330 123 5986',]);  
 
         Supplier::create(['name' => 'Cash Converters',
                           'address' => 'Colchester',
-                          'contact' => '',]);         
+                          'contact' => '01206 762575',]);         
     }                          
 }

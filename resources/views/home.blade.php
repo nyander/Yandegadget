@@ -35,8 +35,8 @@
                         review company performance.  The Dashboard table displays the progress 
                         within business as well as the website. 
                     </p>
-                    <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success " >Filter Products</button></a>
-                    <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary " >Record Transactions</button></a>
+                    <a href="{{route('reports.create')}}"><button type="button" class="btn btn-success " >Review Performance</button></a>
+                    <a href="{{route('transactions.create')}}"><button type="button" class="btn btn-primary " >Record Trans.</button></a>
                 @endcan
 
                 {{-- Customer View --}}

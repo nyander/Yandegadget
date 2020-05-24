@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
                 $table->foreign('user_id')->references('id')->on('users');
             $table->string('name')->nullable();
             $table->unsignedBigInteger('type')->nullable();
-                $table->foreign('type')->references('id')->on('categories');
+                // $table->foreign('type')->references('id')->on('categories');
             $table->unsignedDecimal('cost')->nullable();;
             $table->unsignedBigInteger('supplier')->nullable();
                 $table->foreign('supplier')->references('id')->on('suppliers');

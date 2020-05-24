@@ -6,7 +6,7 @@
 {{-- $title is the variable name in which the Postcontroller will replace with the variable $tite - so this title will be variable in the postcontroller    --}}
     <div class="header-banner">
         <h1 class="index-title">{{$title}}</h1>
-        <p class="index-subtitle"> I can now conirm that you are connected to the index page hello serve HELLLOOOOO</p> 
+        <p class="index-subtitle"> I can now conirm that you are connected to the index page hello serve</p> 
         @if (Auth::check()) 
             <p class="index-subtitle"> Logged In as: {{Auth::user()->name}}
         @else 

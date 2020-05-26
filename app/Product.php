@@ -30,6 +30,12 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     {
         return $this->hasMany('App\Image');
     }
+
+    protected $casts = [
+        'created_at'=>'datetime:d-m-y',
+        'updated_at' => 'datetime:d-m-y',
+        'purchase_Date' => 'datetime:d-m-y'
+    ];
     
 }
 

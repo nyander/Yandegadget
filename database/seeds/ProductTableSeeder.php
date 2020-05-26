@@ -6,6 +6,7 @@ use App\Category;
 use App\Supplier;
 use App\Product;
 use App\User;
+use Carbon\Carbon;
 
 class ProductTableSeeder extends Seeder
 {
@@ -36,12 +37,18 @@ class ProductTableSeeder extends Seeder
         $categories5 = Category::select('id')->where('id', '5')->value('id');
         $categories6 = Category::select('id')->where('id', '6')->value('id');
         $categories7 = Category::select('id')->where('id', '7')->value('id');
+
+        
+        $date1 = Carbon::now()->toDateString();       
+        $date2 = Carbon::createFromFormat('d/m/Y', '28/04/2020');        
+       
+
         Product::create(['name' => 'LG TV 2018',
                          'user_id' => $user,   
                          'type' => $categories3,
                          'cost' => '25',
                          'supplier' => $supplier,
-                         'purchase_Date' => '18/04/2020',
+                         'purchase_Date' => $date1,
                          'condition' => $condition,
                          'selling_Price' => '50' ,
                          'featured' => 'true',
@@ -53,7 +60,7 @@ class ProductTableSeeder extends Seeder
                          'type' => $categories,
                          'cost' => '25',
                          'supplier' =>  $supplier2,
-                         'purchase_Date' => '18/04/2020',
+                         'purchase_Date' => $date1,
                          'condition' => $condition2,
                          'selling_Price' => '50',
                          'featured' => 'true',
@@ -65,7 +72,7 @@ class ProductTableSeeder extends Seeder
                          'type' => $categories4,
                          'cost' => '25',
                          'supplier' => $supplier3,
-                         'purchase_Date' => '18/04/2020',
+                         'purchase_Date' => $date1,
                          'condition' =>  $condition3,
                          'selling_Price' => '50',
                          'featured' => 'true',
@@ -77,13 +84,13 @@ class ProductTableSeeder extends Seeder
                          'type' => $categories5,
                          'cost' => '25',
                          'supplier' => $supplier,
-                         'purchase_Date' => '16/03/2020',
+                         'purchase_Date' => $date1,
                          'condition' => $condition,
                          'selling_Price' => '150' ,
                          'featured' => 'true',
                          'thumbnail_path' => 'playstation_4_2020_.jpg',
                          'sold'=>true,
-                         'sold_Date'=> '2020-04-27',
+                         'sold_Date'=> $date2,
                          'received'=>true
                          ]); 
                          
@@ -92,13 +99,13 @@ class ProductTableSeeder extends Seeder
                          'type' => $categories3,
                          'cost' => '25',
                          'supplier' => $supplier2,
-                         'purchase_Date' => '16/03/2020',
+                         'purchase_Date' => $date1,
                          'condition' => $condition,
                          'selling_Price' => '150' ,
                          'featured' => 'true',
                          'thumbnail_path' => '71QN1O337TL._AC_SL1500_-1588269387.jpg',
                          'sold'=>true,
-                         'sold_Date'=> '2020-04-27',
+                         'sold_Date'=> $date2,
                          'received'=>true
                          ]); 
         
@@ -108,13 +115,13 @@ class ProductTableSeeder extends Seeder
                          'type' => $categories7,
                          'cost' => '60',
                          'supplier' => $supplier3,
-                         'purchase_Date' => '16/03/2020',
+                         'purchase_Date' => $date1,
                          'condition' => $condition3,
                          'selling_Price' => '250' ,
                          'featured' => 'true',
                          'thumbnail_path' => 'LG_watch_urbane_2nd.jpg',
                          'sold'=>true,
-                         'sold_Date'=> '2020-04-20',
+                         'sold_Date'=> $date2,
                          'received'=>true
                          ]);                 
 

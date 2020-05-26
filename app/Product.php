@@ -32,9 +32,9 @@ protected $fillable = ['name','type','cost','supplier','purchase_Date','conditio
     }
 
     protected $casts = [
-        'created_at'=>'datetime:d-m-y',
-        'updated_at' => 'datetime:d-m-y',
-        'purchase_Date' => 'datetime:d-m-y'
+        'created_at' => 'datetime:d-m-Y',
+        'updated_at' => 'datetime:d-m-Y',
+        'purchase_Date' => 'datetime:d-m-Y'
     ];
     
 }

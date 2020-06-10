@@ -29,7 +29,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Dave Yande',
             'email' => 'admin@admin.com',
             'email_verified_at' => '2020-05-11 13:46:35',
-            'password' => Hash::make('GadgetsAccra123_'),
+            'password' => Hash::make('Yande123_'),
         ]);
 
         $staff = User::create([

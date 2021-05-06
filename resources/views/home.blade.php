@@ -5,7 +5,7 @@
     <div class="row justify-content-center my-5">
         <div class="col-md-4 order-md-1 mr-5">
             <div class="container text-white p-3" style="background-color:#f70d1a;">
-                <p>Welcome <b>{{Auth::user()->name}},</b></p>
+                <p>Welcome MR/MS<b>{{Auth::user()->name}},</b></p>
                 {{-- Suppliers view --}}
                 @can('supplier-role')
                     @if ($checker)

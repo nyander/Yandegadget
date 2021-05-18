@@ -4,6 +4,49 @@
 {{--inside the @section is what will be added in the app file, basically content to be added to your template--}}
 @section('index')
 {{-- $title is the variable name in which the Postcontroller will replace with the variable $tite - so this title will be variable in the postcontroller    --}}
+    
+  <div class="row" style="margin-top: 25px;">
+    <div class="col-7"style=
+      "
+      padding-top: 16%;
+      padding-bottom: 16%;
+      padding-left: 2%;
+      padding-right: 2%;
+      ">
+    </div>
+
+
+    <div class="col-5"
+    style=
+      "
+      background-color: #CE2029;
+      padding-top: 16%;
+      padding-bottom: 16%;
+      padding-left: 2%;
+      padding-right: 2%;
+      color: white;
+      text-align: center;
+      margin: auto;
+      ">
+      <h1 style="font-family: 'Crimson Text', serif;">YANDE GADGETS</h1>
+      <hr style="border-width: 5px; width:50%; margin: auto; border:solid white">
+      <h4 style="font-family: 'Montserrat', sans-serif; margin-top:10px; font-weight:700;">Technology Store</h4>
+      <br>
+      <p style="margin-top: 8%;">
+        <a 
+        role="button" 
+        style=
+        "background-color:white; 
+        color:black;  
+        padding: 8px 80px ;
+        font-family: 'Montserrat', sans-serif;
+        border-radius:5px;">
+          Explore Products
+        </a> 
+    </div>
+  </div>
+    
+    
     <div class="header-banner">
         <h1 class="index-title">{{$title}}</h1>
         <p class="index-subtitle"> I can now conirm that you are connected to the index page hello serve</p> 

@@ -4749,7 +4749,7 @@ input[type=button].btn-block {
   display: block;
 }
 
-.navbar {
+/* .navbar {
   position: relative;
   display: -webkit-box;
   display: flex;
@@ -4759,7 +4759,7 @@ input[type=button].btn-block {
   -webkit-box-pack: justify;
           justify-content: space-between;
   padding: 0.5rem 1rem;
-}
+} */
 
 .navbar .container,
 .navbar .container-fluid,
@@ -11354,151 +11354,5 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
-}
-
-/**
- * The CSS shown here will not be introduced in the Quickstart guide, but shows
- * how you can use CSS to style your Element's container.
- */
-
-.StripeElement {
-  box-sizing: border-box;
-  height: 40px;
-  padding: 10px 12px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: white;
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-
-.products-header {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-pack: justify;
-          justify-content: space-between;
-}
-
-.sidebar.li.active {
-  font-weight: 500;
-}
-
-.pagination {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-pack: center;
-          justify-content: center;
-  margin-top: 4%;
-}
-
-.pagination a {
-  color: black;
-  float: left;
-  padding: 2px 16px;
-  text-decoration: none;
-}
-
-.rightstatment {
-  float: right;
-  padding-right: 10px;
-}
-
-.leftstatment {
-  padding-left: 10px;
-}
-
-.statementsection {
-  padding-left: 15px;
-}
-
-.main-section {
-  margin: 0 auto;
-  padding: 20px;
-  margin-top: 100px;
-  background-color: #fff;
-  box-shadow: 0px 0px 20px #C1C1C1;
-}
-
-.brand_logo {
-  height: 50px;
-  width: auto;
-}
-
-.header-banner {
-  background: -webkit-gradient(linear, left bottom, left top, from(rgba(64, 64, 64, 0.6)), to(rgba(64, 64, 64, 0.6))), url("/images/view-of-vintage-camera-325153.jpg");
-  background: linear-gradient(0deg, rgba(64, 64, 64, 0.6), rgba(64, 64, 64, 0.6)), url("/images/view-of-vintage-camera-325153.jpg");
-  text-align: center !important;
-  padding: 15rem 2rem;
-  background-size: cover;
-  background-position: initial;
-  min-height: 100%;
-}
-
-.index-title,
-.index-subtitle {
-  color: white;
-}
-
-#phones {
-  background: -webkit-gradient(linear, left bottom, left top, from(rgba(64, 64, 64, 0.7)), to(rgba(64, 64, 64, 0.7))), url("/images/index_phone.jpeg");
-  background: linear-gradient(0deg, rgba(64, 64, 64, 0.7), rgba(64, 64, 64, 0.7)), url("/images/index_phone.jpeg");
-  background-size: cover;
-  background-position: initial;
-}
-
-#tvaudio {
-  background: -webkit-gradient(linear, left bottom, left top, from(rgba(64, 64, 64, 0.7)), to(rgba(64, 64, 64, 0.7))), url("/images/Samsung-QLED.png");
-  background: linear-gradient(0deg, rgba(64, 64, 64, 0.7), rgba(64, 64, 64, 0.7)), url("/images/Samsung-QLED.png");
-  background-size: cover;
-  background-position: center;
-}
-
-#computer {
-  background: -webkit-gradient(linear, left bottom, left top, from(rgba(64, 64, 64, 0.7)), to(rgba(64, 64, 64, 0.7))), url("/images/idnex_Laptop.jpg");
-  background: linear-gradient(0deg, rgba(64, 64, 64, 0.7), rgba(64, 64, 64, 0.7)), url("/images/idnex_Laptop.jpg");
-  background-size: cover;
-  background-position: center;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-footer {
-  background-color: green;
-}
-
-.google-maps {
-  position: relative;
-  padding-bottom: 75%;
-  height: 0;
-  overflow: hidden;
-}
-
-.google-maps iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.mx-6 {
-  margin-left: 5rem !important;
-  margin-right: 5rem !important;
 }
 

@@ -1,65 +1,112 @@
-<!--<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Yande Gadgets</h5>
-        nav class="my-2 my-md-0 mr-md-3">
-          <a class="p-2 text-dark" href="/">Home</a>
-          <a class="p-2 text-dark" href="/products">Products</a>
-          <a class="p-2 text-dark" href="/about">About Us</a>          
-        </nav>
-        <a class="btn btn-outline-primary" href="#">Sign up</a>
-      </div>-->
-      
-      <nav class="navbar navbar-expand-md navbar-light bg-yellow shadow-md " style="background-color:yellow;">
-          <div class="container my-auto">
-              <a class="navbar-brand" href="{{ url('/') }}">
-                  {{-- {{ config('app.name', 'Laravel') }} --}}
-                  <img class="brand_logo" src="/images/YandeGadgets.png">
-              </a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
+<!-- Black Section at the top of the page -->
+<row style=" width:100%;">
+<div class="col"
+    style=
+      "
+      background-color: black;
+      padding-top: 0.8%;
+      padding-bottom:0.8%;
+      color: white;
+      text-align:center;
+      margin:auto;
+      font-weight:500;
+      ">
+      <p style="font-size: 12px; margin-bottom:0px;">All Products were Sourced and Quality Checked in United Kingdom</p>
+    </div>
+</row>      
 
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <!-- Left Side Of Navbar -->
-                  <ul class="navbar-nav mr-auto">
-                      
-                  </ul>
+<!-- Row Number 2 : Loghin - Logo - Cart etc. -->
+<div class="row" style="margin-top: 15px;">
+    <div class="col-3" style="padding-left:10%; padding-top:9px; font-family: 'Montserrat', sans-serif;  font-size:14px;">
+        <div class="header-banner" >
+            @if (Auth::check()) 
+                <p class="index-subtitle"> Logged In as: {{Auth::user()->name}}
+            @else 
+            <p><a href="/login" role="button" style="color:black;">Guest</a>
+            @endif
+        </div>
+    </div>
 
-                  <!-- Right Side Of Navbar -->
-                  <ul class="navbar-nav ml-auto font-weight-bold">
-                      <a class="nav-link" href="/">Home</a>
-                      <a class="nav-link" href="/products">Products</a>
-                      <a class="nav-link" href="/about">About Us</a> 
-                      @can('supproducts') 
-                        <a class="nav-link" href="/supplierproducts">Supplier Products</a> 
-                      @endcan
-                      @can('managing-requests')
-                        <a class="nav-link" href="/requests/create">Request Product</a>
-                      @endcan
+    <div class="col-6" style="text-align: center; font-family: 'Crimson Text';">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            <p style=" color:black; font: weight 800px; font-size:30px; margin-bottom: 0px;">YANDE GADGETS</p>
+        </a>
+    </div>
 
-                      @can("admin-role")
-                        <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
-                            @if(Cart::instance('default')->count() > 0) 
-                            <span class="badge badge-light">{{Cart::instance('default')->count()}}</span></span>    
-                            @endif                    
-                        </a>
-                      @endcan   
+    <div class="col-3" style="padding-right:10%; padding-top:9px; font-family: 'Montserrat', sans-serif;  font-size:14px;">
+        <i class="material-icons" style="padding-left: 5px; padding-right:5px;">search </i>
+        <!-- Top Loggin section -->
 
-                      <!-- Authentication Links -->
-                      @guest
-                          <li class="nav-item">
-                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                @guest
+                        <li class="nav-item dropdown" style="margin-top: -8px;">    
+                            <a id="navbarDropdown1" class="nav-link material-icons" style="padding-left: 5px; padding-right:5px; color:black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                person
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown1" >
+                                <a class="nav-link" style="color: black; font-size:14px; text-align:right;" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" style="color: black; font-size:14px; text-align:right;" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </div>
+
+                        </li>
+                @else
+                        {{-- Logged in user --}}
+                        <li class="nav-item dropdown" style="margin-top: -8px;">
+                              <a id="navbarDropdown" class="nav-link material-icons" style="padding-left: 5px; padding-right:5px; color:black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                  person
+                              </a>
+
+                              <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item bg-secondary text-light" href="{{ route('logout') }}"
+                                     onclick="event.preventDefault();
+                                                   document.getElementById('logout-form').submit();">
+                                      {{ __('Logout') }}
+                                  </a>
+                                    <a class="dropdown-item" href="{{route('home')}}">
+                                        Dashboard
+                                    </a>
+                                    @can("admin-role")
+                                        <a class="dropdown-item" href="{{route('products.create')}}">
+                                            Upload Product
+                                        </a>
+                                    @endcan 
+                                    
+                                    @can('managing-requests')
+                                        <a class="dropdown-item" href="{{route('requests.index')}}">
+                                            Requested Products
+                                        </a>
+                                    @endcan
+
+                                    @can('admin-role')
+                                        <a class="dropdown-item" href="{{ route('reports.index') }}">
+                                            Reports 
+                                        </a> 
+                                    @endcan
+
+                                    @can('manage-shipped-products')
+                                        <a class="dropdown-item" href="{{ route('ships.index') }}">
+                                            Shipped Product Management 
+                                        </a> 
+                                    @endcan
+                                    
+                                    @can("admin-role")
+                                        <a class="dropdown-item" href="/settings">
+                                            Settings
+                                        </a>
+                                    @endcan
+                                                                        
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                              </div>
                           </li>
-                          @if (Route::has('register'))
-                              <li class="nav-item">
-                                  <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                              </li>
-                          @endif
-                      @else
-                        {{-- Notification--}}
-
-                        <li class="nav-item dropdown">
+                          
+                          
+                        <i class="material-icons" style="padding-left: 5px; padding-right:5px;">shopping_cart</i>
+                          
+                        <!-- Notification -->
+                        <li class="nav-item dropdown" style="margin-top: -8px;">
                             <a id="navbarDropdown1" cclass="nav-link dropdown-toggle" class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre> 
-                                <i class="fa fa-bell"></i>
+                            <i class="material-icons" style="color:black ">notifications</i>
                                 <span class="badge badge-light">{{auth()->user()->unreadNotifications -> count() }}</span>
                             </a>                          
 
@@ -125,61 +172,69 @@
                                @endif 
                             </div>
                         </li>
-                        
-                        {{-- Logged in user --}}
-                        <li class="nav-item dropdown">
-                              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                  {{ Auth::user()->name }} <span class="caret"></span>
-                              </a>
 
-                              <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item bg-secondary text-light" href="{{ route('logout') }}"
-                                     onclick="event.preventDefault();
-                                                   document.getElementById('logout-form').submit();">
-                                      {{ __('Logout') }}
-                                  </a>
-                                    <a class="dropdown-item" href="{{route('home')}}">
-                                        Dashboard
-                                    </a>
-                                    @can("admin-role")
-                                        <a class="dropdown-item" href="{{route('products.create')}}">
-                                            Upload Product
-                                        </a>
-                                    @endcan 
-                                    
-                                    @can('managing-requests')
-                                        <a class="dropdown-item" href="{{route('requests.index')}}">
-                                            Requested Products
-                                        </a>
-                                    @endcan
 
-                                    @can('admin-role')
-                                        <a class="dropdown-item" href="{{ route('reports.index') }}">
-                                            Reports 
-                                        </a> 
-                                    @endcan
+                    @endguest
+    </div>
+</div>
 
-                                    @can('manage-shipped-products')
-                                        <a class="dropdown-item" href="{{ route('ships.index') }}">
-                                            Shipped Product Management 
-                                        </a> 
-                                    @endcan
-                                    
-                                    @can("admin-role")
-                                        <a class="dropdown-item" href="/settings">
-                                            Settings
-                                        </a>
-                                    @endcan
-                                                                        
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                              </div>
-                          </li>
+
+
+
+
+<!-- Row Number 3: Menus -->
+<div class="row">
+    <div class="col-3" style="padding-top:9px; font-family: 'Montserrat', sans-serif;  font-size:14px;">
+    </div>
+
+    <div class="col-6" style="display: flex;  margin-left:-10px; justify-content: center;  align-items: center; font-family: 'Montserrat'; font-size:16px;">
+    <nav class="navbar navbar-expand-md navbar-light shadow-md ">
+          <div class="container my-auto">
+              <a class="navbar-brand" href="{{ url('/') }}">
+                  {{-- {{ config('app.name', 'Laravel') }} --}}
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                  <!-- Right Side Of Navbar -->
+                  <ul class="navbar-nav font-weight-bold">
+                      <a class="nav-link" href="/">Home</a>
+                      <a class="nav-link" href="/products">Products</a>
+                      <a class="nav-link" href="/about">About Us</a> 
+                      @can('supproducts') 
+                        <a class="nav-link" href="/supplierproducts">Supplier Products</a> 
+                      @endcan
+                      @can('managing-requests')
+                        <a class="nav-link" href="/requests/create">Request Product</a>
+                      @endcan
+
+                      @can("admin-role")
+                        <a class="nav-link" href="/shipments">Shipments <span class="shipment-count">
+                            @if(Cart::instance('default')->count() > 0) 
+                            <span class="badge badge-light">{{Cart::instance('default')->count()}}</span></span>    
+                            @endif                    
+                        </a>
+                      @endcan   
+
+                      <!-- Authentication Links -->
+                      @guest
+                      @else
+                        {{-- Notification--}}
                       @endguest
                   </ul>
                   
               </div>
           </div>
       </nav>
+    </div>
+
+    <div class="col-3">
+    </div>
+</div>
+
+
+      
    

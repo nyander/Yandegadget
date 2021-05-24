@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
@@ -38,6 +39,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <style>@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@1,700&display=swap');</style>
     <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');</style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@800&display=swap');</style>
 
     
     
@@ -69,7 +71,7 @@
     <br>
     <br>
     <!-- Footer -->
-    <footer class="page-footer font-small blue pt-4 ">
+    <footer class="page-footer font-small blue pt-4" id="footersection">
         <div class="container">
             <!-- Footer Links -->
             <div class="container-fluid text-center text-md-left">

@@ -1,23 +1,13 @@
 <!-- Black Section at the top of the page -->
 <row style=" width:100%;">
-<div class="col"
-    style=
-      "
-      background-color: black;
-      padding-top: 0.8%;
-      padding-bottom:0.8%;
-      color: white;
-      text-align:center;
-      margin:auto;
-      font-weight:500;
-      ">
-      <p style="font-size: 12px; margin-bottom:0px;">All Products were Sourced and Quality Checked in United Kingdom</p>
+<div class="col" id="topbar">
+      <p >All Products were Sourced and Quality Checked in United Kingdom</p>
     </div>
 </row>      
 
-<!-- Row Number 2 : Loghin - Logo - Cart etc. -->
-<div class="row" style="margin-top: 15px;">
-    <div class="col-3" style="padding-left:10%; padding-top:9px; font-family: 'Montserrat', sans-serif;  font-size:14px;">
+<!-- Row Number 2 : Login - Logo - Cart etc. -->
+<div class="row" id="topmenurow">
+    <div class="col-3" id="loginstatus">
         <div class="header-banner" >
             @if (Auth::check()) 
                 <p class="index-subtitle"> Logged In as: {{Auth::user()->name}}
@@ -27,19 +17,19 @@
         </div>
     </div>
 
-    <div class="col-6" style="text-align: center; font-family: 'Crimson Text';">
+    <div class="col-6" id="Mainheaderlogo">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <p style=" color:black; font: weight 800px; font-size:30px; margin-bottom: 0px;">YANDE GADGETS</p>
+            <p>YANDE GADGETS</p>
         </a>
     </div>
 
-    <div class="col-3" style="padding-right:10%; padding-top:9px; font-family: 'Montserrat', sans-serif;  font-size:14px;">
+    <div class="col-3" id="lefticons">
         <i class="material-icons" style="padding-left: 5px; padding-right:5px;">search </i>
         <!-- Top Loggin section -->
 
                 @guest
                         <li class="nav-item dropdown" style="margin-top: -8px;">    
-                            <a id="navbarDropdown1" class="nav-link material-icons" style="padding-left: 5px; padding-right:5px; color:black;" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown1" class="nav-link material-icons" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 person
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown1" >

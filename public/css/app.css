@@ -51,6 +51,17 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+a{
+  text-decoration: none;
+}
+
+a:hover{
+  color: red;
+}
+
+a:active{
+  color: darkred;
+}
 article,
 aside,
 figcaption,
@@ -73,6 +84,8 @@ body {
   color: #212529;
   text-align: left;
   background-color: #f8fafc;
+  max-width: 100%;
+  margin: auto;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -11356,3 +11369,210 @@ a.text-dark:focus {
   }
 }
 
+#rightHeader{
+      background-color: #CE2029;
+      padding-top: 12.5%;
+      padding-bottom: 12.5%;
+      padding-left: 4%;
+      padding-right: 4%;
+      color: white;
+      text-align: center;
+      margin: auto;
+}
+
+#headerrow{
+  margin-top: 25px;
+}
+
+#headerbutton{
+  background-color:white; 
+  color:black;  
+  padding: 8px 80px ;
+  font-family: 'Montserrat', sans-serif;
+  border-radius:5px;
+}
+
+#rightHeader h1{
+  font-family: 'Cabin', sans-serif; 
+  text-align:left;
+  font-size: 50px;
+  font-weight: 900;
+}
+
+#rightHeader h4{
+  font-family: 'Montserrat', sans-serif;
+  text-align:left;
+  font-size: 24px;
+}
+
+#rightHeader p{
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.5em;
+}
+
+
+#sliderhead h3{
+  font-family: 'Cabin', sans-serif;
+  font-weight: 900;
+} 
+
+#topbar
+{
+  background-color: black;
+  padding-top: 0.8%;
+  padding-bottom:0.8%;
+  color: white;
+  text-align:center;
+  margin:auto;
+  font-weight:500;
+}
+
+#topbar p{
+  font-size: 12px; 
+  margin-bottom:0px;
+}
+
+#Mainheaderlogo{
+ text-align: center;
+}
+
+#Mainheaderlogo p {
+  font-family: 'Cabin', sans-serif;
+  font-weight: 900;
+  color:black; 
+  font-size:36px; 
+  margin-bottom: 0px;
+}
+
+
+#topmenurow{
+  margin-top: 15px;
+}
+
+#loginstatus{
+  padding-left:10%; 
+  padding-top:9px; 
+  font-family: 'Montserrat', sans-serif;  
+  font-size:14px;
+}
+
+#lefticons {
+  padding-right:10%; 
+  padding-top:9px; 
+  font-family: 'Montserrat', sans-serif;  
+  font-size:14px;
+}
+
+#navbarDropdown1{
+  padding-left: 5px; 
+  padding-right:5px; 
+  color:black;
+}
+
+#headerimage {
+  background-image: url(../images/headerimage.jpg);
+  background-position: center;
+}
+
+
+#slidersection {
+  max-width:85%;
+  margin: auto;
+}
+
+#sliderhead{  
+  padding-top: 5%;
+}
+
+.sectionHighlight{
+  border-width: 0.2em;
+  border-color: black;
+  margin-top: 0;
+}
+
+.sectionHighlight1{
+  border-width: 0.5em;
+  border-color: black;
+  margin-bottom: 0;
+}
+
+#productadverisement{
+  background-image: url(../images/yellow.jpg);
+  background-position:top;
+  object-fit:cover;
+  padding-top: 15%;
+  padding-bottom: 15%;
+  padding-right: 8%;
+  padding-left: 8%;
+  margin-bottom: 0;
+}
+
+.productButton{
+  padding: 5px 30px;
+  font-weight: 500;
+  border-radius: 5px;
+  border-color: white;
+  border-width: 2px;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+}
+
+.productButton:active{
+  padding: 5px 30px;
+  font-weight: 500;
+  border-color: white;
+  border-width: 2px;
+  border-radius: 5px;
+  background-color: grey;
+  color: black;
+}
+
+.productButton:hover{
+  padding: 5px 30px;
+  font-weight: 700;
+  border-color: black;
+  border-width: 2px;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+}
+
+.page-footer{
+  background-color: #016C40;
+  margin-top: 0;
+}
+
+.footer-copyright{
+  margin-top: 5%;
+}
+
+.box{
+  width: 300px;
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.001);
+  margin-top: 2%;
+  border-radius: 10px;
+
+}
+
+.slide-img{
+  height: 300px;
+}
+
+.slide-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+#adtitle{
+  font-weight: bold;
+}
+
+.detail-box h5 a{
+  color: black;
+  font-weight: 700;
+  text-decoration: none;
+}

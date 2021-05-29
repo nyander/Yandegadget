@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@1,700&display=swap');</style>
     <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');</style>
     <style>@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@800&display=swap');</style>
@@ -82,44 +83,55 @@
     <br>
     <br>
     <!-- Footer -->
-    <footer class="page-footer font-small blue pt-4" id="footersection">
+    <footer class="page-footer font-medium blue pt-5" id="footersection">
         <div class="container">
             <!-- Footer Links -->
             <div class="container-fluid text-center text-md-left">
+                <div class="subscribeTitle">
+                    <h5>Subscribe to our Newsletter</h5>
+                    <div class="subscriptionfield">
+                        <input type="email" class="mailinglist"  name="subscription" placeholder="Email">
+                    </div>
+                </div>
     
                 <!-- Grid row -->
                 <div class="row">
     
                     <!-- Grid column -->
-                    <div class="col-md-6 mt-md-0 mt-3">
+                    <div class="col-md-3 mb-md-0 mb-3">
     
-                        <!-- Content -->
-                        <h5 class="text-uppercase text-light">Yande Gadgets</h5>
-                        <p class="text-light">
-                            Yande Gadgets is a second-hand electrical retailer based in Ghana 
-                            which specializes in Technology, Appliances such as phones, computers, and TVs’.
-                        </p>
+                        <!-- Links -->
+                        <h5 class="text-light">My Account</h5>
     
-                    </div>
-                    <!-- Grid column -->
+                        <ul class="list-unstyled text-light">
+                            <li>
+                                <a href="/products" class="text-light">My Account</a>
+                            </li>
+                            <li>
+                                <a href="/requests" class="text-light">My Orders</a>
+                            </li>                            
+                        </ul>
     
-                    <hr class="clearfix w-100 d-md-none pb-3">
+                    </div> 
     
                     <!-- Grid column -->
                     <div class="col-md-3 mb-md-0 mb-3">
     
                         <!-- Links -->
-                        <h5 class="text-uppercase text-light">Products</h5>
+                        <h5 class="text-light">Legal & Policies</h5>
     
                         <ul class="list-unstyled text-light">
                             <li>
-                                <a href="/products" class="text-light">Products</a>
+                                <a href="/products" class="text-light">Conditions</a>
                             </li>
                             <li>
-                                <a href="/requests" class="text-light">Product Requests</a>
+                                <a href="/requests" class="text-light">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href="/requests/create"class="text-light">Request a Product</a>
+                                <a href="/requests/create"class="text-light">Privacy Settings</a>
+                            </li>
+                            <li>
+                                <a href="/requests/create"class="text-light">Order & Purchasing Policy</a>
                             </li>
                             
                         </ul>
@@ -131,28 +143,61 @@
                     <div class="col-md-3 mb-md-0 mb-3">
     
                         <!-- Links -->
-                        <h5 class="text-uppercase text-light" >About Us</h5>
+                        <h5 class="text-light" >Our Company</h5>
     
                         <ul class="list-unstyled">
                             <li>
-                                <a href="/login" class="text-light">Login</a>
-                            </li>
-                            <li>
-                                <a href="/register" class="text-light">Register</a>
+                                <a href="/about" class="text-light">Yande Gadgets</a>
                             </li>
                             <li>
                                 <a href="/about" class="text-light">About Us</a>
+                            </li>
+                            <li>
+                                <a href="/about" class="text-light">Career</a>
                             </li>
                         </ul>
     
                     </div>
                     <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-3 mb-md-0 mb-3">
+    
+                        <!-- Links -->
+                        <h5 class="text-light">Customer Service</h5>
+    
+                        <ul class="list-unstyled text-light">
+                            <li>
+                                <a href="/products" class="text-light">Service & FAQ</a>
+                            </li>
+                            <li>
+                                <a href="/requests" class="text-light">Order & Payment</a>
+                            </li>
+                            <li>
+                                <a href="/requests/create"class="text-light">Shipping & Returns</a>
+                            </li>
+                            
+                        </ul>
+    
+                    </div>
     
                 </div>
                 <!-- Grid row -->
     
+
+
+                <div class="paymentMethod">
+                    <h5 class="text-light">Accepted Payment</h5>
+                </div>
+
+                <div class="row container">
+                    <i class="fa fa-cc-mastercard" style="font-size:3.5em; color:white; padding:5px;"></i>
+                    <i class="fa fa-cc-paypal" style="font-size:3.5em; color:white; padding:5px;"></i>
+                    <i class="fa fa-cc-visa" style="font-size:3.5em; color:white; padding:5px;"></i>
+                </div>
             </div>
             <!-- Footer Links -->
+
     
             <!-- Copyright -->
             <div class="footer-copyright text-center py-3 text-light">© 2020 Copyright:

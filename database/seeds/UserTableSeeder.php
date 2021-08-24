@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use App\Role;
 use Illuminate\Support\Facades\Hash;
 

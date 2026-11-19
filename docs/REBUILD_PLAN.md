@@ -23,20 +23,20 @@ Keep the 2020 version: tag it `v1-2020` on `master`, build the new app on a `reb
 
 ## Target stack
 
-| Area | 2020 | 2026 |
-|---|---|---|
-| Framework | Laravel 6, PHP 7.2 | Latest Laravel, PHP 8.3+ |
-| Customer-facing and staff frontend | Blade + Bootstrap 4 | **Inertia.js + React + TypeScript**, Tailwind, shadcn/ui, from Laravel's official React starter kit. Server-side rendering on for SEO |
-| Back-office data entry (settings, ledger, CRUD) | Hand-written Blade CRUD | **Filament** panel at `/admin`, which replaces most of the 22 controllers. Screens can move into React later if they need a custom design |
-| Auth | `laravel/ui` | The React starter kit's auth (Fortify), email verification, optional 2FA for admin |
-| Roles | Raw `role_id` 1–4, broken gates | `spatie/laravel-permission` + Policies, with no numeric role checks |
-| Payments | Cartalyst Stripe charge | A `PaymentGateway` interface with Paystack (mobile money + card) and/or Stripe behind it. See decision 2 |
-| Images | `public/gallery` | `spatie/laravel-medialibrary` on S3-compatible storage (e.g. Cloudflare R2), resized automatically |
-| Search | None | Laravel Scout: database driver first, Meilisearch when the catalogue grows |
-| Notifications | Database only | Database + mail, queued; SMS/WhatsApp channel later |
-| Money | Floats in GBP | Integer minor units (pence / pesewas) with a currency, via `brick/money` |
-| Tests | None | Pest feature tests on every money rule |
-| Hosting | Heroku Procfile | Laravel Forge + VPS, or Laravel Cloud, with a queue worker and nightly DB backups |
+| Area                                            | 2020                            | 2026                                                                                                                                      |
+| ----------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework                                       | Laravel 6, PHP 7.2              | Laravel 13, PHP 8.3+, Node 24                                                                                                             |
+| Customer-facing and staff frontend              | Blade + Bootstrap 4             | **Inertia.js + React + TypeScript**, Tailwind, shadcn/ui, from Laravel's official React starter kit. Server-side rendering on for SEO     |
+| Back-office data entry (settings, ledger, CRUD) | Hand-written Blade CRUD         | **Filament** panel at `/admin`, which replaces most of the 22 controllers. Screens can move into React later if they need a custom design |
+| Auth                                            | `laravel/ui`                    | The React starter kit's auth (Fortify), email verification, optional 2FA for admin                                                        |
+| Roles                                           | Raw `role_id` 1–4, broken gates | `spatie/laravel-permission` + Policies, with no numeric role checks                                                                       |
+| Payments                                        | Cartalyst Stripe charge         | A `PaymentGateway` interface with Paystack (mobile money + card) and/or Stripe behind it. See decision 2                                  |
+| Images                                          | `public/gallery`                | `spatie/laravel-medialibrary` on S3-compatible storage (e.g. Cloudflare R2), resized automatically                                        |
+| Search                                          | None                            | Laravel Scout: database driver first, Meilisearch when the catalogue grows                                                                |
+| Notifications                                   | Database only                   | Database + mail, queued; SMS/WhatsApp channel later                                                                                       |
+| Money                                           | Floats in GBP                   | Integer minor units (pence / pesewas) with a currency, via `brick/money`                                                                  |
+| Tests                                           | None                            | PHPUnit feature tests on every money rule, Larastan level 7, Pint                                                                         |
+| Hosting                                         | Heroku Procfile                 | Laravel Forge + VPS, or Laravel Cloud, with a queue worker and nightly DB backups                                                         |
 
 ## Schema redesign
 
@@ -75,8 +75,8 @@ A brand refresh and design system: colour, type, components, keeping or reworkin
 
 Each phase ends with something usable and tested.
 
-**Phase 0 — Foundations (1 week)**
-Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larastan, Pest). Auth, roles/permissions, locations, money and enum base classes. Seeders ported from `database/seeds`.
+**Phase 0 — Foundations (1 week)** — done on the `rebuild` branch, November 2026
+Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larastan, PHPUnit, frontend lint and type checks). Auth, roles/permissions, locations, money and enum base classes. Seeders ported from `database/seeds`.
 
 **Phase 1 — Catalogue and stock (1–2 weeks)**
 Categories, conditions, suppliers, products, stock units, images. Filament admin for all of these. React storefront built from the design system: listing, category filter, price sort, search, product page. Only received and unsold stock is visible, enforced in a query scope.

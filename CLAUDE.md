@@ -1,5 +1,19 @@
 # Yande Gadgets — project briefing
 
+## Current state: 2026 rebuild (read first)
+
+The app is being rebuilt on the `rebuild` branch. The plan is in `docs/REBUILD_PLAN.md`. The 2020 Laravel 6 app described further down is preserved at tag `v1-2020` and on `master` until the rebuild merges. Use the 2020 sections for business rules and history, not for code conventions.
+
+Rebuild stack and conventions:
+
+- Laravel 13, PHP 8.3+, Laravel's React starter kit: Inertia v3, React 19, TypeScript, Tailwind 4, shadcn/ui, Wayfinder for typed routes, Fortify auth (email verification, registration, 2FA, passkeys, password confirmation). Filament is planned for back-office data entry but not installed yet.
+- Node 24 (`.nvmrc`). The frontend toolchain (`vp`, Vite+) fails on Node 20.
+- Roles and permissions: `spatie/laravel-permission`, defined in `app/Enums/Role.php` and `app/Enums/Permission.php`. Authorise with permissions (`$user->can(Permission::RecordSales->value)`), never role IDs or names in business logic. Self-registration assigns `customer`.
+- Money: integer minor units plus a currency column, exposed as `Brick\Money\Money` through `App\Casts\MoneyCast`. Never floats.
+- Enums for statuses and categories: `StockStatus` (with allowed transitions), `LocationType`, `TransactionCategory`.
+- Reference data (roles, permissions, locations, categories, conditions, transaction types) is seeded by `ReferenceDataSeeder`, which is idempotent and runs on every deploy. Tests seed it automatically via `tests/TestCase.php`. `DatabaseSeeder` also adds local demo users, one per role, at `*@example.test` with password `password`.
+- Checks: `composer test` runs Pint, Larastan (level 7) and PHPUnit; `npm run check` and `npm run types:check` cover the frontend. `composer ci:check` runs everything, as CI does.
+
 ## What this is
 
 Yande Gadgets is a bespoke Laravel 6 web application for a second-hand electronics retailer in Legon Boundary, Accra, Ghana. The shop (started 2011, named from the family name Nyande) buys used phones, appliances, TVs and audio, computers, gaming gear, cameras, and smart tech in the United Kingdom, ships them to Ghana, and resells them from a flagship store. In-store price negotiation is a selling point, so the website does not sell products outright. Customers browse what has arrived and pay a Stripe deposit to request an item the shop does not yet have. Staff record the real sale in store.

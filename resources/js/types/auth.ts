@@ -10,8 +10,12 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Role = 'admin' | 'staff' | 'customer' | 'supplier';
+
 export type Auth = {
     user: User;
+    roles: Role[];
+    permissions: string[];
 };
 
 export type Passkey = {

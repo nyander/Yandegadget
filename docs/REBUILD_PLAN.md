@@ -81,7 +81,7 @@ Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larasta
 **Phase 1 — Catalogue and stock (1–2 weeks)** — done on the `rebuild` branch, November 2026 (exchange-rate history pulled forward from Phase 3 so the shop can show cedis)
 Categories, conditions, suppliers, products, stock units, images. Filament admin for all of these. React storefront built from the design system: listing, category filter, price sort, search, product page. Only received and unsold stock is visible, enforced in a query scope.
 
-**Phase 2 — Shipments (1 week)**
+**Phase 2 — Shipments (1 week)** — done on the `rebuild` branch, November 2026
 Build a shipment, confirm with carrier, cost and date. Staff mark items received, with a photo. Notifications to staff and admin.
 
 **Phase 3 — In-store sales (1 week)**

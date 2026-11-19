@@ -17,7 +17,10 @@ Rebuild stack and conventions:
 - Shop visibility: `Product::visibleInShop()` (published, active category, at least one received or reserved unit). Enforced in queries, not in the React pages.
 - Photos: spatie/laravel-medialibrary on the `public` disk (`MEDIA_DISK`), with `thumb` and `large` WebP conversions generated straight away. Run `php artisan storage:link` locally.
 - Search: Laravel Scout with the `database` driver (`SCOUT_DRIVER`). Switch to Meilisearch when the catalogue grows.
-- Local demo data: `DatabaseSeeder` adds `DemoCatalogueSeeder` (sample stock and a demo rate of 15 GHS per GBP) outside production.
+- Shipments: `Shipment` (draft → in transit → received, references like `SH-0001`) with `ShipmentItem` rows linking stock units. Every change goes through `App\Services\ShipmentService` (add/remove items, dispatch, check in), which throws `ShipmentRuleViolation` with a message safe to show staff. Admins build and dispatch shipments in Filament; staff check items in at `/staff/shipments` (React, tablet-first, with arrival photos). A missing item stays in transit; damaged items go into the store with a note.
+- Notifications: database + mail, queued. Database entries use Filament's format (shown in the admin bell) plus `url` and `shipment_id` keys for the React side. `composer dev` runs a queue worker.
+- Filament closures get their arguments injected by name: use `$query`, `$record`, `$state`, `$get`, `$set`, `$data`, not shortened names, or you'll get an empty object.
+- Local demo data: `DatabaseSeeder` adds `DemoCatalogueSeeder` (sample stock, a demo rate of 15 GHS per GBP, and one in-transit shipment) outside production.
 - Checks: `composer test` runs Pint, Larastan (level 7) and PHPUnit; `npm run check` and `npm run types:check` cover the frontend. `composer ci:check` runs everything, as CI does.
 
 ## What this is

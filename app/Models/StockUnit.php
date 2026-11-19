@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -116,6 +117,26 @@ class StockUnit extends Model implements HasMedia
     protected function visibleToCustomers(Builder $query): void
     {
         $query->whereIn('status', StockStatus::customerVisibleValues());
+    }
+
+    /**
+     * @return HasMany<ShipmentItem, $this>
+     */
+    public function shipmentItems(): HasMany
+    {
+        return $this->hasMany(ShipmentItem::class);
+    }
+
+    /**
+     * Units bought in the UK that aren't on a draft or in-transit shipment yet.
+     *
+     * @param  Builder<StockUnit>  $query
+     */
+    #[Scope]
+    protected function readyToShip(Builder $query): void
+    {
+        $query->where('status', StockStatus::Purchased)
+            ->whereDoesntHave('shipmentItems', fn (Builder $items) => $items->whereHas('shipment', fn (Builder $shipment) => $shipment->open()));
     }
 
     /**

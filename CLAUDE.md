@@ -6,12 +6,18 @@ The app is being rebuilt on the `rebuild` branch. The plan is in `docs/REBUILD_P
 
 Rebuild stack and conventions:
 
-- Laravel 13, PHP 8.3+, Laravel's React starter kit: Inertia v3, React 19, TypeScript, Tailwind 4, shadcn/ui, Wayfinder for typed routes, Fortify auth (email verification, registration, 2FA, passkeys, password confirmation). Filament is planned for back-office data entry but not installed yet.
+- Laravel 13, PHP 8.3+, Laravel's React starter kit: Inertia v3, React 19, TypeScript, Tailwind 4, shadcn/ui, Wayfinder for typed routes, Fortify auth (email verification, registration, 2FA, passkeys, password confirmation). Filament 5 is the back office at `/admin` (resources in `app/Filament/Resources`). It has no login page of its own: guests go to the main Fortify login, and `User::canAccessPanel()` admits verified users with an admin-level permission.
 - Node 24 (`.nvmrc`). The frontend toolchain (`vp`, Vite+) fails on Node 20.
 - Roles and permissions: `spatie/laravel-permission`, defined in `app/Enums/Role.php` and `app/Enums/Permission.php`. Authorise with permissions (`$user->can(Permission::RecordSales->value)`), never role IDs or names in business logic. Self-registration assigns `customer`.
 - Money: integer minor units plus a currency column, exposed as `Brick\Money\Money` through `App\Casts\MoneyCast`. Never floats.
 - Enums for statuses and categories: `StockStatus` (with allowed transitions), `LocationType`, `TransactionCategory`.
 - Reference data (roles, permissions, locations, categories, conditions, transaction types) is seeded by `ReferenceDataSeeder`, which is idempotent and runs on every deploy. Tests seed it automatically via `tests/TestCase.php`. `DatabaseSeeder` also adds local demo users, one per role, at `*@example.test` with password `password`.
+- Catalogue: `Product` is the catalogue entry (soft-deleted, slug route key, Scout-searchable, `gallery` photos). `StockUnit` is one physical item with its own condition, cost and GBP list price (`photos`), moved through `StockStatus` only via `StockUnit::transitionTo()`. Selling isn't allowed from the admin panel; that comes with the in-store sale screen.
+- Prices: costs and list prices are GBP. `App\Services\Pricing` converts to GHS at the latest `ExchangeRate` (append-only history), falling back to GBP if no rate is set. The shop never sends cost, supplier or GBP prices to the browser (`App\Http\Presenters\ShopProductPresenter`).
+- Shop visibility: `Product::visibleInShop()` (published, active category, at least one received or reserved unit). Enforced in queries, not in the React pages.
+- Photos: spatie/laravel-medialibrary on the `public` disk (`MEDIA_DISK`), with `thumb` and `large` WebP conversions generated straight away. Run `php artisan storage:link` locally.
+- Search: Laravel Scout with the `database` driver (`SCOUT_DRIVER`). Switch to Meilisearch when the catalogue grows.
+- Local demo data: `DatabaseSeeder` adds `DemoCatalogueSeeder` (sample stock and a demo rate of 15 GHS per GBP) outside production.
 - Checks: `composer test` runs Pint, Larastan (level 7) and PHPUnit; `npm run check` and `npm run types:check` cover the frontend. `composer ci:check` runs everything, as CI does.
 
 ## What this is

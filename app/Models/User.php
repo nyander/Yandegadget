@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Permission;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -32,10 +35,24 @@ use Spatie\Permission\Traits\HasRoles;
  */
 #[Fillable(['name', 'email', 'password', 'location_id'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+
+    /**
+     * The /admin back office is for people who run the business. Staff, customers
+     * and suppliers use the React app.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasVerifiedEmail() && $this->canAny([
+            Permission::ManageCatalogue->value,
+            Permission::ManageFinances->value,
+            Permission::ManageSettings->value,
+            Permission::ManageUsers->value,
+        ]);
+    }
 
     /**
      * The store or buying base a staff member works from. Null for customers and suppliers.

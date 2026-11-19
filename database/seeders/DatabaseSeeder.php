@@ -34,5 +34,7 @@ class DatabaseSeeder extends Seeder
             $user->forceFill(['location_id' => $locationId])->save();
             $user->syncRoles([$role->value]);
         }
+
+        $this->call(DemoCatalogueSeeder::class);
     }
 }

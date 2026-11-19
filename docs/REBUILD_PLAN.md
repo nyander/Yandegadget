@@ -78,7 +78,7 @@ Each phase ends with something usable and tested.
 **Phase 0 — Foundations (1 week)** — done on the `rebuild` branch, November 2026
 Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larastan, PHPUnit, frontend lint and type checks). Auth, roles/permissions, locations, money and enum base classes. Seeders ported from `database/seeds`.
 
-**Phase 1 — Catalogue and stock (1–2 weeks)**
+**Phase 1 — Catalogue and stock (1–2 weeks)** — done on the `rebuild` branch, November 2026 (exchange-rate history pulled forward from Phase 3 so the shop can show cedis)
 Categories, conditions, suppliers, products, stock units, images. Filament admin for all of these. React storefront built from the design system: listing, category filter, price sort, search, product page. Only received and unsold stock is visible, enforced in a query scope.
 
 **Phase 2 — Shipments (1 week)**

@@ -6,6 +6,7 @@ use App\Casts\MoneyCast;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,6 +24,14 @@ use Illuminate\Support\Carbon;
 #[Fillable(['grade', 'name', 'description', 'deposit', 'sort_order'])]
 class Condition extends Model
 {
+    /**
+     * @return HasMany<StockUnit, $this>
+     */
+    public function stockUnits(): HasMany
+    {
+        return $this->hasMany(StockUnit::class);
+    }
+
     protected function casts(): array
     {
         return [

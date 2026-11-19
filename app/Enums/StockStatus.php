@@ -2,11 +2,14 @@
 
 namespace App\Enums;
 
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
 /**
  * Lifecycle of one physical item, from purchase in the UK to sale in Ghana.
  * Replaces the 2020 `received` and `sold` booleans.
  */
-enum StockStatus: string
+enum StockStatus: string implements HasColor, HasLabel
 {
     case Purchased = 'purchased';
     case InTransit = 'in_transit';
@@ -15,6 +18,32 @@ enum StockStatus: string
     case Sold = 'sold';
     case Returned = 'returned';
     case WrittenOff = 'written_off';
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::Purchased => 'Purchased (UK)',
+            self::InTransit => 'In transit',
+            self::Received => 'In store',
+            self::Reserved => 'Reserved',
+            self::Sold => 'Sold',
+            self::Returned => 'Returned',
+            self::WrittenOff => 'Written off',
+        };
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::Purchased => 'gray',
+            self::InTransit => 'info',
+            self::Received => 'success',
+            self::Reserved => 'warning',
+            self::Sold => 'primary',
+            self::Returned => 'danger',
+            self::WrittenOff => 'danger',
+        };
+    }
 
     /**
      * @return list<self>

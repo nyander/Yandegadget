@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     Banknote,
+    Handshake,
     LayoutGrid,
     PackageSearch,
     ShieldCheck,
@@ -22,6 +23,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard, home } from '@/routes';
 import { index as myRequests } from '@/routes/requests';
+import { index as supplierOffers } from '@/routes/supplier/offers';
 import { index as staffShipments } from '@/routes/staff/shipments';
 import { index as staffSell } from '@/routes/staff/sell';
 import type { NavItem } from '@/types';
@@ -40,6 +42,9 @@ export function AppSidebar() {
                       icon: PackageSearch,
                   },
               ]
+            : []),
+        ...(can('supplier-offers.submit')
+            ? [{ title: 'My offers', href: supplierOffers(), icon: Handshake }]
             : []),
         ...(can('sales.record')
             ? [{ title: 'Sell', href: staffSell(), icon: Banknote }]

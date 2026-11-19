@@ -90,7 +90,7 @@ Staff sale screen (tablet-friendly): listed GHS price, floor price, negotiated p
 **Phase 4 — Requests and deposits (1–2 weeks)** — done on the `rebuild` branch, November 2026, with Paystack
 Customer request flow, deposit by condition, payment gateway with webhooks and idempotency, the "acquired" flow linking a request to a stock unit, refunds handled by admin.
 
-**Phase 5 — Supplier portal (1 week)**
+**Phase 5 — Supplier portal (1 week)** — done on the `rebuild` branch, November 2026
 Supplier onboarding, offers with photos, admin accept → stock unit.
 
 **Phase 6 — Reports (1–2 weeks)**

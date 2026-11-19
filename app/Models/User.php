@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -52,6 +53,16 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Pas
             Permission::ManageSettings->value,
             Permission::ManageUsers->value,
         ]);
+    }
+
+    /**
+     * The supplier business this login belongs to, for users with the supplier role.
+     *
+     * @return HasOne<Supplier, $this>
+     */
+    public function supplier(): HasOne
+    {
+        return $this->hasOne(Supplier::class);
     }
 
     /**

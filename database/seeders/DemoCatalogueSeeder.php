@@ -14,6 +14,7 @@ use App\Models\StockUnit;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Services\ShipmentService;
+use App\Services\SupplierOfferService;
 use Brick\Money\Money;
 use Illuminate\Database\Seeder;
 
@@ -36,7 +37,10 @@ class DemoCatalogueSeeder extends Seeder
             'effective_at' => now()->subDay(),
         ]);
 
-        $supplier = Supplier::factory()->create(['name' => 'Demo UK Trader Ltd']);
+        $supplier = Supplier::factory()->create([
+            'name' => 'Demo UK Trader Ltd',
+            'user_id' => User::where('email', 'supplier@example.test')->value('id'),
+        ]);
 
         $grades = Condition::pluck('id', 'grade');
 
@@ -86,6 +90,18 @@ class DemoCatalogueSeeder extends Seeder
         }
 
         $this->shipDemoStock($toShip);
+
+        $supplierUser = $supplier->user;
+        if ($supplierUser !== null) {
+            app(SupplierOfferService::class)->submit($supplier, $supplierUser, [
+                'category_id' => (int) Category::where('slug', 'computing')->value('id'),
+                'condition_id' => (int) $grades['B'],
+                'title' => 'MacBook Pro 14" M1 Pro 512GB',
+                'brand' => 'Apple',
+                'description' => 'Light marks on the base. Battery at 89%. Charger included.',
+                'asking_price' => Money::of(620, 'GBP'),
+            ]);
+        }
     }
 
     /**

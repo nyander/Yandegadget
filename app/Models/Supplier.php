@@ -40,6 +40,14 @@ class Supplier extends Model
     }
 
     /**
+     * @return HasMany<SupplierOffer, $this>
+     */
+    public function offers(): HasMany
+    {
+        return $this->hasMany(SupplierOffer::class);
+    }
+
+    /**
      * @return HasMany<StockUnit, $this>
      */
     public function stockUnits(): HasMany

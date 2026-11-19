@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -117,6 +118,16 @@ class StockUnit extends Model implements HasMedia
     protected function visibleToCustomers(Builder $query): void
     {
         $query->whereIn('status', StockStatus::customerVisibleValues());
+    }
+
+    /**
+     * The customer request this unit was found for, if any.
+     *
+     * @return HasOne<ProductRequest, $this>
+     */
+    public function productRequest(): HasOne
+    {
+        return $this->hasOne(ProductRequest::class)->latestOfMany();
     }
 
     /**

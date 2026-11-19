@@ -28,6 +28,11 @@ type Props = {
         floor_percent: number;
         currency: string;
         rate: { value: string; effective_at: string } | null;
+        reservation: {
+            reference: string;
+            customer: string;
+            deposit: Price;
+        } | null;
     } | null;
     problem: string | null;
     paymentMethods: PaymentMethodOption[];
@@ -122,6 +127,21 @@ export default function SellCreate({
                     </div>
                 ) : (
                     <form onSubmit={submit} className="space-y-6">
+                        {pricing.reservation && (
+                            <div className="rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 text-sm">
+                                <p className="font-medium">
+                                    Reserved for {pricing.reservation.customer}{' '}
+                                    (request {pricing.reservation.reference})
+                                </p>
+                                <p className="mt-1">
+                                    They&rsquo;ve paid a{' '}
+                                    {pricing.reservation.deposit.formatted}{' '}
+                                    deposit online.
+                                    {priceMinor !== null &&
+                                        ` Collect ${formatMoney(Math.max(0, priceMinor - pricing.reservation.deposit.amount) / 100, pricing.currency)} in store.`}
+                                </p>
+                            </div>
+                        )}
                         <div className="grid grid-cols-2 gap-3">
                             <div className="rounded-xl bg-muted/60 p-4">
                                 <p className="text-sm text-muted-foreground">

@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
+use App\Enums\RequestStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\SaleRuleViolation;
+use App\Models\ProductRequest;
 use App\Models\Sale;
 use App\Models\StockUnit;
 use App\Models\User;
@@ -22,7 +25,34 @@ class SaleService
     public function __construct(
         private readonly Pricing $pricing,
         private readonly ShopSettings $settings,
+        private readonly ProductRequestService $requests,
     ) {}
+
+    /**
+     * The customer request this unit is reserved for, and the deposit already
+     * paid towards it (in the store's currency), if any.
+     *
+     * @return array{request: ProductRequest, deposit: Money}|null
+     */
+    public function reservationFor(StockUnit $unit): ?array
+    {
+        $request = ProductRequest::where('stock_unit_id', $unit->id)
+            ->where('status', RequestStatus::ReadyForCollection)
+            ->with('customer')
+            ->first();
+
+        if ($request === null) {
+            return null;
+        }
+
+        $payment = $request->paidDeposit();
+        $currency = $unit->location->currency;
+        $deposit = $payment !== null && $payment->status === PaymentStatus::Succeeded && $payment->currency === $currency
+            ? $payment->money
+            : Money::zero($currency);
+
+        return ['request' => $request, 'deposit' => $deposit];
+    }
 
     public function quote(StockUnit $unit): SaleQuote
     {
@@ -72,13 +102,21 @@ class SaleService
                 throw new SaleRuleViolation('That\'s below the lowest price allowed ('.$this->pricing->present($quote->floor)['formatted'].').');
             }
 
+            $reservation = $this->reservationFor($unit);
+
+            if ($reservation !== null && $pricePaid->isLessThan($reservation['deposit'])) {
+                throw new SaleRuleViolation('The price can\'t be less than the deposit already paid.');
+            }
+
             $sale = new Sale;
             $sale->forceFill([
                 'stock_unit_id' => $unit->id,
                 'location_id' => $unit->location_id,
                 'sold_by' => $seller->id,
-                'customer_id' => $details['customer_id'] ?? null,
-                'customer_name' => $details['customer_name'] ?? null,
+                'product_request_id' => $reservation['request']->id ?? null,
+                'deposit_applied_amount' => isset($reservation) ? $reservation['deposit']->getMinorAmount()->toInt() : 0,
+                'customer_id' => $details['customer_id'] ?? $reservation['request']->customer_id ?? null,
+                'customer_name' => $details['customer_name'] ?? $reservation['request']->customer->name ?? null,
                 'customer_phone' => $details['customer_phone'] ?? null,
                 'list_price_amount' => $quote->listPrice->getMinorAmount()->toInt(),
                 'list_price_currency' => $quote->listPrice->getCurrency()->getCurrencyCode(),
@@ -98,6 +136,10 @@ class SaleService
             $unit->transitionTo(StockStatus::Sold);
             $unit->sold_at = $soldAt;
             $unit->save();
+
+            if ($reservation !== null) {
+                $this->requests->fulfil($reservation['request'], $sale);
+            }
 
             return $sale;
         });
@@ -133,6 +175,11 @@ class SaleService
                 $unit->transitionTo(StockStatus::Received);
                 $unit->sold_at = null;
                 $unit->save();
+            }
+
+            // A requested item goes back to being reserved for that customer.
+            if ($sale->product_request_id !== null && ($request = ProductRequest::find($sale->product_request_id))) {
+                $this->requests->saleVoided($request);
             }
         });
     }

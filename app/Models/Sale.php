@@ -28,6 +28,8 @@ use Illuminate\Support\Str;
  * @property int $listed_amount
  * @property int $floor_amount
  * @property int $price_paid_amount
+ * @property int $deposit_applied_amount
+ * @property int|null $product_request_id
  * @property string $currency
  * @property int|null $exchange_rate_id
  * @property string|null $rate
@@ -45,6 +47,7 @@ use Illuminate\Support\Str;
  * @property-read Money $listed
  * @property-read Money $floor
  * @property-read Money $price_paid
+ * @property-read Money $deposit_applied
  * @property-read StockUnit $stockUnit
  * @property-read Location $location
  * @property-read User $seller
@@ -124,6 +127,22 @@ class Sale extends Model
     protected function pricePaid(): Attribute
     {
         return Attribute::get(fn () => Money::ofMinor($this->price_paid_amount, $this->currency));
+    }
+
+    /**
+     * @return Attribute<Money, never>
+     */
+    protected function depositApplied(): Attribute
+    {
+        return Attribute::get(fn () => Money::ofMinor($this->deposit_applied_amount, $this->currency));
+    }
+
+    /**
+     * @return BelongsTo<ProductRequest, $this>
+     */
+    public function productRequest(): BelongsTo
+    {
+        return $this->belongsTo(ProductRequest::class);
     }
 
     /**

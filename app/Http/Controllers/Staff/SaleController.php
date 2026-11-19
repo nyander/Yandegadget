@@ -99,6 +99,12 @@ class SaleController extends Controller
                 ] : null,
             ];
             $problem = null;
+            $reservation = $this->sales->reservationFor($unit);
+            $pricing['reservation'] = $reservation ? [
+                'reference' => $reservation['request']->reference,
+                'customer' => $reservation['request']->customer->name,
+                'deposit' => $this->pricing->present($reservation['deposit']),
+            ] : null;
         } catch (SaleRuleViolation $e) {
             $pricing = null;
             $problem = $e->getMessage();
@@ -157,7 +163,7 @@ class SaleController extends Controller
     {
         Gate::authorize('viewReceipt', $sale);
 
-        $sale->load(['stockUnit.product', 'stockUnit.condition', 'seller', 'location', 'voider']);
+        $sale->load(['stockUnit.product', 'stockUnit.condition', 'seller', 'location', 'voider', 'productRequest']);
 
         return Inertia::render('staff/sales/show', [
             'sale' => [
@@ -170,6 +176,9 @@ class SaleController extends Controller
                 'condition' => "{$sale->stockUnit->condition->grade} – {$sale->stockUnit->condition->name}",
                 'listed' => $this->pricing->present($sale->listed),
                 'price_paid' => $this->pricing->present($sale->price_paid),
+                'deposit_applied' => $sale->deposit_applied_amount > 0 ? $this->pricing->present($sale->deposit_applied) : null,
+                'paid_in_store' => $this->pricing->present($sale->price_paid->minus($sale->deposit_applied)),
+                'request_reference' => $sale->productRequest?->reference,
                 'discount_percent' => $sale->discountPercent(),
                 'payment_method' => $sale->payment_method->getLabel(),
                 'payment_reference' => $sale->payment_reference,

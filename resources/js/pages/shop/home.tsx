@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, BadgeCheck, Handshake, Plane } from 'lucide-react';
 import { ProductGrid } from '@/components/shop/product-card';
 import { Button } from '@/components/ui/button';
+import { create as createRequest } from '@/routes/requests';
 import { index as shopIndex } from '@/routes/shop';
 import type { CategoryLink, ProductCard } from '@/types';
 
@@ -52,6 +53,11 @@ export default function Home({ featured, newArrivals, categories }: Props) {
                         <Button size="lg" asChild>
                             <Link href={shopIndex()}>
                                 Browse the shop <ArrowRight />
+                            </Link>
+                        </Button>
+                        <Button size="lg" variant="outline" asChild>
+                            <Link href={createRequest()}>
+                                Can&rsquo;t find it? Request it
                             </Link>
                         </Button>
                     </div>

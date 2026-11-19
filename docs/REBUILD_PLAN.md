@@ -87,7 +87,7 @@ Build a shipment, confirm with carrier, cost and date. Staff mark items received
 **Phase 3 — In-store sales (1 week)** — done on the `rebuild` branch, November 2026
 Staff sale screen (tablet-friendly): listed GHS price, floor price, negotiated price, payment method (cash / MoMo / card). Rate history. Tests on the floor and on the conversions.
 
-**Phase 4 — Requests and deposits (1–2 weeks)**
+**Phase 4 — Requests and deposits (1–2 weeks)** — done on the `rebuild` branch, November 2026, with Paystack
 Customer request flow, deposit by condition, payment gateway with webhooks and idempotency, the "acquired" flow linking a request to a stock unit, refunds handled by admin.
 
 **Phase 5 — Supplier portal (1 week)**
@@ -113,7 +113,7 @@ Rough total: 10–15 weeks part-time for one developer, plus the design phase. T
 ## Decisions needed from the owner and Richard
 
 1. **Is there any 2020 production data to keep?** The repo has none. If an old database exists, add an import step in Phase 1.
-2. **Payment provider.** Stripe doesn't onboard Ghana-registered businesses, and most Ghanaian customers pay with mobile money. Recommendation: Paystack (MoMo + card, settles in GHS) as the main gateway, with Stripe kept only if deposits will be taken from UK customers through a UK entity.
+2. ~~Payment provider.~~ Decided: Paystack (mobile money + card, GHS).
 3. ~~Storefront style.~~ Decided: Inertia + React + TypeScript for the customer, supplier and staff frontend; Filament for back-office data entry.
 4. **Bulk stock.** Confirm the product / stock-unit split (recommended) rather than a plain quantity column. A quantity column would lose per-item condition and cost.
 5. **Hosting budget.** It decides between Forge + VPS (cheap) and Laravel Cloud (less ops work).

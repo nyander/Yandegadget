@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    /*
+     * Online deposits. "paystack" in staging and production; "fake" lets you
+     * click through the deposit flow locally without keys.
+     */
+    'payments' => [
+        'driver' => env('PAYMENTS_DRIVER', 'fake'),
+        'currency' => env('PAYMENTS_CURRENCY', 'GHS'),
+    ],
+
+    'paystack' => [
+        'public_key' => env('PAYSTACK_PUBLIC_KEY'),
+        'secret_key' => env('PAYSTACK_SECRET_KEY'),
+        'base_url' => env('PAYSTACK_BASE_URL', 'https://api.paystack.co'),
+    ],
+
 ];

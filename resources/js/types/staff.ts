@@ -65,6 +65,9 @@ export type SaleReceipt = {
     condition: string;
     listed: Price;
     price_paid: Price;
+    deposit_applied: Price | null;
+    paid_in_store: Price;
+    request_reference: string | null;
     discount_percent: number;
     payment_method: string;
     payment_reference: string | null;

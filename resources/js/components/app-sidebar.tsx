@@ -1,5 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Banknote, LayoutGrid, ShieldCheck, Store, Truck } from 'lucide-react';
+import {
+    Banknote,
+    LayoutGrid,
+    PackageSearch,
+    ShieldCheck,
+    Store,
+    Truck,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,6 +21,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard, home } from '@/routes';
+import { index as myRequests } from '@/routes/requests';
 import { index as staffShipments } from '@/routes/staff/shipments';
 import { index as staffSell } from '@/routes/staff/sell';
 import type { NavItem } from '@/types';
@@ -24,6 +32,15 @@ export function AppSidebar() {
 
     const mainNavItems: NavItem[] = [
         { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+        ...(can('requests.create') && !can('requests.manage')
+            ? [
+                  {
+                      title: 'My requests',
+                      href: myRequests(),
+                      icon: PackageSearch,
+                  },
+              ]
+            : []),
         ...(can('sales.record')
             ? [{ title: 'Sell', href: staffSell(), icon: Banknote }]
             : []),

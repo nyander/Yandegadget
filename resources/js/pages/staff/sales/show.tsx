@@ -12,6 +12,12 @@ export default function SaleShow({ sale }: { sale: SaleReceipt }) {
         ['Serial / IMEI', sale.serial_number],
         ['Condition', sale.condition],
         ['Listed price', sale.listed.formatted],
+        ['Request', sale.request_reference],
+        ['Deposit paid online', sale.deposit_applied?.formatted ?? null],
+        [
+            'Paid in store',
+            sale.deposit_applied ? sale.paid_in_store.formatted : null,
+        ],
         ['Payment', sale.payment_method],
         ['Payment reference', sale.payment_reference],
         ['Customer', sale.customer_name],
@@ -73,7 +79,7 @@ export default function SaleShow({ sale }: { sale: SaleReceipt }) {
                     </dl>
 
                     <div className="mt-4 flex items-baseline justify-between border-t pt-4">
-                        <span className="font-medium">Paid</span>
+                        <span className="font-medium">Total price</span>
                         <span className="text-2xl font-semibold">
                             {sale.price_paid.formatted}
                         </span>

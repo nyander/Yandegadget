@@ -10,6 +10,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { create as createRequest } from '@/routes/requests';
 import { index as shopIndex } from '@/routes/shop';
 import type { CategoryLink, Paginated, ProductCard, ShopSort } from '@/types';
 
@@ -132,8 +133,14 @@ export default function ShopIndex({
                         <ProductGrid products={products.data} />
                     ) : (
                         <div className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">
-                            Nothing matches that right now. Try another category
-                            or search, or ask us in store.
+                            Nothing matches that right now.{' '}
+                            <Link
+                                href={createRequest()}
+                                className="font-medium text-foreground underline"
+                            >
+                                Request it
+                            </Link>{' '}
+                            and we&rsquo;ll find one for you.
                         </div>
                     )}
                 </div>

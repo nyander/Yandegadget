@@ -5,6 +5,7 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { dashboard, home, login, register } from '@/routes';
+import { create as createRequest } from '@/routes/requests';
 import { index as shopIndex } from '@/routes/shop';
 
 const ADMIN_PERMISSIONS = [
@@ -50,6 +51,12 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                         className="hidden text-sm font-medium text-muted-foreground hover:text-foreground md:inline"
                     >
                         Shop all
+                    </Link>
+                    <Link
+                        href={createRequest()}
+                        className="hidden text-sm font-medium whitespace-nowrap text-muted-foreground hover:text-foreground lg:inline"
+                    >
+                        Request an item
                     </Link>
 
                     <Form

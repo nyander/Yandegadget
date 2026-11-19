@@ -151,6 +151,11 @@ class ShipmentService
             $item->addMedia($photo)->toMediaCollection('arrival_photos');
         }
 
+        if ($outcome->arrived()) {
+            // Reserve it for the customer who asked for it, if any.
+            app(ProductRequestService::class)->unitArrived($item->stockUnit);
+        }
+
         if ($completed) {
             Notification::send($this->shipmentManagers(), new ShipmentReceived($shipment->refresh()));
         }

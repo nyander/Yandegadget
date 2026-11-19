@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\Permission;
+use App\Http\Controllers\PaystackWebhookController;
+use App\Http\Controllers\ProductRequestController;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\Staff\SaleController as StaffSaleController;
@@ -12,8 +14,23 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('shop', [ProductController::class, 'index'])->name('shop.index');
 Route::get('shop/{product:slug}', [ProductController::class, 'show'])->name('shop.show');
 
+// Paystack sends customers back here after checkout, and posts signed webhooks.
+Route::get('payments/callback', [ProductRequestController::class, 'callback'])->name('payments.callback');
+Route::post('webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
+
+    Route::middleware('can:'.Permission::RequestProducts->value)->group(function () {
+        Route::get('requests', [ProductRequestController::class, 'index'])->name('requests.index');
+        Route::get('requests/new', [ProductRequestController::class, 'create'])->name('requests.create');
+        Route::post('requests', [ProductRequestController::class, 'store'])->name('requests.store');
+        Route::post('requests/{productRequest}/pay', [ProductRequestController::class, 'pay'])->name('requests.pay');
+        Route::post('requests/{productRequest}/cancel', [ProductRequestController::class, 'cancel'])->name('requests.cancel');
+    });
+
+    // Viewable by the customer who made it and by the shop.
+    Route::get('requests/{productRequest}', [ProductRequestController::class, 'show'])->name('requests.show');
 
     Route::middleware('can:'.Permission::ReceiveShipments->value)
         ->prefix('staff')->name('staff.')

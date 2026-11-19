@@ -120,6 +120,22 @@ class StockUnit extends Model implements HasMedia
     }
 
     /**
+     * @return HasMany<Sale, $this>
+     */
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    /**
+     * The sale that sold this unit, ignoring voided ones.
+     */
+    public function currentSale(): ?Sale
+    {
+        return $this->sales()->completed()->latest('sold_at')->first();
+    }
+
+    /**
      * @return HasMany<ShipmentItem, $this>
      */
     public function shipmentItems(): HasMany

@@ -3,6 +3,7 @@
 use App\Enums\Permission;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\Staff\SaleController as StaffSaleController;
 use App\Http\Controllers\Staff\ShipmentController as StaffShipmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('shipments/{shipment}/items/{item}/check-in', [StaffShipmentController::class, 'checkIn'])
                 ->scopeBindings()
                 ->name('shipments.items.check-in');
+        });
+
+    Route::middleware('can:'.Permission::RecordSales->value)
+        ->prefix('staff')->name('staff.')
+        ->group(function () {
+            Route::get('sell', [StaffSaleController::class, 'index'])->name('sell.index');
+            Route::get('sell/{unit}', [StaffSaleController::class, 'create'])->name('sell.create');
+            Route::post('sell/{unit}', [StaffSaleController::class, 'store'])->name('sell.store');
+            Route::get('sales/{sale}', [StaffSaleController::class, 'show'])->name('sales.show');
         });
 });
 

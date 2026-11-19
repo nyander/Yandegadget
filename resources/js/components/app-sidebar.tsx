@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, ShieldCheck, Store, Truck } from 'lucide-react';
+import { Banknote, LayoutGrid, ShieldCheck, Store, Truck } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard, home } from '@/routes';
 import { index as staffShipments } from '@/routes/staff/shipments';
+import { index as staffSell } from '@/routes/staff/sell';
 import type { NavItem } from '@/types';
 
 export function AppSidebar() {
@@ -23,6 +24,9 @@ export function AppSidebar() {
 
     const mainNavItems: NavItem[] = [
         { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+        ...(can('sales.record')
+            ? [{ title: 'Sell', href: staffSell(), icon: Banknote }]
+            : []),
         ...(can('shipments.receive')
             ? [{ title: 'Shipments', href: staffShipments(), icon: Truck }]
             : []),

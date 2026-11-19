@@ -84,7 +84,7 @@ Categories, conditions, suppliers, products, stock units, images. Filament admin
 **Phase 2 — Shipments (1 week)** — done on the `rebuild` branch, November 2026
 Build a shipment, confirm with carrier, cost and date. Staff mark items received, with a photo. Notifications to staff and admin.
 
-**Phase 3 — In-store sales (1 week)**
+**Phase 3 — In-store sales (1 week)** — done on the `rebuild` branch, November 2026
 Staff sale screen (tablet-friendly): listed GHS price, floor price, negotiated price, payment method (cash / MoMo / card). Rate history. Tests on the floor and on the conversions.
 
 **Phase 4 — Requests and deposits (1–2 weeks)**

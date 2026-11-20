@@ -5,6 +5,7 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { dashboard, home, login, register } from '@/routes';
+import { privacy, terms } from '@/routes/legal';
 import { create as createRequest } from '@/routes/requests';
 import { index as shopIndex } from '@/routes/shop';
 
@@ -146,6 +147,17 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                             rate. The final price is agreed with you in store.
                         </p>
                     </div>
+                </div>
+                <div className="mx-auto flex max-w-7xl flex-wrap gap-x-6 gap-y-2 border-t px-4 py-4 text-xs text-muted-foreground sm:px-6">
+                    <span>
+                        &copy; {new Date().getFullYear()} {name}
+                    </span>
+                    <Link href={privacy()} className="hover:text-foreground">
+                        Privacy policy
+                    </Link>
+                    <Link href={terms()} className="hover:text-foreground">
+                        Terms of use
+                    </Link>
                 </div>
             </footer>
         </div>

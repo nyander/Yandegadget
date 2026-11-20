@@ -15,10 +15,37 @@ export default function ShopShow({ product, rateUpdatedAt }: Props) {
     const [active, setActive] = useState(0);
     const image: ShopImage | undefined = product.images[active];
     const specs = Object.entries(product.specs);
+    const summary = (
+        product.description ??
+        `${product.name}, second-hand from the UK, at Yande Gadgets in Legon, Accra.`
+    ).slice(0, 160);
 
     return (
         <>
-            <Head title={product.name} />
+            <Head title={product.name}>
+                <meta
+                    head-key="description"
+                    name="description"
+                    content={summary}
+                />
+                <meta
+                    head-key="og:title"
+                    property="og:title"
+                    content={product.name}
+                />
+                <meta
+                    head-key="og:description"
+                    property="og:description"
+                    content={summary}
+                />
+                {product.images[0] && (
+                    <meta
+                        head-key="og:image"
+                        property="og:image"
+                        content={product.images[0].large}
+                    />
+                )}
+            </Head>
 
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
                 <Link

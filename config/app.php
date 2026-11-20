@@ -16,6 +16,13 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
+     * Load balancers or proxies (Laravel Cloud, Cloudflare) in front of the app:
+     * "*" to trust whatever is directly in front, a comma-separated list of
+     * IPs, or empty when nginx serves the app directly.
+     */
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------

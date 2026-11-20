@@ -60,6 +60,19 @@ return [
             'report' => false,
         ],
 
+        // Off-site backups, e.g. a private Cloudflare R2 or S3 bucket. See docs/DEPLOYMENT.md.
+        'backups' => [
+            'driver' => 's3',
+            'key' => env('BACKUP_S3_KEY'),
+            'secret' => env('BACKUP_S3_SECRET'),
+            'region' => env('BACKUP_S3_REGION', 'auto'),
+            'bucket' => env('BACKUP_S3_BUCKET'),
+            'endpoint' => env('BACKUP_S3_ENDPOINT'),
+            'use_path_style_endpoint' => env('BACKUP_S3_PATH_STYLE', false),
+            'throw' => true,
+            'report' => true,
+        ],
+
     ],
 
     /*

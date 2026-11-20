@@ -96,8 +96,8 @@ Supplier onboarding, offers with photos, admin accept → stock unit.
 **Phase 6 — Reports (1–2 weeks)** — done on the `rebuild` branch, November 2026
 Dashboard (sales, margin, stock age, units by category/condition/location). Balance sheet and income statement driven by transaction-type categories, with negatives highlighted. CSV/PDF export. Wages prorated from staff wage periods (and the wage rate's unit — daily, weekly or monthly — stored on the record).
 
-**Phase 7 — Launch (1 week)**
-Hosting, backups, error tracking, privacy policy (Ghana Data Protection Act), staff training, a soft launch with real stock.
+**Phase 7 — Launch (1 week)** — code side done on the `rebuild` branch, November 2026
+Hosting, backups, error tracking, privacy policy (Ghana Data Protection Act), staff training, a soft launch with real stock. The app is ready to deploy; what's left needs the owner (hosting, domain, Paystack live keys, Data Protection Commission registration) and is listed in `docs/LAUNCH_CHECKLIST.md`. See also `docs/DEPLOYMENT.md` and `docs/STAFF_GUIDE.md`.
 
 Rough total: 10–15 weeks part-time for one developer, plus the design phase. The full React redesign adds time; Filament for the plain admin screens keeps it realistic.
 

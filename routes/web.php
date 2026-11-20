@@ -1,10 +1,12 @@
 <?php
 
 use App\Enums\Permission;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PaystackWebhookController;
 use App\Http\Controllers\ProductRequestController;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Staff\SaleController as StaffSaleController;
 use App\Http\Controllers\Staff\ShipmentController as StaffShipmentController;
 use App\Http\Controllers\Supplier\OfferController as SupplierOfferController;
@@ -16,6 +18,11 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('shop', [ProductController::class, 'index'])->name('shop.index');
 Route::get('shop/{product:slug}', [ProductController::class, 'show'])->name('shop.show');
+
+Route::get('privacy', [LegalController::class, 'privacy'])->name('legal.privacy');
+Route::get('terms', [LegalController::class, 'terms'])->name('legal.terms');
+Route::get('sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Paystack sends customers back here after checkout, and posts signed webhooks.
 Route::get('payments/callback', [ProductRequestController::class, 'callback'])->name('payments.callback');

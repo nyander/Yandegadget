@@ -53,4 +53,11 @@
     .yg-checklist__links a, .yg-checklist__links button { color: var(--yg-link); font-weight: 600; }
     .yg-progress { height: .5rem; border-radius: 999px; background: var(--yg-rule); overflow: hidden; margin-bottom: .5rem; }
     .yg-progress > span { display: block; height: 100%; background: var(--yg-done); }
+    .yg-tips-toggle { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .5rem .75rem; font-size: .875rem; }
+    .yg-tips-toggle__label { display: block; font-weight: 500; }
+    .yg-tips-toggle__hint { display: block; font-size: .75rem; color: var(--yg-muted); }
+    .yg-switch { flex: none; position: relative; width: 2.25rem; height: 1.25rem; border-radius: 999px; background: var(--yg-rule); transition: background .15s; }
+    .yg-switch > span { position: absolute; top: .125rem; left: .125rem; width: 1rem; height: 1rem; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .3); transition: transform .15s; }
+    .yg-switch.is-on { background: var(--yg-done); }
+    .yg-switch.is-on > span { transform: translateX(1rem); }
 </style>

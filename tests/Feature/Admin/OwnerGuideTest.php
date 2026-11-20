@@ -7,6 +7,7 @@ use App\Filament\Pages\Help;
 use App\Filament\Widgets\GettingStartedChecklist;
 use App\Models\ExchangeRate;
 use App\Models\User;
+use App\Support\AdminTours;
 use App\Support\GettingStarted;
 use App\Support\HelpCentre;
 use Filament\Facades\Filament;
@@ -89,5 +90,33 @@ class OwnerGuideTest extends TestCase
 
         Livewire::test(GettingStartedChecklist::class)->call('dismiss')->assertRedirect(url('/admin'));
         $this->assertFalse(GettingStartedChecklist::canView());
+    }
+
+    public function test_every_tour_belongs_to_a_real_admin_page(): void
+    {
+        $routes = app('router')->getRoutes();
+        $tours = (new \ReflectionClass(AdminTours::class))->getMethod('tours')->invoke(app(AdminTours::class));
+
+        foreach ($tours as $key => $steps) {
+            $this->assertTrue($routes->hasNamedRoute("filament.admin.{$key}"), "No admin page for the [{$key}] tour.");
+            $this->assertNotEmpty($steps);
+        }
+    }
+
+    public function test_pages_with_a_tour_send_its_steps_and_offer_it_in_the_help_menu(): void
+    {
+        $this->get('/admin/product-requests')
+            ->assertOk()
+            ->assertSee('id="yg-tour-data"', false)
+            ->assertSee('Match or cancel')
+            ->assertSee('Show me around this page')
+            ->assertSee('Tips on each page');
+
+        // A page without a tour still has the guide and the toggle, but no tour.
+        $this->get('/admin/carriers')
+            ->assertOk()
+            ->assertDontSee('id="yg-tour-data"', false)
+            ->assertDontSee('Show me around this page')
+            ->assertSee('Read the guide');
     }
 }

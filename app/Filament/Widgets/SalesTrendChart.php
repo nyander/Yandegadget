@@ -9,6 +9,9 @@ class SalesTrendChart extends ChartWidget
 {
     use AuthorisesReports;
 
+    /** Loaded with the page, so the dashboard tour can point at it. */
+    protected static bool $isLazy = false;
+
     protected static ?int $sort = 2;
 
     protected ?string $heading = 'Last 12 months';

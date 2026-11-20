@@ -14,6 +14,9 @@ class SalesOverview extends StatsOverviewWidget
 {
     use AuthorisesReports, InteractsWithPageFilters;
 
+    /** Loaded with the page, so the dashboard tour can point at it. */
+    protected static bool $isLazy = false;
+
     protected static ?int $sort = 1;
 
     protected function getStats(): array

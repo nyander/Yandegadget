@@ -17,6 +17,12 @@ This app runs the shop's records and the website together. You don't need to be 
 
 Customers only ever see the website.
 
+## Help on every page
+
+The first time you open a page, a short tour points out its parts, one pop-up at a time. Use **Next** and **Back** to move through it, or **Skip tour** to stop.
+
+To see a tour again, or to turn the tours off, click the **lifebuoy** button at the top right, next to the bell. It also opens this guide.
+
 ## Where to start
 
 Work through [Getting set up](help:first-week). The checklist on your dashboard shows what's left to do.

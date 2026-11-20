@@ -35,6 +35,8 @@ class ProductRequestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlassCircle;
 
+    protected static ?string $modelLabel = 'customer request';
+
     protected static string|UnitEnum|null $navigationGroup = 'Sales';
 
     protected static ?string $navigationLabel = 'Customer requests';

@@ -1,5 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section
+        data-tour="getting-started"
         heading="Getting started"
         :description="$done.' of '.count($steps).' done. Each step links to the page and to the guide.'"
         icon="heroicon-o-rocket-launch"

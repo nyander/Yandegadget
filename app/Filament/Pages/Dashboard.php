@@ -37,7 +37,8 @@ class Dashboard extends BaseDashboard
                         ->placeholder(today()->format('M j, Y')),
                 ])
                 ->columns(2)
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->extraAttributes(['data-tour' => 'dates']),
         ]);
     }
 

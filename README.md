@@ -42,12 +42,12 @@ Open http://127.0.0.1:8000. `composer dev` runs four things together; stop them 
 
 Password `password` for all of them:
 
-| Email | Can do |
-|---|---|
-| `admin@example.test` | Everything, including the back office at `/admin` |
-| `staff@example.test` | Check in shipments and sell at `/staff` |
-| `customer@example.test` | Browse, request items, pay deposits |
-| `supplier@example.test` | Offer stock to the shop |
+| Email                   | Can do                                            |
+| ----------------------- | ------------------------------------------------- |
+| `admin@example.test`    | Everything, including the back office at `/admin` |
+| `staff@example.test`    | Check in shipments and sell at `/staff`           |
+| `customer@example.test` | Browse, request items, pay deposits               |
+| `supplier@example.test` | Offer stock to the shop                           |
 
 Deposits use a pretend payment provider locally (`PAYMENTS_DRIVER=fake`): "Pay deposit" succeeds straight away, no card needed.
 

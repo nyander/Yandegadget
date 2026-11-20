@@ -16,6 +16,11 @@ class ShopSettings
 
     public const COLLECTION_DAYS = 'request_collection_days';
 
+    /** Getting-started steps the owner ticked off by hand. */
+    public const ONBOARDING_DONE = 'onboarding_done';
+
+    public const ONBOARDING_DISMISSED = 'onboarding_dismissed';
+
     /** @var array<string, mixed> */
     private const DEFAULTS = [
         // Lowest price staff can accept, as a percentage of the listed price (70% in 2020).
@@ -24,6 +29,8 @@ class ShopSettings
         self::CANCELLATION_FEE => 25,
         // Days a found item stays reserved in store before it goes back on sale.
         self::COLLECTION_DAYS => 14,
+        self::ONBOARDING_DONE => [],
+        self::ONBOARDING_DISMISSED => false,
     ];
 
     public function negotiationFloorPercent(): int

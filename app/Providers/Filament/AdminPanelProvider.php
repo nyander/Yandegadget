@@ -31,8 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Emerald,
             ])
-            ->navigationGroups(['Reports', 'Sales', 'Catalogue', 'Shipping', 'Buying', 'Finance', 'Settings'])
+            ->navigationGroups(['Reports', 'Sales', 'Catalogue', 'Shipping', 'Buying', 'Finance', 'Settings', 'Help'])
             ->renderHook(PanelsRenderHook::STYLES_AFTER, fn () => view('filament.report-styles'))
+            // A guide button next to the notifications bell, on every page.
+            ->renderHook(PanelsRenderHook::USER_MENU_BEFORE, fn () => view('filament.help-button'))
             ->databaseNotifications()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

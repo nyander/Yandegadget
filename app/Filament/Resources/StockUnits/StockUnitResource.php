@@ -21,6 +21,8 @@ class StockUnitResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
 
+    protected static ?string $navigationLabel = 'Stock units';
+
     protected static string|UnitEnum|null $navigationGroup = 'Catalogue';
 
     protected static ?int $navigationSort = 2;

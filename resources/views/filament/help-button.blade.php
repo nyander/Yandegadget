@@ -1,0 +1,9 @@
+<x-filament::icon-button
+    :href="app(\App\Support\HelpCentre::class)->url()"
+    tag="a"
+    icon="heroicon-o-lifebuoy"
+    color="gray"
+    size="lg"
+    label="Guide"
+    tooltip="Guide"
+/>

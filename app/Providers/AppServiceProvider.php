@@ -6,6 +6,7 @@ use App\Services\Payments\FakeGateway;
 use App\Services\Payments\GatewayException;
 use App\Services\Payments\PaymentGateway;
 use App\Services\Payments\PaystackGateway;
+use App\Services\Reports\ReportCurrency;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // One per request, so every report shares rates and missing-rate warnings.
+        $this->app->scoped(ReportCurrency::class);
+
         $this->app->singleton(PaymentGateway::class, function () {
             return match (config('services.payments.driver')) {
                 'paystack' => new PaystackGateway(

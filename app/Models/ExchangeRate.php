@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,10 +26,18 @@ class ExchangeRate extends Model
 {
     public static function current(string $base, string $quote): ?self
     {
+        return static::asOf($base, $quote, now());
+    }
+
+    /**
+     * The rate that was in force at a point in time.
+     */
+    public static function asOf(string $base, string $quote, DateTimeInterface $at): ?self
+    {
         return static::query()
             ->where('base_currency', $base)
             ->where('quote_currency', $quote)
-            ->where('effective_at', '<=', now())
+            ->where('effective_at', '<=', $at)
             ->latest('effective_at')
             ->latest('id')
             ->first();

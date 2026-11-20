@@ -2,17 +2,23 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PaymentMethod;
 use App\Enums\StockStatus;
+use App\Enums\WagePeriod;
 use App\Models\Carrier;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\ExchangeRate;
+use App\Models\LedgerEntry;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\Shipment;
+use App\Models\StaffWage;
 use App\Models\StockUnit;
 use App\Models\Supplier;
+use App\Models\TransactionType;
 use App\Models\User;
+use App\Services\SaleService;
 use App\Services\ShipmentService;
 use App\Services\SupplierOfferService;
 use Brick\Money\Money;
@@ -34,7 +40,7 @@ class DemoCatalogueSeeder extends Seeder
             'base_currency' => 'GBP',
             'quote_currency' => 'GHS',
             'rate' => '15.000000',
-            'effective_at' => now()->subDay(),
+            'effective_at' => now()->subYear(),
         ]);
 
         $supplier = Supplier::factory()->create([
@@ -90,6 +96,7 @@ class DemoCatalogueSeeder extends Seeder
         }
 
         $this->shipDemoStock($toShip);
+        $this->seedDemoSalesAndFinances($supplier, $grades->all());
 
         $supplierUser = $supplier->user;
         if ($supplierUser !== null) {
@@ -102,6 +109,70 @@ class DemoCatalogueSeeder extends Seeder
                 'asking_price' => Money::of(620, 'GBP'),
             ]);
         }
+    }
+
+    /**
+     * Six months of past sales, rent and a wage, so the dashboard and reports have something to show.
+     *
+     * @param  array<string, int>  $grades
+     */
+    private function seedDemoSalesAndFinances(Supplier $supplier, array $grades): void
+    {
+        $staff = User::where('email', 'staff@example.test')->first();
+        $admin = User::where('email', 'admin@example.test')->first();
+
+        if ($staff === null || $admin === null) {
+            return;
+        }
+
+        $products = Product::with('category')->get();
+        $sales = app(SaleService::class);
+        $methods = PaymentMethod::cases();
+
+        for ($i = 0; $i < 24; $i++) {
+            $product = $products[$i % $products->count()];
+            $cost = fake()->numberBetween(60, 400);
+            $price = (int) round($cost * fake()->randomFloat(2, 1.4, 1.7));
+            $soldAt = now()->subDays(fake()->numberBetween(1, 180))->setTime(fake()->numberBetween(9, 18), 0);
+
+            $unit = StockUnit::factory()->for($product)->received()->create([
+                'condition_id' => fake()->randomElement($grades),
+                'supplier_id' => $supplier->id,
+                'cost' => Money::of($cost, 'GBP'),
+                'price' => Money::of($price, 'GBP'),
+                'purchased_at' => $soldAt->subDays(fake()->numberBetween(20, 60))->toDateString(),
+            ]);
+
+            // Somewhere between 85% and 100% of the listed cedi price.
+            $paid = Money::of((int) round($price * 15 * fake()->randomFloat(2, 0.85, 1)), 'GHS');
+            $sales->record($unit, $paid, fake()->randomElement($methods), $staff, ['sold_at' => $soldAt->toImmutable()]);
+        }
+
+        $types = TransactionType::pluck('id', 'name');
+        $entry = fn (string $type, string $description, int $ghs, string $on) => LedgerEntry::create([
+            'transaction_type_id' => $types[$type],
+            'occurred_on' => $on,
+            'description' => $description,
+            'money' => Money::of($ghs, 'GHS'),
+            'recorded_by' => $admin->id,
+        ]);
+
+        $start = now()->subMonths(6)->startOfMonth();
+        $entry('Common Stock', 'Owner\'s capital', 60000, $start->toDateString());
+        $entry('Cash', 'Opening bank balance', 25000, $start->toDateString());
+
+        for ($month = $start; $month->lessThan(now()); $month = $month->addMonth()) {
+            $entry('Rent', 'Shop rent, '.$month->format('F'), 2500, $month->toDateString());
+        }
+
+        StaffWage::create([
+            'user_id' => $staff->id,
+            'name' => $staff->name,
+            'location_id' => $staff->location_id,
+            'rate' => Money::of(1800, 'GHS'),
+            'period' => WagePeriod::Monthly,
+            'starts_on' => $start->toDateString(),
+        ]);
     }
 
     /**

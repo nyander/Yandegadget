@@ -93,7 +93,7 @@ Customer request flow, deposit by condition, payment gateway with webhooks and i
 **Phase 5 — Supplier portal (1 week)** — done on the `rebuild` branch, November 2026
 Supplier onboarding, offers with photos, admin accept → stock unit.
 
-**Phase 6 — Reports (1–2 weeks)**
+**Phase 6 — Reports (1–2 weeks)** — done on the `rebuild` branch, November 2026
 Dashboard (sales, margin, stock age, units by category/condition/location). Balance sheet and income statement driven by transaction-type categories, with negatives highlighted. CSV/PDF export. Wages prorated from staff wage periods (and the wage rate's unit — daily, weekly or monthly — stored on the record).
 
 **Phase 7 — Launch (1 week)**

@@ -25,7 +25,7 @@ Keep the 2020 version: tag it `v1-2020` on `master`, build the new app on a `reb
 
 | Area                                            | 2020                            | 2026                                                                                                                                      |
 | ----------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework                                       | Laravel 6, PHP 7.2              | Laravel 13, PHP 8.3+, Node 24                                                                                                             |
+| Framework                                       | Laravel 6, PHP 7.2              | Laravel 13, PHP 8.4+, Node 24                                                                                                             |
 | Customer-facing and staff frontend              | Blade + Bootstrap 4             | **Inertia.js + React + TypeScript**, Tailwind, shadcn/ui, from Laravel's official React starter kit. Server-side rendering on for SEO     |
 | Back-office data entry (settings, ledger, CRUD) | Hand-written Blade CRUD         | **Filament** panel at `/admin`, which replaces most of the 22 controllers. Screens can move into React later if they need a custom design |
 | Auth                                            | `laravel/ui`                    | The React starter kit's auth (Fortify), email verification, optional 2FA for admin                                                        |

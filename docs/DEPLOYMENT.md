@@ -2,7 +2,7 @@
 
 The app is a standard Laravel 13 app. It needs:
 
-- PHP 8.3+ with `intl`, `gd` or `imagick` (photo conversions), `bcmath`, `pdo_mysql` (or `pdo_pgsql`)
+- PHP 8.4+ with `intl`, `gd` or `imagick` (photo conversions), `bcmath`, `pdo_mysql` (or `pdo_pgsql`)
 - MySQL 8 (or PostgreSQL 15+) — SQLite is for local development only
 - Node 24 to build the frontend (`.nvmrc`)
 - `mysqldump` (or `pg_dump`) on the server, for backups

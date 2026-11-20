@@ -6,7 +6,7 @@ The app is being rebuilt on the `rebuild` branch. The plan is in `docs/REBUILD_P
 
 Rebuild stack and conventions:
 
-- Laravel 13, PHP 8.3+, Laravel's React starter kit: Inertia v3, React 19, TypeScript, Tailwind 4, shadcn/ui, Wayfinder for typed routes, Fortify auth (email verification, registration, 2FA, passkeys, password confirmation). Filament 5 is the back office at `/admin` (resources in `app/Filament/Resources`). It has no login page of its own: guests go to the main Fortify login, and `User::canAccessPanel()` admits verified users with an admin-level permission.
+- Laravel 13, PHP 8.4+ (the locked Symfony 8 packages need it), Laravel's React starter kit: Inertia v3, React 19, TypeScript, Tailwind 4, shadcn/ui, Wayfinder for typed routes, Fortify auth (email verification, registration, 2FA, passkeys, password confirmation). Filament 5 is the back office at `/admin` (resources in `app/Filament/Resources`). It has no login page of its own: guests go to the main Fortify login, and `User::canAccessPanel()` admits verified users with an admin-level permission.
 - Node 24 (`.nvmrc`). The frontend toolchain (`vp`, Vite+) fails on Node 20.
 - Roles and permissions: `spatie/laravel-permission`, defined in `app/Enums/Role.php` and `app/Enums/Permission.php`. Authorise with permissions (`$user->can(Permission::RecordSales->value)`), never role IDs or names in business logic. Self-registration assigns `customer`.
 - Money: integer minor units plus a currency column, exposed as `Brick\Money\Money` through `App\Casts\MoneyCast`. Never floats.

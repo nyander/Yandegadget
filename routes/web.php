@@ -1,121 +1,82 @@
 <?php
-    use App\Notifications\NewShipment;	
-    use App\Ship;	
-    use App\User;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-/*this is a test to see if the website displays
-Route::get('/richard', function () {
-    return 'I can confirm that the routes are working'; 
-});
-*/
+use App\Enums\Permission;
+use App\Http\Controllers\LegalController;
+use App\Http\Controllers\PaystackWebhookController;
+use App\Http\Controllers\ProductRequestController;
+use App\Http\Controllers\Shop\HomeController;
+use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\Staff\SaleController as StaffSaleController;
+use App\Http\Controllers\Staff\ShipmentController as StaffShipmentController;
+use App\Http\Controllers\Supplier\OfferController as SupplierOfferController;
+use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
+use App\Http\Middleware\EnsureSupplierProfile;
+use Illuminate\Support\Facades\Route;
 
-//authentication related
-Auth::routes(['verify' => true]);
+Route::get('/', HomeController::class)->name('home');
 
-//PageControllers
-//this route should display the index page of the website 
-Route::get('/', 'PagesController@index');
-Route::get('/about', 'PagesController@about');
-Route::get('/settings', 'PagesController@settings');
+Route::get('shop', [ProductController::class, 'index'])->name('shop.index');
+Route::get('shop/{product:slug}', [ProductController::class, 'show'])->name('shop.show');
 
-//HomeController
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('privacy', [LegalController::class, 'privacy'])->name('legal.privacy');
+Route::get('terms', [LegalController::class, 'terms'])->name('legal.terms');
+Route::get('sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
-//ProductsController
-// GET|PUSH|PUT|etc
-Route::resource('/products', 'ProductsController');
-// Mark Products as read function
-Route::get('products/notifications/{id}','ProductsController@MarkRead');
-// Confirm product as been received function
-Route::get('/products/received/{id}', 'ProductsController@received')->name('products.received');
-// Redirects to page to confirm purchase
-Route::get('/products/{id}/purchase', 'ProductsController@purchase')->name('products.purchase');
-// Cofirm Product has been purchased function 
-Route::put('/products/{id}/purchase', 'ProductsController@purchaseupdate')->name('products.purchaseupdate');
-// Function for supplier to upload product
-Route::get('/supplierproducts/{id}/addproduct', 'ProductsController@storesupproduct')->name('products.storesupproduct');
-//Function for customer to request product
-Route::get('/prodrequest/{id}/addproduct', 'ProductsController@storereqproduct')->name('products.storereqproduct');
+// Paystack sends customers back here after checkout, and posts signed webhooks.
+Route::get('payments/callback', [ProductRequestController::class, 'callback'])->name('payments.callback');
+Route::post('webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack');
 
-//Image Controller
-Route::resource('/images', 'ImageController');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
-// update suppliers images
-Route::put('/images/updatesuppliers/{id}', 'ImageController@updatesuppliers')->name('updatesuppliers');
+    Route::middleware('can:'.Permission::RequestProducts->value)->group(function () {
+        Route::get('requests', [ProductRequestController::class, 'index'])->name('requests.index');
+        Route::get('requests/new', [ProductRequestController::class, 'create'])->name('requests.create');
+        Route::post('requests', [ProductRequestController::class, 'store'])->name('requests.store');
+        Route::post('requests/{productRequest}/pay', [ProductRequestController::class, 'pay'])->name('requests.pay');
+        Route::post('requests/{productRequest}/cancel', [ProductRequestController::class, 'cancel'])->name('requests.cancel');
+    });
 
-//SupplierProduct Controller
-Route::resource('/supplierproducts', 'SupplierProductController');
-//marks notification as read 
-Route::get('supproduct/notifications/{id}','SupplierProductController@MarkRead');
+    Route::middleware('can:'.Permission::SubmitSupplierOffers->value)
+        ->prefix('supplier')->name('supplier.')
+        ->group(function () {
+            Route::get('profile', [SupplierProfileController::class, 'edit'])->name('profile.edit');
+            Route::put('profile', [SupplierProfileController::class, 'update'])->name('profile.update');
 
-// Requested Product Controller
-Route::resource('/requests','ProductRequestController');
+            Route::middleware(EnsureSupplierProfile::class)->group(function () {
+                Route::get('offers', [SupplierOfferController::class, 'index'])->name('offers.index');
+                Route::get('offers/new', [SupplierOfferController::class, 'create'])->name('offers.create');
+                Route::post('offers', [SupplierOfferController::class, 'store'])->name('offers.store');
+                Route::post('offers/{offer}/withdraw', [SupplierOfferController::class, 'withdraw'])->name('offers.withdraw');
+            });
+        });
 
-// Staff Wage controller
-Route::resource('/staffwages', 'StaffWageController');
+    // Viewable by the supplier who made it and by the shop.
+    Route::get('supplier/offers/{offer}', [SupplierOfferController::class, 'show'])->name('supplier.offers.show');
 
-// Conditions controller
-Route::resource('/conditions', 'ConditionsController');
+    // Viewable by the customer who made it and by the shop.
+    Route::get('requests/{productRequest}', [ProductRequestController::class, 'show'])->name('requests.show');
 
-// Categories controller
-Route::resource('/categories', 'CategoriesController');
+    Route::middleware('can:'.Permission::ReceiveShipments->value)
+        ->prefix('staff')->name('staff.')
+        ->group(function () {
+            Route::get('shipments', [StaffShipmentController::class, 'index'])->name('shipments.index');
+            Route::get('shipments/{shipment}', [StaffShipmentController::class, 'show'])->name('shipments.show');
+            Route::post('shipments/{shipment}/items/{item}/check-in', [StaffShipmentController::class, 'checkIn'])
+                ->scopeBindings()
+                ->name('shipments.items.check-in');
+        });
 
-// Suppliers controller
-Route::resource('/suppliers', 'SuppliersController');
-
-// Shipment Comapny Controller
-Route::resource('/shipcompanies', 'ShipCompanyController');
-
-// Shipment Confirmation Controller
-Route::resource('/confirmations','ShipmentConfirmationController');
-
-// Requested Product Checkout
-Route::resource('/checkouts', 'CheckoutController');
-
-// Shipped Product Controler
-Route::resource('/ships', 'ShipController');
-
-// Shipped Product has been received function
-Route::get('/ships/received/{id}', 'ShipController@received')->name('ships.received');
-
-//Charts and Reports controller 
-Route::resource('/reports', 'ReportController');
-
-// Admin recording Business Transactions
-Route::resource('/transactions', 'TransactionController');
-
-//shipment routes
-Route::resource('/shipments', 'ShipmentController'); 
-
-// place Products for save for later shipment 
-Route::post('/shipments/switchToSaveForLater/{product}', 'ShipmentController@switchToSaveForLater')->name('shipments.switchToSaveForLater');
-
-
-Route::resource('/saveForLater', 'SaveForLaterController'); 
-Route::post('/saveForLater/switchToShipment/{product}', 'SaveForLaterController@switchToShipment')->name('saveForLater.switchToShipment');
-
-Route::get('empty', function(){
-    Cart::instance('saveForLater')->destroy();
+    Route::middleware('can:'.Permission::RecordSales->value)
+        ->prefix('staff')->name('staff.')
+        ->group(function () {
+            Route::get('sell', [StaffSaleController::class, 'index'])->name('sell.index');
+            Route::get('sell/{unit}', [StaffSaleController::class, 'create'])->name('sell.create');
+            Route::post('sell/{unit}', [StaffSaleController::class, 'store'])->name('sell.store');
+            Route::get('sales/{sale}', [StaffSaleController::class, 'show'])->name('sales.show');
+        });
 });
 
-Route::resource('/conversions', 'ConversionController');
-
-
-// adding a prefix adds admin to the start of the URL and the name adds the admin. to the routes entered. it applies middleware so when the user logs in it checks whther it is a staff or an admin 
-Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:admin-role')->group(function(){
-    Route::resource('/users', 'UsersController',['except'=>['show','create','store']]);
-    
-});
-
-
-
+require __DIR__.'/settings.php';

@@ -2,152 +2,212 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DB;
-use App\ProductRequest;
+use App\Enums\CancellationCause;
+use App\Enums\PaymentStatus;
+use App\Enums\RequestStatus;
+use App\Exceptions\RequestRuleViolation;
+use App\Http\Requests\StoreProductRequestRequest;
+use App\Models\Category;
+use App\Models\Condition;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\ProductRequest;
+use App\Models\User;
+use App\Services\Payments\GatewayException;
+use App\Services\Payments\PaymentService;
+use App\Services\Pricing;
+use App\Services\ProductRequestService;
+use App\Services\RefundPolicy;
+use Brick\Money\Money;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Gate;
+use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-
+/**
+ * Customers asking the shop to find an item, with a deposit taken online.
+ */
 class ProductRequestController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth','verified']);
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if(Gate::denies('request-products')){
-                return redirect(route('products.index'));
-        } 
-        $requests = ProductRequest::all();       
-        return view('requests.index')->with(['requests'=>$requests]);
-    }
+    public function __construct(
+        private readonly ProductRequestService $requests,
+        private readonly Pricing $pricing,
+    ) {}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index(Request $request): Response
     {
-        if(Gate::denies('request-products')){
-                return redirect(route('products.index'));   
-            
-        } 
-        $conditions = DB::table('conditions')->select('id','details','deposit','explanation')->get();
-        $categories = DB::table('categories')->select('id','type')->get();
-        return view('requests.create')->with(['conditions'=> $conditions, 'categories'=> $categories]);
-    }
+        /** @var User $user */
+        $user = $request->user();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $id = Auth::id();
-        $this->validate($request,[
-            'name' => 'required'            
+        return Inertia::render('requests/index', [
+            'requests' => ProductRequest::where('customer_id', $user->id)
+                ->with(['category', 'condition'])
+                ->latest()
+                ->get()
+                ->map(fn (ProductRequest $r) => [
+                    'id' => $r->id,
+                    'reference' => $r->reference,
+                    'description' => $r->description,
+                    'status' => $r->status->value,
+                    'status_label' => $r->status->getLabel(),
+                    'category' => $r->category->name,
+                    'condition' => "{$r->condition->grade} – {$r->condition->name}",
+                    'created_at' => $r->created_at?->toIso8601String(),
+                ])->all(),
         ]);
-
-         $productrequ = new ProductRequest;
-         $productrequ->name = request("name");
-         $productrequ->customer_id = $id;         
-         $productrequ->type = request("type");         
-         $productrequ->condition = $condition = DB::table('conditions')->where('deposit',request("condition"))->value('id');
-         $productrequ->deposit_paid = false;  
-         $productrequ->acquired = false;
-         $productrequ->deposit= request("deposit");       
-         $productrequ->save();
-
-         return redirect('/requests')->with('success', 'Request has been made');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function create(): Response
     {
-        if(Gate::denies('request-products')){
-                return redirect(route('products.index'));   
+        $currency = (string) config('services.payments.currency');
+
+        $conditions = Condition::orderBy('sort_order')->get()->map(function (Condition $c) use ($currency) {
+            $deposit = $this->pricing->convert($c->deposit, $currency);
+
+            return [
+                'id' => $c->id,
+                'grade' => $c->grade,
+                'name' => $c->name,
+                'description' => $c->description,
+                'deposit' => $deposit ? $this->pricing->present($deposit) : null,
+            ];
+        });
+
+        return Inertia::render('requests/create', [
+            'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(['id', 'name']),
+            'conditions' => $conditions->all(),
+            'depositsAvailable' => $conditions->every(fn (array $c) => $c['deposit'] !== null),
+        ]);
+    }
+
+    public function store(StoreProductRequestRequest $request): HttpResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        /** @var array{category_id: int, condition_id: int, description: string, notes?: string|null} $data */
+        $data = $request->validated();
+        $productRequest = $this->requests->create($user, $data);
+
+        return $this->checkout($productRequest);
+    }
+
+    public function show(ProductRequest $productRequest, RefundPolicy $refunds): Response
+    {
+        Gate::authorize('view', $productRequest);
+
+        $productRequest->load(['category', 'condition', 'stockUnit.product', 'stockUnit.location', 'latestPayment']);
+        $payment = $productRequest->paidDeposit() ?? $productRequest->latestPayment;
+        $unit = $productRequest->stockUnit;
+        $currency = (string) config('services.payments.currency');
+        $estimate = $this->pricing->convert($productRequest->deposit, $currency);
+
+        return Inertia::render('requests/show', [
+            'request' => [
+                'id' => $productRequest->id,
+                'reference' => $productRequest->reference,
+                'description' => $productRequest->description,
+                'notes' => $productRequest->notes,
+                'status' => $productRequest->status->value,
+                'status_label' => $productRequest->status->getLabel(),
+                'category' => $productRequest->category->name,
+                'condition' => [
+                    'grade' => $productRequest->condition->grade,
+                    'name' => $productRequest->condition->name,
+                    'description' => $productRequest->condition->description,
+                ],
+                'deposit' => $payment ? $this->pricing->present($payment->money) : ($estimate ? $this->pricing->present($estimate) : null),
+                'created_at' => $productRequest->created_at?->toIso8601String(),
+                'paid_at' => $productRequest->paid_at?->toIso8601String(),
+                'sourced_at' => $productRequest->sourced_at?->toIso8601String(),
+                'ready_at' => $productRequest->ready_at?->toIso8601String(),
+                'fulfilled_at' => $productRequest->fulfilled_at?->toIso8601String(),
+                'cancelled_at' => $productRequest->cancelled_at?->toIso8601String(),
+                'cancel_reason' => $productRequest->cancel_reason,
+                'item' => $unit ? [
+                    'reference' => $unit->reference,
+                    'product' => $unit->product->name,
+                    'shop_slug' => Product::visibleInShop()->whereKey($unit->product_id)->exists() ? $unit->product->slug : null,
+                    'price' => ($listed = $this->pricing->convert($unit->price, $unit->location->currency)) ? $this->pricing->present($listed) : null,
+                ] : null,
+                'payment' => $payment ? [
+                    'status' => $payment->status->value,
+                    'status_label' => $payment->status->getLabel(),
+                    'channel' => $payment->channel,
+                    'refunded' => $payment->status === PaymentStatus::Refunded,
+                ] : null,
+                'can_pay' => $productRequest->status === RequestStatus::AwaitingDeposit,
+                'can_cancel' => in_array($productRequest->status, [RequestStatus::AwaitingDeposit, RequestStatus::Open, RequestStatus::Sourced, RequestStatus::ReadyForCollection], true),
+                'cancel_quote' => ($quote = $refunds->quote($productRequest, CancellationCause::Customer)) ? [
+                    'refund' => $this->pricing->present($quote->refund),
+                    'kept' => $quote->kept->isZero() ? null : $this->pricing->present($quote->kept),
+                    'fee_percent' => $quote->feePercent,
+                ] : null,
+                'collect_by' => $refunds->collectBy($productRequest)?->toIso8601String(),
+                'refunded' => $payment?->refunded_at !== null ? $this->pricing->present(Money::ofMinor($payment->refunded_amount, $payment->currency)) : null,
+            ],
+        ]);
+    }
+
+    public function pay(ProductRequest $productRequest): HttpResponse
+    {
+        Gate::authorize('pay', $productRequest);
+
+        return $this->checkout($productRequest);
+    }
+
+    public function cancel(Request $request, ProductRequest $productRequest): RedirectResponse
+    {
+        Gate::authorize('pay', $productRequest);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        try {
+            $this->requests->cancel(
+                $productRequest,
+                $user,
+                $productRequest->paid_at === null ? 'Cancelled by the customer before paying.' : 'Cancelled by the customer.',
+            );
+        } catch (RequestRuleViolation|GatewayException $e) {
+            return back()->withErrors(['request' => $e->getMessage()]);
         }
-        $requests = ProductRequest::find($id);
-        $categories = DB::table('categories')->where('id',$requests->type)->value('type');
-        $condition = DB::table('conditions')->where('id',$requests->condition)->value('details');
-        return view('requests.show')->with(['requests'=> $requests, 'categories'=> $categories, 'condition'=>$condition ]);
-    }
 
-        /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        if(Gate::denies('request-products')){
-                return redirect(route('products.index'));   
-        } 
-        $requests = ProductRequest::find($id);
-        $conditions = DB::table('conditions')->select('id','details')->get();
-        $categories = DB::table('categories')->select('id','type')->get();
-        $conditionname = DB::table('conditions')->where('id',$requests->condition)->value('details');
-        $conditionid = DB::table('conditions')->where('id',$requests->condition)->value('id');
-        $categoriesname = DB::table('categories')->where('id',$requests->type)->value('type');
-        $suppliername = DB::table('suppliers')->where('id', $requests->supplier)->value('name');
-        return view('requests.edit')->with(['requests'=> $requests,
-                                            'conditions'=> $conditions, 
-                                            'categories'=> $categories, 
-                                            'categoriesname'=>$categoriesname, 
-                                            'suppliername'=> $suppliername,
-                                            'conditionname'=> $conditionname,
-                                            'conditionid'=> $conditionid,]);
+        return to_route('requests.show', $productRequest);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Where Paystack sends the customer back. The redirect proves nothing on
+     * its own, so the payment is checked with Paystack before anything changes.
      */
-    public function update(Request $request, $id)
+    public function callback(Request $request, PaymentService $payments): RedirectResponse
     {
-        
-        $productrequ = ProductRequest::find($id);
-        $productrequ->name = request("name");
-        $productrequ->customer_id = Auth::id();         
-        $productrequ->type = request("type");         
-        $productrequ->condition = request("condition");               
-        $productrequ->save();
+        $reference = $request->string('reference')->toString() ?: $request->string('trxref')->toString();
+        $payment = Payment::where('reference', $reference)->first();
 
-        return redirect('/requests')->with('success', 'Request has been updated');
+        if ($payment === null || ! $payment->payable instanceof ProductRequest) {
+            return to_route('requests.index');
+        }
 
+        try {
+            $payments->confirm($reference);
+        } catch (GatewayException) {
+            // The webhook will confirm it if the provider was briefly unreachable.
+        }
+
+        return to_route('requests.show', $payment->payable);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    private function checkout(ProductRequest $productRequest): HttpResponse
     {
-        $productrequ = ProductRequest::find($id);
-        $productrequ->delete();
+        try {
+            $url = $this->requests->startDeposit($productRequest, route('payments.callback'));
+        } catch (RequestRuleViolation|GatewayException $e) {
+            return to_route('requests.show', $productRequest)->withErrors(['payment' => $e->getMessage()]);
+        }
 
-        return redirect('/requests')->with('success', 'Request has been removed');
+        return Inertia::location($url);
     }
-    
 }

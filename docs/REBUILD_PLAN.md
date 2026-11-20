@@ -23,20 +23,20 @@ Keep the 2020 version: tag it `v1-2020` on `master`, build the new app on a `reb
 
 ## Target stack
 
-| Area | 2020 | 2026 |
-|---|---|---|
-| Framework | Laravel 6, PHP 7.2 | Latest Laravel, PHP 8.3+ |
-| Customer-facing and staff frontend | Blade + Bootstrap 4 | **Inertia.js + React + TypeScript**, Tailwind, shadcn/ui, from Laravel's official React starter kit. Server-side rendering on for SEO |
-| Back-office data entry (settings, ledger, CRUD) | Hand-written Blade CRUD | **Filament** panel at `/admin`, which replaces most of the 22 controllers. Screens can move into React later if they need a custom design |
-| Auth | `laravel/ui` | The React starter kit's auth (Fortify), email verification, optional 2FA for admin |
-| Roles | Raw `role_id` 1–4, broken gates | `spatie/laravel-permission` + Policies, with no numeric role checks |
-| Payments | Cartalyst Stripe charge | A `PaymentGateway` interface with Paystack (mobile money + card) and/or Stripe behind it. See decision 2 |
-| Images | `public/gallery` | `spatie/laravel-medialibrary` on S3-compatible storage (e.g. Cloudflare R2), resized automatically |
-| Search | None | Laravel Scout: database driver first, Meilisearch when the catalogue grows |
-| Notifications | Database only | Database + mail, queued; SMS/WhatsApp channel later |
-| Money | Floats in GBP | Integer minor units (pence / pesewas) with a currency, via `brick/money` |
-| Tests | None | Pest feature tests on every money rule |
-| Hosting | Heroku Procfile | Laravel Forge + VPS, or Laravel Cloud, with a queue worker and nightly DB backups |
+| Area                                            | 2020                            | 2026                                                                                                                                      |
+| ----------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework                                       | Laravel 6, PHP 7.2              | Laravel 13, PHP 8.4+, Node 24                                                                                                             |
+| Customer-facing and staff frontend              | Blade + Bootstrap 4             | **Inertia.js + React + TypeScript**, Tailwind, shadcn/ui, from Laravel's official React starter kit. Server-side rendering on for SEO     |
+| Back-office data entry (settings, ledger, CRUD) | Hand-written Blade CRUD         | **Filament** panel at `/admin`, which replaces most of the 22 controllers. Screens can move into React later if they need a custom design |
+| Auth                                            | `laravel/ui`                    | The React starter kit's auth (Fortify), email verification, optional 2FA for admin                                                        |
+| Roles                                           | Raw `role_id` 1–4, broken gates | `spatie/laravel-permission` + Policies, with no numeric role checks                                                                       |
+| Payments                                        | Cartalyst Stripe charge         | A `PaymentGateway` interface with Paystack (mobile money + card) and/or Stripe behind it. See decision 2                                  |
+| Images                                          | `public/gallery`                | `spatie/laravel-medialibrary` on S3-compatible storage (e.g. Cloudflare R2), resized automatically                                        |
+| Search                                          | None                            | Laravel Scout: database driver first, Meilisearch when the catalogue grows                                                                |
+| Notifications                                   | Database only                   | Database + mail, queued; SMS/WhatsApp channel later                                                                                       |
+| Money                                           | Floats in GBP                   | Integer minor units (pence / pesewas) with a currency, via `brick/money`                                                                  |
+| Tests                                           | None                            | PHPUnit feature tests on every money rule, Larastan level 7, Pint                                                                         |
+| Hosting                                         | Heroku Procfile                 | Laravel Forge + VPS, or Laravel Cloud, with a queue worker and nightly DB backups                                                         |
 
 ## Schema redesign
 
@@ -75,29 +75,29 @@ A brand refresh and design system: colour, type, components, keeping or reworkin
 
 Each phase ends with something usable and tested.
 
-**Phase 0 — Foundations (1 week)**
-Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larastan, Pest). Auth, roles/permissions, locations, money and enum base classes. Seeders ported from `database/seeds`.
+**Phase 0 — Foundations (1 week)** — done on the `rebuild` branch, November 2026
+Tag `v1-2020`. Fresh Laravel app on `rebuild`. CI (GitHub Actions: Pint, Larastan, PHPUnit, frontend lint and type checks). Auth, roles/permissions, locations, money and enum base classes. Seeders ported from `database/seeds`.
 
-**Phase 1 — Catalogue and stock (1–2 weeks)**
+**Phase 1 — Catalogue and stock (1–2 weeks)** — done on the `rebuild` branch, November 2026 (exchange-rate history pulled forward from Phase 3 so the shop can show cedis)
 Categories, conditions, suppliers, products, stock units, images. Filament admin for all of these. React storefront built from the design system: listing, category filter, price sort, search, product page. Only received and unsold stock is visible, enforced in a query scope.
 
-**Phase 2 — Shipments (1 week)**
+**Phase 2 — Shipments (1 week)** — done on the `rebuild` branch, November 2026
 Build a shipment, confirm with carrier, cost and date. Staff mark items received, with a photo. Notifications to staff and admin.
 
-**Phase 3 — In-store sales (1 week)**
+**Phase 3 — In-store sales (1 week)** — done on the `rebuild` branch, November 2026
 Staff sale screen (tablet-friendly): listed GHS price, floor price, negotiated price, payment method (cash / MoMo / card). Rate history. Tests on the floor and on the conversions.
 
-**Phase 4 — Requests and deposits (1–2 weeks)**
+**Phase 4 — Requests and deposits (1–2 weeks)** — done on the `rebuild` branch, November 2026, with Paystack
 Customer request flow, deposit by condition, payment gateway with webhooks and idempotency, the "acquired" flow linking a request to a stock unit, refunds handled by admin.
 
-**Phase 5 — Supplier portal (1 week)**
+**Phase 5 — Supplier portal (1 week)** — done on the `rebuild` branch, November 2026
 Supplier onboarding, offers with photos, admin accept → stock unit.
 
-**Phase 6 — Reports (1–2 weeks)**
+**Phase 6 — Reports (1–2 weeks)** — done on the `rebuild` branch, November 2026
 Dashboard (sales, margin, stock age, units by category/condition/location). Balance sheet and income statement driven by transaction-type categories, with negatives highlighted. CSV/PDF export. Wages prorated from staff wage periods (and the wage rate's unit — daily, weekly or monthly — stored on the record).
 
-**Phase 7 — Launch (1 week)**
-Hosting, backups, error tracking, privacy policy (Ghana Data Protection Act), staff training, a soft launch with real stock.
+**Phase 7 — Launch (1 week)** — code side done on the `rebuild` branch, November 2026
+Hosting, backups, error tracking, privacy policy (Ghana Data Protection Act), staff training, a soft launch with real stock. The app is ready to deploy; what's left needs the owner (hosting, domain, Paystack live keys, Data Protection Commission registration) and is listed in `docs/LAUNCH_CHECKLIST.md`. See also `docs/DEPLOYMENT.md` and `docs/STAFF_GUIDE.md`.
 
 Rough total: 10–15 weeks part-time for one developer, plus the design phase. The full React redesign adds time; Filament for the plain admin screens keeps it realistic.
 
@@ -113,8 +113,11 @@ Rough total: 10–15 weeks part-time for one developer, plus the design phase. T
 ## Decisions needed from the owner and Richard
 
 1. **Is there any 2020 production data to keep?** The repo has none. If an old database exists, add an import step in Phase 1.
-2. **Payment provider.** Stripe doesn't onboard Ghana-registered businesses, and most Ghanaian customers pay with mobile money. Recommendation: Paystack (MoMo + card, settles in GHS) as the main gateway, with Stripe kept only if deposits will be taken from UK customers through a UK entity.
+2. ~~Payment provider.~~ Decided: Paystack (mobile money + card, GHS).
 3. ~~Storefront style.~~ Decided: Inertia + React + TypeScript for the customer, supplier and staff frontend; Filament for back-office data entry.
 4. **Bulk stock.** Confirm the product / stock-unit split (recommended) rather than a plain quantity column. A quantity column would lose per-item condition and cost.
-5. **Hosting budget.** It decides between Forge + VPS (cheap) and Laravel Cloud (less ops work).
-6. **Domain and branding.** Keep the Ghana-flag theme or refresh it.
+5. ~~Hosting.~~ Decided: Laravel Forge + a VPS (Richard runs it).
+6. **Domain and branding.** No final business name or domain yet; "Yande Gadgets" is the placeholder (`APP_NAME`). The Ghana-flag theme stays until a brand is chosen.
+7. ~~Email.~~ Decided: Resend.
+8. ~~Deposit refunds.~~ Decided: `RefundPolicy` with an admin-set cancellation fee and collection window. Deposit amounts are set per condition grade by the admin.
+9. **Paystack** live account: later.

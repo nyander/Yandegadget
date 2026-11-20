@@ -2,7 +2,7 @@
 
 ## Current state: 2026 rebuild (read first)
 
-The app is being rebuilt on the `rebuild` branch. The plan is in `docs/REBUILD_PLAN.md`. The 2020 Laravel 6 app described further down is preserved at tag `v1-2020` and on `master` until the rebuild merges. Use the 2020 sections for business rules and history, not for code conventions.
+The 2026 rebuild is on `master` (merged in PR #53, November 2026); all phases in `docs/REBUILD_PLAN.md` are done in code, and going live is tracked in `docs/LAUNCH_CHECKLIST.md`. The 2020 Laravel 6 app described further down is preserved at tag `v1-2020`. Use the 2020 sections for business rules and history, not for code conventions. Local setup is in `README.md`. Keep the project outside iCloud-synced folders (it lives in `~/Code/Yandegadget`).
 
 Rebuild stack and conventions:
 

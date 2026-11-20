@@ -11,7 +11,7 @@ Rebuild on the latest stable Laravel, in a fresh skeleton, and carry the 2020 do
 - What limits growth is the schema and the hard-coded IDs, not the framework. A rebuild is the cheapest point to fix them.
 - The shop paused and there's no live database in the repo, so the schema can be redesigned freely. Seed data (categories, conditions, transaction types) carries over.
 
-Keep the 2020 version: tag it `v1-2020` on `master`, build the new app on a `rebuild` branch, and merge once it reaches parity.
+Keep the 2020 version: tag it `v1-2020` on `master`, build the new app on a `rebuild` branch, and merge once it reaches parity. Done: merged into `master` in PR #53, November 2026.
 
 ## What stays the same (business rules)
 

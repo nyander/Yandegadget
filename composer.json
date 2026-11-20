@@ -19,6 +19,7 @@
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "resend/resend-php": "^1.19",
         "sentry/sentry-laravel": "^4.31",
         "spatie/laravel-backup": "^10.5",
         "spatie/laravel-medialibrary": "^11.23",

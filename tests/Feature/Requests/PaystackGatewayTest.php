@@ -106,6 +106,15 @@ class PaystackGatewayTest extends TestCase
         $payment->forceFill(['provider_transaction_id' => '12345'])->save();
 
         $this->assertSame('pending', $this->gateway->refund($payment));
-        Http::assertSent(fn (Request $request) => $request['transaction'] === '12345');
+        Http::assertSent(fn (Request $request) => $request['transaction'] === '12345' && ! isset($request['amount']));
+    }
+
+    public function test_a_partial_refund_sends_the_amount_in_pesewas(): void
+    {
+        Http::fake(['api.paystack.co/refund' => Http::response(['status' => true, 'data' => ['status' => 'pending']])]);
+        $payment = $this->payment();
+
+        $this->gateway->refund($payment, 9000);
+        Http::assertSent(fn (Request $request) => $request['amount'] === 9000);
     }
 }

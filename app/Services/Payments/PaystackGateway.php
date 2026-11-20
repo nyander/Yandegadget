@@ -74,11 +74,13 @@ class PaystackGateway implements PaymentGateway
         );
     }
 
-    public function refund(Payment $payment): string
+    public function refund(Payment $payment, ?int $amount = null): string
     {
-        $response = $this->send(fn (PendingRequest $http) => $http->post('/refund', [
+        $response = $this->send(fn (PendingRequest $http) => $http->post('/refund', array_filter([
             'transaction' => $payment->provider_transaction_id ?? $payment->reference,
-        ]));
+            // Omitted for a full refund; otherwise in pesewas.
+            'amount' => $amount,
+        ], fn ($value) => $value !== null)));
 
         return (string) ($response->json('data.status') ?? 'pending');
     }

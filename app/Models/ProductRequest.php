@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Enums\CancellationCause;
 use App\Enums\PaymentStatus;
 use App\Enums\RequestStatus;
 use Brick\Money\Money;
@@ -36,6 +37,7 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable|null $fulfilled_at
  * @property CarbonImmutable|null $cancelled_at
  * @property string|null $cancel_reason
+ * @property CancellationCause|null $cancelled_by
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  * @property-read User $customer
@@ -133,6 +135,7 @@ class ProductRequest extends Model
             'ready_at' => 'datetime',
             'fulfilled_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'cancelled_by' => CancellationCause::class,
         ];
     }
 }

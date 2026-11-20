@@ -2,9 +2,13 @@
 
 namespace App\Services\Reports;
 
+use App\Enums\PaymentStatus;
+use App\Enums\RequestStatus;
 use App\Enums\ShipmentStatus;
 use App\Enums\TransactionCategory;
 use App\Models\LedgerEntry;
+use App\Models\Payment;
+use App\Models\ProductRequest;
 use App\Models\Sale;
 use App\Models\Shipment;
 use App\Models\StaffWage;
@@ -107,6 +111,11 @@ class IncomeStatementReport
             }
         }
 
+        $kept = $this->keptDeposits($start, $end);
+        if (! $kept->isZero()) {
+            array_unshift($income, new StatementLine('Kept deposits', $kept, 'Cancellation fees on requests cancelled after the item was found'));
+        }
+
         [$shipping, $shipmentCount] = $this->shipping($start, $end);
         array_unshift(
             $expenses,
@@ -181,6 +190,35 @@ class IncomeStatementReport
         }
 
         return [$total, $count];
+    }
+
+    /**
+     * Deposit money not refunded on requests cancelled in the range.
+     */
+    private function keptDeposits(CarbonImmutable $start, CarbonImmutable $end): Money
+    {
+        $total = $this->currency->zero();
+
+        $payments = Payment::query()
+            ->where('payable_type', (new ProductRequest)->getMorphClass())
+            ->whereIn('status', [PaymentStatus::Succeeded, PaymentStatus::Refunded])
+            ->whereHasMorph('payable', [ProductRequest::class], fn ($query) => $query
+                ->where('status', RequestStatus::Cancelled)
+                ->whereBetween('cancelled_at', [$start, $end]))
+            ->with('payable')
+            ->get();
+
+        foreach ($payments as $payment) {
+            $kept = $payment->amount - ($payment->refunded_at !== null ? $payment->refunded_amount : 0);
+
+            if ($kept > 0) {
+                /** @var ProductRequest $request */
+                $request = $payment->payable;
+                $total = $total->plus($this->currency->convert(Money::ofMinor($kept, $payment->currency), $request->cancelled_at ?? $end));
+            }
+        }
+
+        return $total;
     }
 
     private function wageCost(CarbonImmutable $from, CarbonImmutable $to): Money

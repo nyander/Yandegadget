@@ -14,6 +14,9 @@ Schedule::command('backup:run')->dailyAt('01:30')->onOneServer();
 // Emails the owner if the latest backup is missing, too old or too big.
 Schedule::command('backup:monitor')->dailyAt('07:00')->onOneServer();
 
+// Reserved items not collected in time go back on sale (see RefundPolicy).
+Schedule::command('requests:release-uncollected')->dailyAt('06:00')->onOneServer();
+
 // Housekeeping.
 Schedule::command('queue:prune-failed --hours=720')->weekly();
 Schedule::command('auth:clear-resets')->daily();

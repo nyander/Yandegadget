@@ -4,13 +4,13 @@ Work through this before telling customers about the site. Items marked **owner*
 
 ## Decisions and accounts (owner)
 
-- [ ] Hosting: Forge + VPS or Laravel Cloud (see `docs/DEPLOYMENT.md`).
+- [x] Hosting: Forge + VPS (see `docs/DEPLOYMENT.md`).
 - [ ] Domain name, and who holds the registrar account.
-- [ ] Email sending provider (Postmark, Resend, Mailgun or SES) with the domain verified.
+- [ ] Resend account (decided) with the domain verified (DNS records from Resend), and an API key in `RESEND_API_KEY`.
 - [ ] Paystack business account verified and switched to live.
 - [ ] Branding: logo and colours. The Ghana-flag colours in `resources/css/app.css` are placeholders.
-- [ ] Deposit amount for each condition grade (currently the 2020 values).
-- [ ] Refund rules for deposits once an item has been found. The terms currently promise a refund only before an item is found.
+- [ ] Deposit amount for each condition grade, under Catalogue → Conditions (currently the 2020 values).
+- [x] Refund rules: built. Check the cancellation fee (25%) and collection window (14 days) under Shop settings.
 - [ ] Any 2020 records to bring across. None are in the repository.
 
 ## Legal (owner)

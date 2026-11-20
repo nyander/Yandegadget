@@ -1,7 +1,12 @@
 import { ContactLines, LegalPage } from '@/components/legal/legal-page';
 import type { LegalProps } from '@/components/legal/legal-page';
 
-export default function Terms({ contact, updatedOn }: LegalProps) {
+export default function Terms({
+    contact,
+    cancellationFeePercent,
+    collectionDays,
+    updatedOn,
+}: LegalProps) {
     return (
         <LegalPage title="Terms of use" updatedOn={updatedOn}>
             <p>
@@ -45,13 +50,43 @@ export default function Terms({ contact, updatedOn }: LegalProps) {
                     store.
                 </li>
                 <li>
-                    If we can&rsquo;t find the item, or cancel your request, we
-                    refund your deposit in full to the way you paid.
+                    Once the item is in the store, please collect it within{' '}
+                    {collectionDays} days. We tell you the date.
+                </li>
+            </ul>
+
+            <h2>Cancelling and refunds</h2>
+            <ul>
+                <li>
+                    <strong>Before we find your item:</strong> cancel at any
+                    time from your request page and we refund the whole deposit.
                 </li>
                 <li>
-                    If you change your mind before we find an item, contact us
-                    and we will refund your deposit. Once an item has been found
-                    and reserved for you, ask us about cancelling.
+                    <strong>If we can&rsquo;t supply it,</strong> or the item
+                    isn&rsquo;t as described when you see it, we cancel the
+                    request and refund the whole deposit.
+                </li>
+                {cancellationFeePercent > 0 ? (
+                    <li>
+                        <strong>After we have found your item:</strong> you can
+                        still cancel, but we keep {cancellationFeePercent}% of
+                        the deposit to cover the cost of buying and shipping it,
+                        and refund the rest. The same applies if you don&rsquo;t
+                        collect it within {collectionDays} days; it then goes
+                        back on sale.
+                    </li>
+                ) : (
+                    <li>
+                        <strong>After we have found your item:</strong> you can
+                        still cancel and get the whole deposit back. If you
+                        don&rsquo;t collect it within {collectionDays} days it
+                        goes back on sale and we refund the deposit.
+                    </li>
+                )}
+                <li>
+                    Refunds go back to the card or mobile money wallet you paid
+                    with. Paystack usually completes them within a few working
+                    days.
                 </li>
             </ul>
 

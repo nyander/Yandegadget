@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\CancellationCause;
 use App\Enums\Permission;
 use App\Enums\RequestStatus;
 use App\Enums\StockStatus;
@@ -27,6 +28,8 @@ class ProductRequestService
     public function __construct(
         private readonly PaymentService $payments,
         private readonly Pricing $pricing,
+        private readonly RefundPolicy $refunds,
+        private readonly ShopSettings $settings,
     ) {}
 
     /**
@@ -189,30 +192,43 @@ class ProductRequestService
     }
 
     /**
-     * Customers can cancel before paying. After that only the shop can cancel,
-     * releasing any reserved item and optionally refunding the deposit.
+     * Cancels a request, releases any reserved item and refunds the deposit
+     * as App\Services\RefundPolicy says. Customers can cancel their own
+     * requests until the item is collected; only the shop can cancel as
+     * "shop couldn't supply it". A null $by is the system (uncollected items).
      *
      * @throws RequestRuleViolation|GatewayException
      */
-    public function cancel(ProductRequest $request, User $by, string $reason, bool $refund = false): void
+    public function cancel(ProductRequest $request, ?User $by, string $reason, CancellationCause $cause = CancellationCause::Customer): void
     {
-        $isShop = $by->can(Permission::ManageRequests->value);
+        $isShop = $by?->can(Permission::ManageRequests->value) ?? false;
 
-        if (! $isShop && ! ($by->id === $request->customer_id && $request->status === RequestStatus::AwaitingDeposit)) {
-            throw new RequestRuleViolation('Contact the shop to cancel a request once the deposit is paid.');
+        if ($by === null && $cause !== CancellationCause::NotCollected) {
+            throw new RequestRuleViolation('Only uncollected items are cancelled automatically.');
+        }
+
+        if ($by !== null && ! $isShop) {
+            if ($by->id !== $request->customer_id || $cause !== CancellationCause::Customer) {
+                throw new RequestRuleViolation('Only the shop can cancel this request.');
+            }
         }
 
         if (in_array($request->status, [RequestStatus::Fulfilled, RequestStatus::Cancelled], true)) {
             throw new RequestRuleViolation("{$request->reference} can't be cancelled now.");
         }
 
-        $payment = $request->paidDeposit();
+        // Worked out before the status changes, since the fee depends on how far the request got.
+        $quote = $this->refunds->quote($request, $cause);
 
-        if ($refund && $payment !== null) {
-            $this->payments->refund($payment);
+        if ($quote !== null && $quote->refund->isPositive()) {
+            $payment = $request->paidDeposit();
+
+            if ($payment !== null) {
+                $this->payments->refund($payment, $quote->refund);
+            }
         }
 
-        DB::transaction(function () use ($request, $reason) {
+        DB::transaction(function () use ($request, $reason, $cause) {
             $unit = $request->stockUnit;
 
             if ($unit !== null && $unit->status === StockStatus::Reserved) {
@@ -223,6 +239,7 @@ class ProductRequestService
                 'status' => RequestStatus::Cancelled,
                 'cancelled_at' => now(),
                 'cancel_reason' => $reason,
+                'cancelled_by' => $cause,
                 'stock_unit_id' => null,
             ])->save();
         });
@@ -230,6 +247,30 @@ class ProductRequestService
         if ($request->paid_at !== null) {
             $request->customer->notify(new ProductRequestUpdated($request->refresh()));
         }
+    }
+
+    /**
+     * Cancels requests whose item has waited in store past the collection
+     * window, putting the item back on sale. Returns how many were released.
+     */
+    public function releaseUncollected(): int
+    {
+        $days = $this->settings->collectionDays();
+        $released = 0;
+
+        ProductRequest::query()
+            ->where('status', RequestStatus::ReadyForCollection)
+            ->where('ready_at', '<', now()->subDays($days)->startOfDay())
+            ->each(function (ProductRequest $request) use ($days, &$released) {
+                try {
+                    $this->cancel($request, null, "Not collected within {$days} days of being ready, so it has gone back on sale.", CancellationCause::NotCollected);
+                    $released++;
+                } catch (RequestRuleViolation|GatewayException $e) {
+                    report($e);
+                }
+            });
+
+        return $released;
     }
 
     private function reserve(ProductRequest $request, StockUnit $unit): void

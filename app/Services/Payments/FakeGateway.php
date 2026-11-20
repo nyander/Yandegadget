@@ -43,7 +43,7 @@ class FakeGateway implements PaymentGateway
         );
     }
 
-    public function refund(Payment $payment): string
+    public function refund(Payment $payment, ?int $amount = null): string
     {
         return 'processed';
     }

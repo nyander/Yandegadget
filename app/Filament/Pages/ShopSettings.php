@@ -44,6 +44,8 @@ class ShopSettings extends Page
     {
         $this->form->fill([
             Settings::NEGOTIATION_FLOOR => $settings->negotiationFloorPercent(),
+            Settings::CANCELLATION_FEE => $settings->cancellationFeePercent(),
+            Settings::COLLECTION_DAYS => $settings->collectionDays(),
         ]);
     }
 
@@ -62,6 +64,28 @@ class ShopSettings extends Page
                             ->minValue(1)
                             ->maxValue(100)
                             ->suffix('%')
+                            ->required(),
+                    ]),
+                Section::make('Customer requests and deposits')
+                    ->description('Deposit amounts are set per condition grade under Catalogue → Conditions. The shop cancelling, or the customer cancelling before we find the item, always refunds the whole deposit.')
+                    ->schema([
+                        TextInput::make(Settings::CANCELLATION_FEE)
+                            ->label('Cancellation fee once the item is found')
+                            ->helperText('Share of the deposit we keep if the customer cancels after we\'ve found their item, or doesn\'t collect it in time. The rest is refunded. 0% refunds everything.')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%')
+                            ->required(),
+                        TextInput::make(Settings::COLLECTION_DAYS)
+                            ->label('Days to collect a reserved item')
+                            ->helperText('After this, the item goes back on sale and the cancellation fee applies. Checked every morning.')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1)
+                            ->maxValue(90)
+                            ->suffix('days')
                             ->required(),
                     ]),
             ]);
@@ -88,6 +112,8 @@ class ShopSettings extends Page
         $data = $this->form->getState();
 
         $settings->set(Settings::NEGOTIATION_FLOOR, (int) $data[Settings::NEGOTIATION_FLOOR]);
+        $settings->set(Settings::CANCELLATION_FEE, (int) $data[Settings::CANCELLATION_FEE]);
+        $settings->set(Settings::COLLECTION_DAYS, (int) $data[Settings::COLLECTION_DAYS]);
 
         Notification::make()->success()->title('Settings saved')->send();
     }

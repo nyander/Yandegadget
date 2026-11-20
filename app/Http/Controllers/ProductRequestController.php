@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CancellationCause;
 use App\Enums\PaymentStatus;
 use App\Enums\RequestStatus;
 use App\Exceptions\RequestRuleViolation;
@@ -16,6 +17,8 @@ use App\Services\Payments\GatewayException;
 use App\Services\Payments\PaymentService;
 use App\Services\Pricing;
 use App\Services\ProductRequestService;
+use App\Services\RefundPolicy;
+use Brick\Money\Money;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -91,7 +94,7 @@ class ProductRequestController extends Controller
         return $this->checkout($productRequest);
     }
 
-    public function show(ProductRequest $productRequest): Response
+    public function show(ProductRequest $productRequest, RefundPolicy $refunds): Response
     {
         Gate::authorize('view', $productRequest);
 
@@ -136,7 +139,14 @@ class ProductRequestController extends Controller
                     'refunded' => $payment->status === PaymentStatus::Refunded,
                 ] : null,
                 'can_pay' => $productRequest->status === RequestStatus::AwaitingDeposit,
-                'can_cancel' => $productRequest->status === RequestStatus::AwaitingDeposit,
+                'can_cancel' => in_array($productRequest->status, [RequestStatus::AwaitingDeposit, RequestStatus::Open, RequestStatus::Sourced, RequestStatus::ReadyForCollection], true),
+                'cancel_quote' => ($quote = $refunds->quote($productRequest, CancellationCause::Customer)) ? [
+                    'refund' => $this->pricing->present($quote->refund),
+                    'kept' => $quote->kept->isZero() ? null : $this->pricing->present($quote->kept),
+                    'fee_percent' => $quote->feePercent,
+                ] : null,
+                'collect_by' => $refunds->collectBy($productRequest)?->toIso8601String(),
+                'refunded' => $payment?->refunded_at !== null ? $this->pricing->present(Money::ofMinor($payment->refunded_amount, $payment->currency)) : null,
             ],
         ]);
     }
@@ -156,8 +166,12 @@ class ProductRequestController extends Controller
         $user = $request->user();
 
         try {
-            $this->requests->cancel($productRequest, $user, 'Cancelled by the customer before paying.');
-        } catch (RequestRuleViolation $e) {
+            $this->requests->cancel(
+                $productRequest,
+                $user,
+                $productRequest->paid_at === null ? 'Cancelled by the customer before paying.' : 'Cancelled by the customer.',
+            );
+        } catch (RequestRuleViolation|GatewayException $e) {
             return back()->withErrors(['request' => $e->getMessage()]);
         }
 

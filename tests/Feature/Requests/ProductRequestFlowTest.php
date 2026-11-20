@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Requests;
 
+use App\Enums\CancellationCause;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\ReceiptOutcome;
@@ -25,8 +26,10 @@ use App\Notifications\ProductRequestUpdated;
 use App\Services\Payments\PaymentGateway;
 use App\Services\Payments\PaystackGateway;
 use App\Services\ProductRequestService;
+use App\Services\RefundPolicy;
 use App\Services\SaleService;
 use App\Services\ShipmentService;
+use App\Services\ShopSettings;
 use Brick\Money\Money;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -219,7 +222,7 @@ class ProductRequestFlowTest extends TestCase
         $this->assertSame(StockStatus::Reserved, $unit->fresh()?->status);
     }
 
-    public function test_customers_can_cancel_only_before_paying(): void
+    public function test_customers_cancel_before_the_item_is_found_for_a_full_refund(): void
     {
         $this->actingAs($this->customer)->post(route('requests.store'), [
             'category_id' => $this->phones()->id,
@@ -232,24 +235,113 @@ class ProductRequestFlowTest extends TestCase
         $this->assertSame(RequestStatus::Cancelled, $unpaid->fresh()?->status);
 
         $paid = $this->paidRequest();
-        $this->actingAs($this->customer)->post(route('requests.cancel', $paid))->assertSessionHasErrors('request');
-        $this->assertSame(RequestStatus::Open, $paid->fresh()?->status);
+        $this->actingAs($this->customer)->get(route('requests.show', $paid))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('request.can_cancel', true)
+                ->where('request.cancel_quote.refund.amount', 120000)
+                ->where('request.cancel_quote.kept', null));
+
+        $this->actingAs($this->customer)->post(route('requests.cancel', $paid))->assertRedirect(route('requests.show', $paid));
+
+        $paid->refresh();
+        $this->assertSame(RequestStatus::Cancelled, $paid->status);
+        $this->assertSame(CancellationCause::Customer, $paid->cancelled_by);
+        $this->assertSame(120000, $paid->paidDeposit()?->refunded_amount);
     }
 
-    public function test_the_shop_cancels_releases_the_item_and_refunds(): void
+    public function test_cancelling_after_the_item_is_found_keeps_the_cancellation_fee(): void
+    {
+        $request = $this->paidRequest();
+        $unit = StockUnit::factory()->received()->create();
+        app(ProductRequestService::class)->source($request, $unit);
+
+        $this->actingAs($this->customer)->get(route('requests.show', $request))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('request.cancel_quote.refund.amount', 90000)
+                ->where('request.cancel_quote.kept.amount', 30000)
+                ->where('request.cancel_quote.fee_percent', 25)
+                ->has('request.collect_by'));
+
+        $this->actingAs($this->customer)->post(route('requests.cancel', $request))->assertRedirect();
+
+        $payment = Payment::firstOrFail();
+        $this->assertSame(PaymentStatus::Refunded, $payment->status);
+        $this->assertSame(90000, $payment->refunded_amount);
+        $this->assertSame(StockStatus::Received, $unit->fresh()?->status);
+    }
+
+    public function test_the_cancellation_fee_is_an_admin_setting(): void
+    {
+        app(ShopSettings::class)->set(ShopSettings::CANCELLATION_FEE, 10);
+        $request = $this->paidRequest();
+        app(ProductRequestService::class)->source($request, StockUnit::factory()->received()->create());
+
+        $quote = app(RefundPolicy::class)->quote($request->refresh(), CancellationCause::Customer);
+
+        $this->assertNotNull($quote);
+        $this->assertSame('1080.00', (string) $quote->refund->getAmount());
+        $this->assertSame('120.00', (string) $quote->kept->getAmount());
+
+        app(ShopSettings::class)->set(ShopSettings::CANCELLATION_FEE, 0);
+        $this->assertTrue(app(RefundPolicy::class)->quote($request, CancellationCause::Customer)?->isFull());
+    }
+
+    public function test_customers_cannot_cancel_as_the_shop_or_cancel_someone_elses_request(): void
+    {
+        $request = $this->paidRequest();
+        $service = app(ProductRequestService::class);
+
+        try {
+            $service->cancel($request, $this->customer, 'Free refund please', CancellationCause::Shop);
+            $this->fail('A customer cancelled as the shop.');
+        } catch (RequestRuleViolation) {
+            $this->assertSame(RequestStatus::Open, $request->fresh()?->status);
+        }
+
+        $other = User::factory()->create()->assignRole(Role::Customer->value);
+        $this->actingAs($other)->post(route('requests.cancel', $request))->assertForbidden();
+    }
+
+    public function test_the_shop_cancels_releases_the_item_and_refunds_in_full(): void
     {
         $request = $this->paidRequest();
         $unit = StockUnit::factory()->received()->create();
         $service = app(ProductRequestService::class);
         $service->source($request, $unit);
 
-        $service->cancel($request, $this->admin, 'We could not get one in grade A', refund: true);
+        $service->cancel($request, $this->admin, 'We could not get one in grade A', CancellationCause::Shop);
 
         $this->assertSame(RequestStatus::Cancelled, $request->fresh()?->status);
         $this->assertSame(StockStatus::Received, $unit->fresh()?->status);
         $payment = Payment::firstOrFail();
         $this->assertSame(PaymentStatus::Refunded, $payment->status);
         $this->assertSame(120000, $payment->refunded_amount);
+    }
+
+    public function test_uncollected_items_go_back_on_sale_after_the_collection_window(): void
+    {
+        Notification::fake();
+        $service = app(ProductRequestService::class);
+
+        $late = $this->paidRequest();
+        $lateUnit = StockUnit::factory()->received()->create();
+        $service->source($late, $lateUnit);
+        $late->forceFill(['ready_at' => now()->subDays(15)])->save();
+
+        $recent = $this->paidRequest();
+        $service->source($recent, StockUnit::factory()->received()->create());
+        $recent->forceFill(['ready_at' => now()->subDays(5)])->save();
+
+        $this->artisan('requests:release-uncollected')->expectsOutputToContain('Released 1 uncollected item')->assertSuccessful();
+
+        $late->refresh();
+        $this->assertSame(RequestStatus::Cancelled, $late->status);
+        $this->assertSame(CancellationCause::NotCollected, $late->cancelled_by);
+        $this->assertSame(90000, $late->paidDeposit()?->refunded_amount);
+        $this->assertSame(StockStatus::Received, $lateUnit->fresh()?->status);
+        $this->assertSame(RequestStatus::ReadyForCollection, $recent->fresh()?->status);
+        Notification::assertSentTo($this->customer, ProductRequestUpdated::class, fn (ProductRequestUpdated $n) => $n->request->is($late)
+            && str_contains((string) $n->toDatabase($this->customer)['body'], 'cancellation fee'));
     }
 
     public function test_signed_paystack_webhooks_confirm_payments_once(): void

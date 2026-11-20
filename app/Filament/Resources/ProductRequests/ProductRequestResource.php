@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ProductRequests;
 
+use App\Enums\CancellationCause;
 use App\Enums\RequestStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\RequestRuleViolation;
@@ -11,13 +12,14 @@ use App\Models\StockUnit;
 use App\Models\User;
 use App\Services\Payments\GatewayException;
 use App\Services\ProductRequestService;
+use App\Services\RefundPolicy;
 use BackedEnum;
 use Brick\Money\Money;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
@@ -121,23 +123,31 @@ class ProductRequestResource extends Resource
             ->icon(Heroicon::OutlinedXCircle)
             ->color('danger')
             ->visible(fn (ProductRequest $record) => ! in_array($record->status, [RequestStatus::Fulfilled, RequestStatus::Cancelled], true))
-            ->modalDescription('Any reserved item goes back on sale. The customer is told by email.')
+            ->modalDescription('Any reserved item goes back on sale. The customer is told by email, and any refund goes back through Paystack.')
             ->schema(fn (ProductRequest $record) => [
+                Radio::make('cause')
+                    ->label('Who is cancelling?')
+                    ->options([
+                        CancellationCause::Shop->value => 'The shop: we can\'t supply it, or it isn\'t as described',
+                        CancellationCause::Customer->value => 'The customer changed their mind',
+                    ])
+                    ->descriptions([
+                        CancellationCause::Shop->value => self::refundSummary($record, CancellationCause::Shop),
+                        CancellationCause::Customer->value => self::refundSummary($record, CancellationCause::Customer),
+                    ])
+                    ->default(CancellationCause::Shop->value)
+                    ->required(),
                 Textarea::make('reason')
                     ->label('Reason (shown to the customer)')
                     ->required()
                     ->maxLength(500),
-                Toggle::make('refund')
-                    ->label('Refund the deposit through Paystack')
-                    ->default(true)
-                    ->visible($record->paid_at !== null),
             ])
             ->action(function (ProductRequest $record, array $data, ProductRequestService $requests): void {
                 /** @var User $user */
                 $user = auth()->user();
 
                 try {
-                    $requests->cancel($record, $user, (string) $data['reason'], (bool) ($data['refund'] ?? false));
+                    $requests->cancel($record, $user, (string) $data['reason'], CancellationCause::from((string) $data['cause']));
                 } catch (RequestRuleViolation|GatewayException $e) {
                     Notification::make()->danger()->title('Not cancelled')->body($e->getMessage())->send();
 
@@ -146,6 +156,23 @@ class ProductRequestResource extends Resource
 
                 Notification::make()->success()->title("{$record->reference} cancelled")->send();
             });
+    }
+
+    private static function refundSummary(ProductRequest $record, CancellationCause $cause): string
+    {
+        $quote = app(RefundPolicy::class)->quote($record, $cause);
+
+        if ($quote === null) {
+            return 'No deposit has been paid, so there is nothing to refund.';
+        }
+
+        $locale = (string) config('shop.display_locale');
+
+        if ($quote->isFull()) {
+            return "Refund the full deposit of {$quote->paid->formatToLocale($locale)}.";
+        }
+
+        return "Refund {$quote->refund->formatToLocale($locale)} and keep {$quote->kept->formatToLocale($locale)} ({$quote->feePercent}% cancellation fee, because the item has been found).";
     }
 
     public static function getPages(): array

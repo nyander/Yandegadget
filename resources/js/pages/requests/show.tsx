@@ -3,6 +3,16 @@ import { Check, ChevronLeft, MapPin } from 'lucide-react';
 import AlertError from '@/components/alert-error';
 import { RequestStatusBadge } from '@/components/request-status-badge';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { formatDate } from '@/lib/dates';
 import { cn } from '@/lib/utils';
 import { cancel, index, pay } from '@/routes/requests';
@@ -68,18 +78,7 @@ export default function RequestShow({ request }: { request: RequestDetail }) {
                                     </Button>
                                 )}
                             </Form>
-                            {request.can_cancel && (
-                                <Form action={cancel(request.id)}>
-                                    {({ processing }) => (
-                                        <Button
-                                            variant="ghost"
-                                            disabled={processing}
-                                        >
-                                            Cancel request
-                                        </Button>
-                                    )}
-                                </Form>
-                            )}
+                            <CancelRequest request={request} />
                         </div>
                     </div>
                 )}
@@ -99,6 +98,13 @@ export default function RequestShow({ request }: { request: RequestDetail }) {
                                 {request.deposit &&
                                     `; your ${request.deposit.formatted} deposit comes off the price.`}
                             </p>
+                            {request.collect_by && (
+                                <p className="mt-1 font-medium">
+                                    Please collect it by{' '}
+                                    {formatDate(request.collect_by)}. After that
+                                    it goes back on sale.
+                                </p>
+                            )}
                             {request.item.shop_slug && (
                                 <Link
                                     href={shopShow(request.item.shop_slug)}
@@ -117,14 +123,20 @@ export default function RequestShow({ request }: { request: RequestDetail }) {
                             Cancelled {formatDate(request.cancelled_at)}.{' '}
                             {request.cancel_reason}
                         </p>
-                        {request.payment?.refunded && (
+                        {request.refunded && (
                             <p className="mt-1">
-                                Your deposit of {request.deposit?.formatted} has
-                                been refunded to your{' '}
-                                {request.payment.channel === 'mobile_money'
+                                {request.refunded.formatted} of your{' '}
+                                {request.deposit?.formatted} deposit has been
+                                refunded to your{' '}
+                                {request.payment?.channel === 'mobile_money'
                                     ? 'mobile money wallet'
                                     : 'card'}
                                 .
+                            </p>
+                        )}
+                        {!request.refunded && request.paid_at && (
+                            <p className="mt-1">
+                                Your deposit was kept as the cancellation fee.
                             </p>
                         )}
                     </div>
@@ -177,6 +189,13 @@ export default function RequestShow({ request }: { request: RequestDetail }) {
                     </ol>
                 )}
 
+                {request.can_cancel &&
+                    request.status !== 'awaiting_deposit' && (
+                        <div className="border-t pt-4">
+                            <CancelRequest request={request} />
+                        </div>
+                    )}
+
                 {request.notes && (
                     <div className="text-sm">
                         <p className="font-medium">Your notes</p>
@@ -185,6 +204,55 @@ export default function RequestShow({ request }: { request: RequestDetail }) {
                 )}
             </div>
         </>
+    );
+}
+
+function CancelRequest({ request }: { request: RequestDetail }) {
+    if (!request.can_cancel) {
+        return null;
+    }
+
+    const quote = request.cancel_quote;
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="ghost">Cancel request</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Cancel this request?</DialogTitle>
+                    <DialogDescription>
+                        {!quote &&
+                            'You haven’t paid anything, so there’s nothing to refund.'}
+                        {quote &&
+                            !quote.kept &&
+                            `We’ll refund your full deposit of ${quote.refund.formatted}.`}
+                        {quote &&
+                            quote.kept &&
+                            `We’ve already found your item, so we keep ${quote.kept.formatted} (${quote.fee_percent}% of the deposit) and refund ${quote.refund.formatted}.`}
+                    </DialogDescription>
+                </DialogHeader>
+                {quote && (
+                    <p className="text-sm text-muted-foreground">
+                        Refunds go back to the card or mobile money wallet you
+                        paid with, usually within a few working days.
+                    </p>
+                )}
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Keep my request</Button>
+                    </DialogClose>
+                    <Form action={cancel(request.id)}>
+                        {({ processing }) => (
+                            <Button variant="destructive" disabled={processing}>
+                                Cancel request
+                            </Button>
+                        )}
+                    </Form>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }
 

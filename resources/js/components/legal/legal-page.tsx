@@ -4,6 +4,8 @@ import type { ReactNode } from 'react';
 export type LegalProps = {
     contact: { email: string | null; phone: string | null; address: string };
     dpcRegistration: string | null;
+    cancellationFeePercent: number;
+    collectionDays: number;
     updatedOn: string;
 };
 

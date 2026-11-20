@@ -50,6 +50,14 @@ export type RequestDetail = {
     } | null;
     can_pay: boolean;
     can_cancel: boolean;
+    /** What a cancellation now would refund, or null when nothing has been paid. */
+    cancel_quote: {
+        refund: Price;
+        kept: Price | null;
+        fee_percent: number;
+    } | null;
+    collect_by: string | null;
+    refunded: Price | null;
 };
 
 export type ConditionOption = {

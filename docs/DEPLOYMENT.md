@@ -34,8 +34,9 @@ SESSION_SECURE_COOKIE=true
 QUEUE_CONNECTION=database
 CACHE_STORE=database          # or redis
 
-MAIL_MAILER=…                 # Postmark, Resend, Mailgun or SES — the app emails invitations, password resets and request updates
-MAIL_FROM_ADDRESS=…
+MAIL_MAILER=resend           # the app emails invitations, password resets and request updates
+RESEND_API_KEY=re_…
+MAIL_FROM_ADDRESS=…           # an address on the domain verified in Resend
 
 PAYMENTS_DRIVER=paystack
 PAYSTACK_PUBLIC_KEY=pk_live_…

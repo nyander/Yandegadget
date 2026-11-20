@@ -107,21 +107,31 @@ class PaymentService
     }
 
     /**
-     * Refunds a paid payment in full.
+     * Refunds a paid payment, in full or in part.
      *
      * @throws GatewayException
      */
-    public function refund(Payment $payment): void
+    public function refund(Payment $payment, ?Money $amount = null): void
     {
         if ($payment->status !== PaymentStatus::Succeeded) {
             throw new GatewayException('Only paid payments can be refunded.');
         }
 
-        $status = $this->gateway->refund($payment);
+        $minor = $amount?->getMinorAmount()->toInt() ?? $payment->amount;
+
+        if ($amount !== null && ! $amount->getCurrency()->isEqualTo($payment->currency)) {
+            throw new GatewayException('A refund must be in the currency of the payment.');
+        }
+
+        if ($minor <= 0 || $minor > $payment->amount) {
+            throw new GatewayException('The refund must be more than zero and no more than was paid.');
+        }
+
+        $status = $this->gateway->refund($payment, $minor === $payment->amount ? null : $minor);
 
         $payment->forceFill([
             'status' => PaymentStatus::Refunded,
-            'refunded_amount' => $payment->amount,
+            'refunded_amount' => $minor,
             'refund_status' => $status,
             'refunded_at' => now(),
         ])->save();

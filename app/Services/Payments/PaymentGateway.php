@@ -28,7 +28,10 @@ interface PaymentGateway
      *
      * @throws GatewayException
      */
-    public function refund(Payment $payment): string;
+    /**
+     * Refunds all of a payment, or part of it (in minor units). Returns the provider's status.
+     */
+    public function refund(Payment $payment, ?int $amount = null): string;
 
     public function verifyWebhookSignature(string $payload, ?string $signature): bool;
 }

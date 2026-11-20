@@ -219,4 +219,22 @@ class FinancialStatementsTest extends TestCase
             'paid_at' => '2026-06-03 10:00',
         ])->save();
     }
+
+    public function test_deposits_kept_on_cancelled_requests_count_as_other_income(): void
+    {
+        $this->depositPaid(200);
+        $request = ProductRequest::firstOrFail();
+        $request->forceFill(['status' => 'cancelled', 'cancelled_at' => '2026-06-12 10:00'])->save();
+        Payment::firstOrFail()->forceFill([
+            'status' => PaymentStatus::Refunded,
+            'refunded_amount' => 15000,
+            'refunded_at' => '2026-06-12 10:00',
+        ])->save();
+
+        $this->assertSame('50.00', $this->amount($this->june(), 'Kept deposits'));
+
+        // No longer held for the customer.
+        $sheet = app(BalanceSheetReport::class)->build(CarbonImmutable::parse('2026-06-30'));
+        $this->assertSame('0.00', $this->amount($sheet, 'Customer deposits held'));
+    }
 }

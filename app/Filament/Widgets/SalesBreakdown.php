@@ -29,6 +29,7 @@ class SalesBreakdown extends Widget
         [$from, $to] = ReportPeriod::from($this->pageFilters);
 
         return [
+            'total' => $report->summary($from, $to),
             'tables' => [
                 'By category' => $report->breakdown($from, $to, 'category'),
                 'By condition' => $report->breakdown($from, $to, 'condition'),

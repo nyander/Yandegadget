@@ -26,6 +26,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            // Move between admin pages without full reloads; links are prefetched on hover.
+            ->spa(hasPrefetching: true)
             ->brandName('Yande Gadgets')
             // Sign-in happens through the main app (Fortify, with 2FA and passkeys).
             ->colors([

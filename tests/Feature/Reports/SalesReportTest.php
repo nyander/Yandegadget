@@ -5,6 +5,7 @@ namespace Tests\Feature\Reports;
 use App\Enums\PaymentMethod;
 use App\Enums\Role;
 use App\Enums\StockStatus;
+use App\Models\Condition;
 use App\Models\ExchangeRate;
 use App\Models\StockUnit;
 use App\Models\User;
@@ -59,6 +60,39 @@ class SalesReportTest extends TestCase
         $this->assertCount(12, $months);
         $this->assertSame('Jun 2026', $months[11]['month']);
         $this->assertSame(1450.0, $months[11]['revenue']);
+    }
+
+    public function test_breakdowns_list_conditions_by_grade_and_the_rest_by_sales(): void
+    {
+        $staff = User::factory()->create()->assignRole(Role::Staff->value);
+        $sales = app(SaleService::class);
+        $conditions = Condition::orderBy('sort_order')->get();
+        $best = $conditions->first();
+        $worst = $conditions->last();
+        $this->assertNotNull($best);
+        $this->assertNotNull($worst);
+
+        // The worst grade sells for more, so a sales order would put it first.
+        foreach ([[$best, 100], [$worst, 500]] as [$condition, $paid]) {
+            $unit = StockUnit::factory()->received()->create([
+                'condition_id' => $condition->id,
+                'cost' => Money::of(5, 'GBP'),
+                'price' => Money::of($paid / 10, 'GBP'),
+            ]);
+            $sales->record($unit, Money::of($paid, 'GHS'), PaymentMethod::Cash, $staff, ['sold_at' => CarbonImmutable::parse('2026-06-10')]);
+        }
+
+        $report = app(SalesReport::class);
+        $from = CarbonImmutable::parse('2026-06-01');
+        $to = CarbonImmutable::parse('2026-06-30');
+
+        $this->assertSame([$best->name, $worst->name], array_column($report->breakdown($from, $to, 'condition'), 'label'));
+
+        $byCategory = $report->breakdown($from, $to, 'category');
+        $revenues = array_map(fn (array $row) => $row['revenue']->getMinorAmount()->toInt(), $byCategory);
+        $sorted = $revenues;
+        rsort($sorted);
+        $this->assertSame($sorted, $revenues);
     }
 
     public function test_stock_age_buckets_items_in_store_by_days_since_arrival(): void

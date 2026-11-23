@@ -6,6 +6,7 @@ use App\Enums\CancellationCause;
 use App\Enums\PaymentStatus;
 use App\Enums\RequestStatus;
 use App\Exceptions\RequestRuleViolation;
+use App\Http\Presenters\RequestPresenter;
 use App\Http\Requests\StoreProductRequestRequest;
 use App\Models\Category;
 use App\Models\Condition;
@@ -46,16 +47,8 @@ class ProductRequestController extends Controller
                 ->with(['category', 'condition'])
                 ->latest()
                 ->get()
-                ->map(fn (ProductRequest $r) => [
-                    'id' => $r->id,
-                    'reference' => $r->reference,
-                    'description' => $r->description,
-                    'status' => $r->status->value,
-                    'status_label' => $r->status->getLabel(),
-                    'category' => $r->category->name,
-                    'condition' => "{$r->condition->grade} – {$r->condition->name}",
-                    'created_at' => $r->created_at?->toIso8601String(),
-                ])->all(),
+                ->map(RequestPresenter::listItem(...))
+                ->all(),
         ]);
     }
 

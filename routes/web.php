@@ -1,7 +1,9 @@
 <?php
 
 use App\Enums\Permission;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PaystackWebhookController;
 use App\Http\Controllers\ProductRequestController;
 use App\Http\Controllers\Shop\HomeController;
@@ -23,13 +25,14 @@ Route::get('privacy', [LegalController::class, 'privacy'])->name('legal.privacy'
 Route::get('terms', [LegalController::class, 'terms'])->name('legal.terms');
 Route::get('sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
 Route::get('robots.txt', [SitemapController::class, 'robots'])->name('robots');
+Route::post('language', LocaleController::class)->name('locale.update');
 
 // Paystack sends customers back here after checkout, and posts signed webhooks.
 Route::get('payments/callback', [ProductRequestController::class, 'callback'])->name('payments.callback');
 Route::post('webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::middleware('can:'.Permission::RequestProducts->value)->group(function () {
         Route::get('requests', [ProductRequestController::class, 'index'])->name('requests.index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Locales;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -45,6 +46,9 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => $request->user()?->getAllPermissions()->pluck('name')->values()->all() ?? [],
                 'unreadNotifications' => fn () => $request->user()?->unreadNotifications()->count() ?? 0,
             ],
+            'locale' => app()->getLocale(),
+            'locales' => collect(Locales::all())->map(fn (string $name, string $code) => ['code' => $code, 'name' => $name])->values()->all(),
+            'translations' => fn () => Locales::translations(app()->getLocale()),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

@@ -26,4 +26,17 @@ return [
     ],
     'dpc_registration' => env('SHOP_DPC_REGISTRATION'),
     'legal_updated_on' => '2026-11-20',
+
+    /*
+    | Languages customers can choose on the shop and their account pages,
+    | each named in its own language. English is the source text: the others
+    | live in lang/{code}.json, keyed by the English wording.
+    */
+    'locales' => [
+        'en' => 'English',
+        'tw' => 'Twi',
+        'gaa' => 'Gã',
+        'ee' => 'Eʋegbe',
+        'fr' => 'Français',
+    ],
 ];

@@ -52,6 +52,11 @@ class SalesReport
             'location' => $sale->location->name,
         });
 
+        // Conditions read best to worst, as graded; everything else biggest sales first.
+        $gradeOrder = $sales->mapWithKeys(fn (Sale $sale) => [
+            $sale->stockUnit->condition->name => $sale->stockUnit->condition->sort_order,
+        ]);
+
         return array_values($groups
             ->map(function (Collection $group, string $label) {
                 $totals = $this->totals($group);
@@ -64,7 +69,9 @@ class SalesReport
                     'marginPercent' => $totals['marginPercent'],
                 ];
             })
-            ->sortByDesc(fn (array $row) => $row['units'])
+            ->sort(fn (array $a, array $b) => $by === 'condition'
+                ? [$gradeOrder[$a['label']] ?? 0, $a['label']] <=> [$gradeOrder[$b['label']] ?? 0, $b['label']]
+                : [$b['revenue']->getMinorAmount()->toInt(), $a['label']] <=> [$a['revenue']->getMinorAmount()->toInt(), $b['label']])
             ->all());
     }
 

@@ -1,15 +1,44 @@
 {{-- Plain CSS for report pages; the admin panel's Tailwind build doesn't include app classes. --}}
 <style>
-    :root { --yg-link: #047857; --yg-done: #059669; --yg-muted: #6b7280; --yg-rule: #e5e7eb; --yg-strong: #111827; --yg-negative: #dc2626; --yg-warn: #b45309; }
-    .dark { --yg-link: #34d399; --yg-done: #34d399; --yg-muted: #9ca3af; --yg-rule: rgba(255,255,255,.1); --yg-strong: #f9fafb; --yg-negative: #f87171; --yg-warn: #fbbf24; }
+    /* Shared colours for both themes. Light first, then dark (Filament puts .dark on <html>). */
+    :root {
+        --yg-link: #047857; --yg-done: #059669; --yg-muted: #6b7280; --yg-rule: #e5e7eb; --yg-strong: #111827;
+        --yg-negative: #dc2626; --yg-warn: #b45309;
+        --yg-panel: #ffffff; --yg-panel-border: #e5e7eb; --yg-head: #f9fafb; --yg-hover: #f3f4f6;
+        --yg-share: #059669; --yg-share-track: #ecfdf5;
+    }
+    .dark {
+        --yg-link: #34d399; --yg-done: #34d399; --yg-muted: #9ca3af; --yg-rule: rgba(255,255,255,.08); --yg-strong: #f9fafb;
+        --yg-negative: #f87171; --yg-warn: #fbbf24;
+        --yg-panel: rgba(255,255,255,.02); --yg-panel-border: rgba(255,255,255,.1); --yg-head: rgba(255,255,255,.04); --yg-hover: rgba(255,255,255,.05);
+        --yg-share: #34d399; --yg-share-track: rgba(52,211,153,.12);
+    }
     @include('reports.statement-css')
-    .yg-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
-    .yg-table { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; }
-    .yg-table caption { text-align: left; font-weight: 600; padding-bottom: .5rem; }
-    .yg-table th, .yg-table td { padding: .4rem .5rem; border-bottom: 1px solid var(--yg-rule); text-align: right; white-space: nowrap; }
-    .yg-table th:first-child, .yg-table td:first-child { text-align: left; white-space: normal; }
-    .yg-table thead th { font-size: .75rem; font-weight: 500; color: var(--yg-muted); }
-    .yg-table__empty { color: var(--yg-muted); font-style: italic; }
+    .yg-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .yg-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
+    /* Breakdown tables: stacked full width, or three side by side once each has room (never two plus one). */
+    .yg-tables { container-type: inline-size; }
+    .yg-grid--tables { gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+    @container (min-width: 64rem) { .yg-grid--tables { grid-template-columns: repeat(3, minmax(0, 1fr)); } .yg-grid--tables .yg-table th, .yg-grid--tables .yg-table td { padding-left: .5rem; padding-right: .5rem; } .yg-grid--tables .yg-table th:first-child, .yg-grid--tables .yg-table td:first-child { padding-left: .875rem; } .yg-grid--tables .yg-table th:last-child, .yg-grid--tables .yg-table td:last-child { padding-right: .875rem; } }
+
+    /* Report tables: one look everywhere (What sold, Stock age). Each sits in a panel, rows keep their natural height. */
+    .yg-panel { border: 1px solid var(--yg-panel-border); border-radius: .75rem; background: var(--yg-panel); overflow-x: auto; }
+    .yg-table { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; color: var(--yg-strong); }
+    .yg-table caption { text-align: left; font-weight: 600; font-size: .875rem; padding: .75rem 1rem .6rem; color: var(--yg-strong); }
+    .yg-table th, .yg-table td { padding: .55rem .75rem; border-bottom: 1px solid var(--yg-rule); text-align: right; white-space: nowrap; vertical-align: middle; }
+    .yg-table th:first-child, .yg-table td:first-child { padding-left: 1rem; text-align: left; white-space: normal; min-width: 6rem; }
+    .yg-table th:last-child, .yg-table td:last-child { padding-right: 1rem; }
+    .yg-table thead th { background: var(--yg-head); font-size: .7rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--yg-muted); border-top: 1px solid var(--yg-rule); }
+    .yg-table tbody th { font-weight: 500; }
+    .yg-table tbody tr { transition: background-color .15s; }
+    .yg-table tbody tr:hover { background: var(--yg-hover); }
+    .yg-table tbody tr:last-child th, .yg-table tbody tr:last-child td { border-bottom: 0; }
+    .yg-table tfoot th, .yg-table tfoot td { font-weight: 600; background: var(--yg-head); border-top: 1px solid var(--yg-panel-border); border-bottom: 0; }
+    .yg-table__label { display: block; }
+    .yg-share { display: block; height: 3px; margin-top: .3rem; max-width: 7rem; border-radius: 999px; background: var(--yg-share-track); overflow: hidden; }
+    .yg-share > span { display: block; height: 100%; border-radius: inherit; background: var(--yg-share); }
+    .yg-table__empty { color: var(--yg-muted); font-style: italic; text-align: left !important; }
+    .yg-table .yg-neg { color: var(--yg-negative); }
     /* Guide */
     .yg-help { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
     @media (min-width: 1024px) { .yg-help { grid-template-columns: 15rem minmax(0, 1fr); } }
@@ -60,4 +89,16 @@
     .yg-switch > span { position: absolute; top: .125rem; left: .125rem; width: 1rem; height: 1rem; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .3); transition: transform .15s; }
     .yg-switch.is-on { background: var(--yg-done); }
     .yg-switch.is-on > span { transform: translateX(1rem); }
+    /* Motion: each admin page eases in; cards and rows respond to the pointer. Off for reduced motion. */
+    @keyframes yg-enter { from { opacity: 0; transform: translateY(6px); } }
+    .fi-main { animation: yg-enter .32s cubic-bezier(.2,.7,.2,1) backwards; }
+    .fi-wi-stats-overview-stat, .fi-section, .yg-checklist { transition: box-shadow .25s, transform .25s; }
+    .fi-wi-stats-overview-stat:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -12px rgb(0 0 0 / .25); }
+    .fi-ta-row { transition: background-color .15s; }
+    .fi-btn, .fi-icon-btn, .fi-sidebar-item-button { transition: background-color .15s, color .15s, transform .12s; }
+    .fi-btn:active, .fi-icon-btn:active { transform: scale(.97); }
+    @media (prefers-reduced-motion: reduce) {
+        .fi-main { animation: none; }
+        .fi-wi-stats-overview-stat:hover, .fi-btn:active, .fi-icon-btn:active { transform: none; }
+    }
 </style>

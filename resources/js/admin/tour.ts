@@ -4,7 +4,7 @@
  * page's first visit while tips are on, or any time from the help menu.
  * Preferences live in this browser only.
  */
-import { driver, type DriveStep } from 'driver.js';
+import { driver, type DriveStep, type Driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import './tour.css';
 
@@ -54,10 +54,28 @@ function isVisible(element: Element): boolean {
     return box.width > 0 && box.height > 0;
 }
 
-function start(): void {
+let current: Driver | null = null;
+let pending: number | undefined;
+
+function start(retriesLeft = 0): void {
     const data = tourData();
 
     if (!data) {
+        return;
+    }
+
+    // Parts of the page can still be drawing after a page change; give them a moment.
+    const missing = data.steps.some(
+        (step) =>
+            step.element !== null &&
+            !Array.from(document.querySelectorAll(step.element)).some(
+                isVisible,
+            ),
+    );
+
+    if (missing && retriesLeft > 0) {
+        pending = window.setTimeout(() => start(retriesLeft - 1), 400);
+
         return;
     }
 
@@ -80,7 +98,10 @@ function start(): void {
         return;
     }
 
-    const markSeen = () => write(SEEN_PREFIX + data.key, '1');
+    const markSeen = () => {
+        write(SEEN_PREFIX + data.key, '1');
+        current = null;
+    };
 
     const tour = driver({
         steps,
@@ -110,6 +131,7 @@ function start(): void {
         onDestroyed: markSeen,
     });
 
+    current = tour;
     tour.drive();
 }
 
@@ -151,8 +173,21 @@ window.YandeTour = {
 };
 
 // First visit to a page with a tour: start it once the widgets have loaded.
-const data = tourData();
+// The admin moves between pages without reloading (Filament's SPA mode), so
+// this runs again after each navigation, and a running tour closes when the
+// page changes.
+function autoStart(): void {
+    window.clearTimeout(pending);
+    const data = tourData();
 
-if (data && tipsEnabled() && read(SEEN_PREFIX + data.key) === null) {
-    window.setTimeout(start, 900);
+    if (data && tipsEnabled() && read(SEEN_PREFIX + data.key) === null) {
+        pending = window.setTimeout(() => start(4), 700);
+    }
 }
+
+document.addEventListener('livewire:navigating', () => {
+    window.clearTimeout(pending);
+    current?.destroy();
+});
+document.addEventListener('livewire:navigated', autoStart);
+autoStart();

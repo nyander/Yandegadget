@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import type { RequestStatusValue } from '@/types';
 
@@ -18,5 +19,17 @@ export function RequestStatusBadge({
     status: RequestStatusValue;
     label: string;
 }) {
-    return <Badge className={cn(styles[status])}>{label}</Badge>;
+    const { t } = useTrans();
+
+    return (
+        <Badge
+            key={status}
+            className={cn(
+                'animate-in duration-300 zoom-in-95 fade-in',
+                styles[status],
+            )}
+        >
+            {t(label)}
+        </Badge>
+    );
 }

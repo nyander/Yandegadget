@@ -35,7 +35,22 @@ void createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#006B3F',
+        delay: 150,
+    },
+    defaults: {
+        // Fade between pages where the browser supports it. Filters, sorting
+        // and other in-page updates keep their place without a transition.
+        visitOptions: (_href, options) => ({
+            ...options,
+            viewTransition:
+                options.viewTransition ||
+                (options.method === 'get' &&
+                    !options.preserveState &&
+                    !options.only?.length &&
+                    typeof document !== 'undefined' &&
+                    'startViewTransition' in document),
+        }),
     },
 });
 

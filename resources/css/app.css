@@ -146,3 +146,111 @@
         @apply bg-background text-foreground;
     }
 }
+
+/*
+ * Motion. Kept short and subtle so it feels quick on cheaper phones.
+ * Everything here switches off for people who ask for reduced motion.
+ */
+@layer utilities {
+    /* Fade and rise into place. Set --i on list items to stagger them. */
+    .enter {
+        animation: enter 420ms var(--ease-out-soft) both;
+        animation-delay: calc(min(var(--i, 0), 12) * 45ms);
+    }
+
+    .enter-pop {
+        animation: enter-pop 320ms var(--ease-out-soft) both;
+        animation-delay: calc(min(var(--i, 0), 12) * 70ms);
+    }
+
+    .vt-header {
+        view-transition-name: site-header;
+    }
+
+    .vt-sidebar {
+        view-transition-name: app-sidebar;
+    }
+}
+
+:root {
+    --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@keyframes enter-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+}
+
+/* Page changes: the old page fades out, the new one fades and rises in. The header and sidebar stay put. */
+::view-transition-old(root) {
+    animation: 140ms ease-out both vt-out;
+}
+
+::view-transition-new(root) {
+    animation: 280ms var(--ease-out-soft) both vt-in;
+}
+
+::view-transition-group(site-header),
+::view-transition-group(app-sidebar) {
+    animation: none;
+}
+
+@keyframes vt-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes vt-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .enter,
+    .enter-pop {
+        animation: none;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
+
+@keyframes drift {
+    to {
+        transform: translate(-40px, 30px) scale(1.1);
+    }
+}
+
+/* The request timeline line fills in from the top. */
+.timeline-fill {
+    transform-origin: top;
+    animation: timeline-fill 400ms var(--ease-out-soft) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes timeline-fill {
+    from {
+        transform: scaleY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .timeline-fill {
+        animation: none;
+    }
+}

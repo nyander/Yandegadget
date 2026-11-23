@@ -11,6 +11,9 @@ use Filament\Tables\Table;
 
 class StockUnitsRelationManager extends RelationManager
 {
+    /** Loaded with the page, so the page tour can point at it. */
+    protected static bool $isLazy = false;
+
     protected static string $relationship = 'stockUnits';
 
     protected static ?string $title = 'Stock units';

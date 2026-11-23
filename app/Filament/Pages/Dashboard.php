@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\GettingStartedChecklist;
 use App\Filament\Widgets\SalesBreakdown;
 use App\Filament\Widgets\SalesOverview;
 use App\Filament\Widgets\SalesTrendChart;
@@ -36,13 +37,15 @@ class Dashboard extends BaseDashboard
                         ->placeholder(today()->format('M j, Y')),
                 ])
                 ->columns(2)
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->extraAttributes(['data-tour' => 'dates']),
         ]);
     }
 
     public function getWidgets(): array
     {
         return [
+            GettingStartedChecklist::class,
             SalesOverview::class,
             SalesTrendChart::class,
             StockAge::class,

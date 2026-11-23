@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    <x-filament::section data-tour="dates">
         {{ $this->form }}
     </x-filament::section>
 

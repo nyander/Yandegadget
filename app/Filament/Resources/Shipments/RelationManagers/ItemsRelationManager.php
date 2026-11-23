@@ -24,6 +24,9 @@ use Filament\Tables\Table;
  */
 class ItemsRelationManager extends RelationManager
 {
+    /** Loaded with the page, so the page tour can point at it. */
+    protected static bool $isLazy = false;
+
     protected static string $relationship = 'items';
 
     protected static ?string $title = 'Items';

@@ -10,7 +10,12 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
 export default defineConfig({
     plugins: lazyPlugins(() => [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.tsx'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.tsx',
+                // Guided tours in the Filament admin panel.
+                'resources/js/admin/tour.ts',
+            ],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {

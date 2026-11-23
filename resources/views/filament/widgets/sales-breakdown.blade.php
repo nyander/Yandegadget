@@ -1,6 +1,6 @@
 @php use App\Reports\StatementLine; @endphp
 <x-filament-widgets::widget>
-    <x-filament::section heading="What sold" :description="$period.' · amounts in cedis'">
+    <x-filament::section data-tour="what-sold" heading="What sold" :description="$period.' · amounts in cedis'">
         <div class="yg-grid">
             @foreach ($tables as $caption => $rows)
                 <table class="yg-table">

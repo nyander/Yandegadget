@@ -11,6 +11,9 @@ class SalesBreakdown extends Widget
 {
     use AuthorisesReports, InteractsWithPageFilters;
 
+    /** Loaded with the page, so the dashboard tour can point at it. */
+    protected static bool $isLazy = false;
+
     protected static ?int $sort = 4;
 
     protected int|string|array $columnSpan = 'full';

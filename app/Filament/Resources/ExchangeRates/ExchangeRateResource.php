@@ -21,6 +21,8 @@ class ExchangeRateResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyPound;
 
+    protected static ?string $navigationLabel = 'Exchange rates';
+
     protected static string|UnitEnum|null $navigationGroup = 'Settings';
 
     public static function form(Schema $schema): Schema

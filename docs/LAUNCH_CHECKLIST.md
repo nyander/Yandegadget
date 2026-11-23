@@ -43,6 +43,7 @@ Work through this before telling customers about the site. Items marked **owner*
 ## Soft launch (one to two weeks)
 
 - [ ] Enter the stock already in the Accra store as stock units with status _In store_, with photos.
+- [ ] Owner works through the **Getting started** checklist on the dashboard and reads the **Guide** in the admin panel.
 - [ ] Train staff with `docs/STAFF_GUIDE.md`: one shipment check-in and three or four sales each, on the real site.
 - [ ] Share the link with family, friends and regular customers only. Ask them to browse on their phones and make one request.
 - [ ] Each evening, compare the day's sales screen with the till or notebook.

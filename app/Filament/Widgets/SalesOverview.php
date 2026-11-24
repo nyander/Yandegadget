@@ -23,6 +23,16 @@ class SalesOverview extends StatsOverviewWidget
 
     protected static ?int $sort = 1;
 
+    /**
+     * Two across until each card has room for figures like GH₵1,234,567, then four.
+     *
+     * @return array<string, int>
+     */
+    protected function getColumns(): array
+    {
+        return ['@lg' => 2, '@4xl' => 4, '!@md' => 2, '!@xl' => 4];
+    }
+
     protected function getStats(): array
     {
         $report = app(SalesReport::class);

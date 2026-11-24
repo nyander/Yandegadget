@@ -139,6 +139,9 @@
     .yg-stat dd.yg-stat__text { font-size: 1rem; }
     .yg-stat dd.yg-neg { color: var(--yg-negative); }
     .yg-stat__note { display: block; margin-top: .1rem; font-size: .72rem; color: var(--yg-muted); }
+    /* Dashboard figures: shrink a little in a narrow card rather than spill out of it. */
+    .fi-wi-stats-overview-stat { container-type: inline-size; min-width: 0; }
+    .fi-wi-stats-overview-stat-value { font-size: clamp(1.25rem, 14cqi, 1.875rem); overflow-wrap: anywhere; }
     /* "?" explanations on report lines (x-yg-explain). */
     .yg-explain-label { display: inline-flex; align-items: center; gap: .3rem; }
     .yg-explain { display: inline-flex; vertical-align: middle; margin-left: .3rem; padding: .1rem; border-radius: 999px; color: var(--yg-muted); cursor: help; transition: color .15s; text-transform: none; letter-spacing: normal; }

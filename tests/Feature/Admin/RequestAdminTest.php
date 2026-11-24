@@ -9,6 +9,8 @@ use App\Enums\Role;
 use App\Enums\StockStatus;
 use App\Filament\Pages\ShopSettings as ShopSettingsPage;
 use App\Filament\Resources\ProductRequests\Pages\ListProductRequests;
+use App\Filament\Resources\ProductRequests\Pages\ViewProductRequest;
+use App\Filament\Resources\ProductRequests\ProductRequestResource;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\ExchangeRate;
@@ -118,5 +120,44 @@ class RequestAdminTest extends TestCase
         $this->get('/terms')->assertInertia(fn (Assert $page) => $page
             ->where('cancellationFeePercent', 20)
             ->where('collectionDays', 10));
+    }
+
+    public function test_admin_opens_a_request_and_declines_it_with_a_full_refund(): void
+    {
+        config(['services.payments.driver' => 'fake']);
+        ExchangeRate::create(['base_currency' => 'GBP', 'quote_currency' => 'GHS', 'rate' => '15.000000', 'effective_at' => now()->subDay()]);
+        $admin = User::factory()->create()->assignRole(Role::Admin->value);
+        $customer = User::factory()->create()->assignRole(Role::Customer->value);
+        $service = app(ProductRequestService::class);
+        $request = $service->create($customer, [
+            'category_id' => Category::where('slug', 'phones')->value('id'),
+            'condition_id' => Condition::where('grade', 'B')->value('id'),
+            'description' => 'Pixel 8',
+            'notes' => 'Black if possible',
+        ]);
+        $service->depositPaid($request);
+
+        $this->actingAs($admin);
+        Filament::setCurrentPanel('admin');
+
+        $this->get(ProductRequestResource::getUrl('view', ['record' => $request]))
+            ->assertOk()
+            ->assertSee(['Pixel 8', 'Black if possible', $customer->email, 'Looking for it', 'Match an item', 'Decline']);
+
+        Livewire::test(ViewProductRequest::class, ['record' => $request->getRouteKey()])
+            ->assertActionVisible('match')
+            ->assertActionVisible('decline')
+            ->callAction('decline', ['reason' => 'We could not find one'])
+            ->assertHasNoFormErrors();
+
+        $request->refresh();
+        $this->assertSame(RequestStatus::Cancelled, $request->status);
+        $this->assertSame(CancellationCause::Shop, $request->cancelled_by);
+        $this->assertSame('We could not find one', $request->cancel_reason);
+
+        Livewire::test(ViewProductRequest::class, ['record' => $request->getRouteKey()])
+            ->assertActionHidden('match')
+            ->assertActionHidden('decline')
+            ->assertSee('Cancelled by the shop');
     }
 }

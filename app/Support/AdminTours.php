@@ -99,7 +99,11 @@ class AdminTours
             'resources.product-requests.index' => [
                 [null, 'Customer requests', 'Customers asking you to find something, with a deposit paid. '.$guide('requests', 'Read more')],
                 [self::FILTERS, 'Filter by status', 'Show only the ones you\'re still looking for.'],
-                [self::ROW_ACTIONS, 'Match or cancel', '<strong>Match an item</strong> when you\'ve found one: it\'s reserved and the customer is told. <strong>Cancel</strong> shows the refund before you confirm.'],
+                ['.fi-ta-row', 'Open a request', '<strong>Click a request</strong> to see everything about it, with the next step as buttons at the top.'],
+            ],
+            'resources.product-requests.view' => [
+                [null, 'One request', 'What the customer wants, their details, the deposit, the item found for them and what\'s happened so far.'],
+                [self::HEADER_ACTIONS, 'What to do next', '<strong>Match an item</strong> when you\'ve found one: it\'s reserved and the customer is told. <strong>Decline</strong> if you can\'t get it: they get all of the deposit back. <strong>Cancel</strong> is for when the customer changes their mind, and shows the refund before you confirm.'],
             ],
             'resources.sales.index' => [
                 [null, 'Sales', 'Every sale staff recorded in the store, with the price, the lowest allowed price and the rate on the day.'],

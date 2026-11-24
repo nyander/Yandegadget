@@ -108,7 +108,7 @@ class OwnerGuideTest extends TestCase
         $this->get('/admin/product-requests')
             ->assertOk()
             ->assertSee('id="yg-tour-data"', false)
-            ->assertSee('Match or cancel')
+            ->assertSee('Open a request')
             ->assertSee('Show me around this page')
             ->assertSee('Tips on each page');
 

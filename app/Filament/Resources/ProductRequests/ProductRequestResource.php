@@ -7,21 +7,29 @@ use App\Enums\RequestStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\RequestRuleViolation;
 use App\Filament\Resources\ProductRequests\Pages\ListProductRequests;
+use App\Filament\Resources\ProductRequests\Pages\ViewProductRequest;
+use App\Filament\Resources\StockUnits\StockUnitResource;
 use App\Models\ProductRequest;
 use App\Models\StockUnit;
 use App\Models\User;
 use App\Services\Payments\GatewayException;
 use App\Services\ProductRequestService;
 use App\Services\RefundPolicy;
+use App\Services\ShopSettings;
 use BackedEnum;
 use Brick\Money\Money;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -77,15 +85,113 @@ class ProductRequestResource extends Resource
                     ->default([RequestStatus::Open->value, RequestStatus::Sourced->value, RequestStatus::ReadyForCollection->value]),
                 SelectFilter::make('category')->relationship('category', 'name'),
             ])
+            ->recordUrl(fn (ProductRequest $record) => self::getUrl('view', ['record' => $record]))
             ->recordActions([
                 ActionGroup::make([
+                    ViewAction::make()->label('Open'),
                     self::matchAction(),
+                    self::declineAction(),
                     self::cancelAction(),
                 ]),
             ]);
     }
 
-    private static function matchAction(): Action
+    public static function infolist(Schema $schema): Schema
+    {
+        $date = fn (string $name, string $label) => TextEntry::make($name)->label($label)->dateTime('j M Y, H:i')->placeholder('Not yet');
+
+        return $schema->columns(1)->components([
+            Grid::make(['default' => 1, 'lg' => 3])->schema([
+                Section::make('What they want')
+                    ->icon(Heroicon::OutlinedMagnifyingGlass)
+                    ->columnSpan(['lg' => 2])
+                    ->columns(2)
+                    ->schema([
+                        TextEntry::make('description')->label('Item')->weight('bold')->columnSpanFull(),
+                        TextEntry::make('category.name')->label('Category'),
+                        TextEntry::make('condition.name')->label('Lowest condition they\'ll accept')
+                            ->formatStateUsing(fn (ProductRequest $record) => "Grade {$record->condition->grade} · {$record->condition->name}")
+                            ->helperText(fn (ProductRequest $record) => $record->condition->description ?? null),
+                        TextEntry::make('notes')->label('Their notes')->placeholder('No notes')->columnSpanFull(),
+                    ]),
+                Section::make('Status')
+                    ->icon(Heroicon::OutlinedFlag)
+                    ->columnSpan(1)
+                    ->schema([
+                        TextEntry::make('status')->hiddenLabel()->badge()->size('lg'),
+                        TextEntry::make('next')->hiddenLabel()->state(fn (ProductRequest $record) => self::nextStep($record))->color('gray'),
+                        TextEntry::make('cancel_reason')->label('Why it was cancelled')
+                            ->visible(fn (ProductRequest $record) => $record->status === RequestStatus::Cancelled)
+                            ->helperText(fn (ProductRequest $record) => match ($record->cancelled_by) {
+                                CancellationCause::Shop => 'Cancelled by the shop',
+                                CancellationCause::Customer => 'Cancelled by the customer',
+                                default => null,
+                            })
+                            ->placeholder('No reason given'),
+                    ]),
+            ]),
+            Grid::make(['default' => 1, 'lg' => 3])->schema([
+                Section::make('Customer')
+                    ->icon(Heroicon::OutlinedUser)
+                    ->schema([
+                        TextEntry::make('customer.name')->label('Name'),
+                        TextEntry::make('customer.email')->label('Email')->copyable()
+                            ->url(fn (ProductRequest $record) => 'mailto:'.$record->customer->email),
+                    ]),
+                Section::make('Deposit')
+                    ->icon(Heroicon::OutlinedBanknotes)
+                    ->schema([
+                        TextEntry::make('deposit_paid')->label('Amount')
+                            ->state(fn (ProductRequest $record) => ($record->latestPayment === null ? $record->deposit : $record->latestPayment->money)->formatToLocale((string) config('shop.display_locale')))
+                            ->helperText(fn (ProductRequest $record) => $record->latestPayment === null ? 'Not paid yet' : $record->latestPayment->status->getLabel()),
+                        TextEntry::make('refunded')->label('Refunded')
+                            ->visible(fn (ProductRequest $record) => $record->latestPayment !== null && $record->latestPayment->refunded_amount > 0)
+                            ->state(fn (ProductRequest $record) => $record->latestPayment === null ? null
+                                : Money::ofMinor($record->latestPayment->refunded_amount, $record->latestPayment->currency)->formatToLocale((string) config('shop.display_locale'))),
+                    ]),
+                Section::make('Item found for them')
+                    ->icon(Heroicon::OutlinedCube)
+                    ->schema([
+                        TextEntry::make('stockUnit.reference')->label('Stock unit')
+                            ->placeholder('Nothing matched yet')
+                            ->url(fn (ProductRequest $record) => $record->stockUnit === null ? null : StockUnitResource::getUrl('edit', ['record' => $record->stockUnit]))
+                            ->color('primary'),
+                        TextEntry::make('stockUnit.product.name')->label('Product')
+                            ->visible(fn (ProductRequest $record) => $record->stockUnit !== null),
+                        TextEntry::make('stockUnit.status')->label('Where it is')->badge()
+                            ->visible(fn (ProductRequest $record) => $record->stockUnit !== null),
+                    ]),
+            ]),
+            Section::make('What\'s happened')
+                ->icon(Heroicon::OutlinedClock)
+                ->columns(['default' => 2, 'lg' => 3])
+                ->schema([
+                    $date('created_at', 'Asked'),
+                    $date('paid_at', 'Deposit paid'),
+                    $date('sourced_at', 'Item found'),
+                    $date('ready_at', 'Ready in store'),
+                    $date('fulfilled_at', 'Collected'),
+                    $date('cancelled_at', 'Cancelled')->visible(fn (ProductRequest $record) => $record->cancelled_at !== null),
+                ]),
+        ]);
+    }
+
+    /** One plain sentence on what to do next, for the list and the details page. */
+    public static function nextStep(ProductRequest $request): string
+    {
+        $days = app(ShopSettings::class)->collectionDays();
+
+        return match ($request->status) {
+            RequestStatus::AwaitingDeposit => 'The customer hasn\'t paid the deposit yet. Nothing to do until they do.',
+            RequestStatus::Open => 'Deposit paid. Look for the item, then use Match an item. If you can\'t get it, Decline and the customer gets all of the deposit back.',
+            RequestStatus::Sourced => 'Found and on its way from the UK. It\'s reserved for the customer when staff check it in.',
+            RequestStatus::ReadyForCollection => "Reserved in the store. The customer has {$days} days to collect it; staff sell it to them and the deposit comes off the price.",
+            RequestStatus::Fulfilled => 'Done: the customer bought the item.',
+            RequestStatus::Cancelled => 'Cancelled. Any refund has gone back the way the customer paid.',
+        };
+    }
+
+    public static function matchAction(): Action
     {
         return Action::make('match')
             ->label('Match an item')
@@ -118,7 +224,41 @@ class ProductRequestResource extends Resource
             });
     }
 
-    private static function cancelAction(): Action
+    /** Turn down a request the shop can't supply: a full refund, no fee. */
+    public static function declineAction(): Action
+    {
+        return Action::make('decline')
+            ->label('Decline')
+            ->icon(Heroicon::OutlinedHandThumbDown)
+            ->color('danger')
+            ->visible(fn (ProductRequest $record) => $record->status === RequestStatus::Open)
+            ->modalHeading('Decline this request?')
+            ->modalDescription(fn (ProductRequest $record) => 'Use this when you can\'t get the item. '.self::refundSummary($record, CancellationCause::Shop).' The customer is told by email with your reason.')
+            ->modalSubmitActionLabel('Decline and refund')
+            ->schema([
+                Textarea::make('reason')
+                    ->label('Reason (shown to the customer)')
+                    ->placeholder('For example: we couldn\'t find one in this condition at a fair price.')
+                    ->required()
+                    ->maxLength(500),
+            ])
+            ->action(function (ProductRequest $record, array $data, ProductRequestService $requests): void {
+                /** @var User $user */
+                $user = auth()->user();
+
+                try {
+                    $requests->cancel($record, $user, (string) $data['reason'], CancellationCause::Shop);
+                } catch (RequestRuleViolation|GatewayException $e) {
+                    Notification::make()->danger()->title('Not declined')->body($e->getMessage())->send();
+
+                    return;
+                }
+
+                Notification::make()->success()->title("{$record->reference} declined; the customer has been told")->send();
+            });
+    }
+
+    public static function cancelAction(): Action
     {
         return Action::make('cancel')
             ->label('Cancel')
@@ -181,6 +321,7 @@ class ProductRequestResource extends Resource
     {
         return [
             'index' => ListProductRequests::route('/'),
+            'view' => ViewProductRequest::route('/{record}'),
         ];
     }
 }

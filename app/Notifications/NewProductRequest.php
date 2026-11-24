@@ -59,6 +59,6 @@ class NewProductRequest extends Notification implements ShouldQueue
 
     private function url(): string
     {
-        return ProductRequestResource::getUrl('index', panel: 'admin').'?tableSearch='.urlencode($this->request->reference);
+        return ProductRequestResource::getUrl('view', ['record' => $this->request], panel: 'admin');
     }
 }

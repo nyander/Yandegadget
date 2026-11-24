@@ -25,7 +25,7 @@ class AccountCloser
             $user->syncRoles([]);
             $user->forceFill([
                 'name' => "Closed account #{$user->id}",
-                'email' => "closed-{$user->id}@accounts.invalid",
+                'email' => "closed-{$user->id}".User::CLOSED_EMAIL_DOMAIN,
                 'password' => Str::password(40),
                 'remember_token' => null,
                 'email_verified_at' => null,
@@ -52,6 +52,6 @@ class AccountCloser
 
     public function isClosed(User $user): bool
     {
-        return str_ends_with($user->email, '@accounts.invalid');
+        return $user->isClosed();
     }
 }

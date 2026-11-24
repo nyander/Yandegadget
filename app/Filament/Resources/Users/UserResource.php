@@ -19,6 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Models\Role;
@@ -75,7 +76,7 @@ class UserResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['roles', 'location', 'supplier']))
             ->columns([
                 TextColumn::make('name')->searchable()->sortable()
-                    ->description(fn (User $record) => $record->supplier?->name),
+                    ->description(fn (User $record) => $record->isClosed() ? 'Closed: personal details removed' : $record->supplier?->name),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('roles.name')->label('Roles')->badge()
                     ->formatStateUsing(fn (string $state) => RoleEnum::tryFrom($state)?->label() ?? $state),
@@ -85,6 +86,18 @@ class UserResource extends Resource
                 TextColumn::make('created_at')->label('Joined')->date()->sortable(),
             ])
             ->filters([
+                // Closed accounts stay as anonymous rows (their sales and deposits point to them), out of the way.
+                TernaryFilter::make('closed')
+                    ->label('Closed accounts')
+                    ->placeholder('Show all')
+                    ->trueLabel('Only closed accounts')
+                    ->falseLabel('Hide closed accounts')
+                    ->default(false)
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('email', 'like', '%'.User::CLOSED_EMAIL_DOMAIN),
+                        false: fn (Builder $query) => $query->where('email', 'not like', '%'.User::CLOSED_EMAIL_DOMAIN),
+                        blank: fn (Builder $query) => $query,
+                    ),
                 SelectFilter::make('roles')->relationship('roles', 'name')
                     ->getOptionLabelFromRecordUsing(fn (Role $record) => RoleEnum::tryFrom($record->name)?->label() ?? $record->name),
             ])

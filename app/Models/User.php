@@ -41,6 +41,15 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Pas
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
+    /** Closed accounts get an address on this unreachable domain (App\Services\AccountCloser). */
+    public const CLOSED_EMAIL_DOMAIN = '@accounts.invalid';
+
+    /** Closed on request: personal details removed, kept for its sales and deposits. */
+    public function isClosed(): bool
+    {
+        return str_ends_with($this->email, self::CLOSED_EMAIL_DOMAIN);
+    }
+
     /**
      * The /admin back office is for people who run the business. Staff, customers
      * and suppliers use the React app.

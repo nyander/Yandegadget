@@ -5,6 +5,7 @@ namespace Tests\Feature\Launch;
 use App\Enums\PaymentMethod;
 use App\Enums\Role;
 use App\Enums\StockStatus;
+use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Models\ExchangeRate;
 use App\Models\StockUnit;
 use App\Models\User;
@@ -16,6 +17,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia as Assert;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class LaunchReadinessTest extends TestCase
@@ -143,5 +145,22 @@ class LaunchReadinessTest extends TestCase
 
         $this->expectException(DomainException::class);
         $closer->close($admin, $admin);
+    }
+
+    public function test_closed_accounts_are_hidden_from_the_users_list_unless_asked_for(): void
+    {
+        $admin = User::factory()->create()->assignRole(Role::Admin->value);
+        $staying = User::factory()->create(['name' => 'Kofi Boateng'])->assignRole(Role::Customer->value);
+        $leaving = User::factory()->create()->assignRole(Role::Customer->value);
+        app(AccountCloser::class)->close($leaving, $admin);
+        $this->actingAs($admin);
+
+        Livewire::test(ListUsers::class)
+            ->assertCanSeeTableRecords([$staying, $admin])
+            ->assertCanNotSeeTableRecords([$leaving])
+            ->filterTable('closed', true)
+            ->assertCanSeeTableRecords([$leaving])
+            ->assertCanNotSeeTableRecords([$staying])
+            ->assertSee('Closed: personal details removed');
     }
 }

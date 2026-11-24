@@ -21,7 +21,7 @@ Open their account and remove their roles, so they can't do anything when they s
 
 ## A customer asks you to delete their data
 
-Open their account and use **Close account**. Their name, email and sign-in are removed for good. Their past sales and deposits stay in your records, without their name. The privacy policy promises a reply within 21 days.
+Open their account and use **Close account**. Their name, email and sign-in are removed for good. Their past sales and deposits stay in your records, without their name. The account then disappears from the **Users** list; to see closed accounts, use the filter and choose **Only closed accounts**. Accounts are closed rather than deleted so your sales and deposit records still add up. The privacy policy promises a reply within 21 days.
 
 ## Keeping accounts safe
 

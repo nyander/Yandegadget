@@ -31,7 +31,9 @@ class EditUser extends EditRecord
                     $admin = auth()->user();
                     app(AccountCloser::class)->close($record, $admin);
 
-                    Notification::make()->success()->title('Account closed')->send();
+                    Notification::make()->success()->title('Account closed')
+                        ->body('It\'s hidden from the list now. Filter by "Closed accounts" to see it.')
+                        ->send();
                     $this->redirect(UserResource::getUrl('index'));
                 }),
         ];

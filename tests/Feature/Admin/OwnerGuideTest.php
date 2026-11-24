@@ -103,6 +103,19 @@ class OwnerGuideTest extends TestCase
         }
     }
 
+    public function test_every_panel_tour_has_a_panel_marked_for_it(): void
+    {
+        $sources = collect([...glob(resource_path('views/filament/widgets/*.blade.php')) ?: [], ...glob(app_path('Filament/Widgets/*.php')) ?: []])
+            ->map(fn (string $path) => (string) file_get_contents($path))
+            ->implode("\n");
+
+        foreach (array_keys(app(AdminTours::class)->panels()) as $key) {
+            $this->assertMatchesRegularExpression('/data-tour-panel[\'"]?\s*(=>|=)\s*[\'"]'.preg_quote($key, '/').'[\'"]/', $sources, "Nothing is marked data-tour-panel=\"{$key}\".");
+        }
+
+        $this->get('/admin/product-requests')->assertSee('what-sold-details');
+    }
+
     public function test_pages_with_a_tour_send_its_steps_and_offer_it_in_the_help_menu(): void
     {
         $this->get('/admin/product-requests')

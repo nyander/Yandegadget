@@ -5,6 +5,7 @@ namespace App\Filament\Pages\Reports;
 use App\Filament\Support\ReportPeriod;
 use App\Reports\Statement;
 use App\Services\Reports\BalanceSheetReport;
+use App\Support\ReportGlossary;
 use BackedEnum;
 use Carbon\CarbonImmutable;
 use Filament\Forms\Components\DatePicker;
@@ -22,6 +23,11 @@ class BalanceSheet extends StatementPage
     public function mount(): void
     {
         $this->form->fill(['as_of' => today()->toDateString()]);
+    }
+
+    public function getSubheading(): string
+    {
+        return ReportGlossary::PAGES['balance-sheet'].' Hover over or tap a ? to see what a line means.';
     }
 
     public function form(Schema $schema): Schema

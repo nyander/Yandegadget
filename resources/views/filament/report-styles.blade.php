@@ -139,4 +139,13 @@
     .yg-stat dd.yg-stat__text { font-size: 1rem; }
     .yg-stat dd.yg-neg { color: var(--yg-negative); }
     .yg-stat__note { display: block; margin-top: .1rem; font-size: .72rem; color: var(--yg-muted); }
+    /* "?" explanations on report lines (x-yg-explain). */
+    .yg-explain-label { display: inline-flex; align-items: center; gap: .3rem; }
+    .yg-explain { display: inline-flex; vertical-align: middle; margin-left: .3rem; padding: .1rem; border-radius: 999px; color: var(--yg-muted); cursor: help; transition: color .15s; text-transform: none; letter-spacing: normal; }
+    .yg-explain-label .yg-explain { margin-left: 0; }
+    .yg-explain:hover, .yg-explain:focus-visible { color: var(--yg-link); }
+    .yg-explain:focus-visible { outline: 2px solid var(--yg-link); outline-offset: 1px; }
+    .yg-explain__icon { width: 1rem; height: 1rem; }
+    .yg-explain__tip { display: grid; gap: .45rem; padding: .2rem 0; text-align: left; font-size: .8rem; line-height: 1.45; font-weight: 400; }
+    .yg-explain__tip strong { display: block; font-size: .68rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; opacity: .7; }
 </style>

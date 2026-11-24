@@ -3,7 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Services\Reports\SalesReport;
+use App\Support\ReportGlossary;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Contracts\Support\Htmlable;
 
 class SalesTrendChart extends ChartWidget
 {
@@ -14,7 +16,10 @@ class SalesTrendChart extends ChartWidget
 
     protected static ?int $sort = 2;
 
-    protected ?string $heading = 'Last 12 months';
+    public function getHeading(): string|Htmlable|null
+    {
+        return app(ReportGlossary::class)->label('Last 12 months', 'dashboard:trend');
+    }
 
     protected ?string $description = 'Sales and gross profit per month, in cedis';
 

@@ -19,7 +19,7 @@ Customers only ever see the website.
 
 ## Help on every page
 
-The first time you open a page, a short tour points out its parts, one pop-up at a time. Use **Next** and **Back** to move through it, or **Skip tour** to stop.
+The first time you open a page, a short tour points out its parts, one pop-up at a time. Use **Next** and **Back** to move through it, or **Skip tour** to stop. The tour follows what you do: if you open a panel, for example the details behind a row on the dashboard, the tour explains that panel, then carries on where you left off when you close it.
 
 To see a tour again, or to turn the tours off, click the **lifebuoy** button at the top right, next to the bell. It also opens this guide.
 

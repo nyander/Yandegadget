@@ -5,6 +5,7 @@ namespace App\Filament\Pages\Reports;
 use App\Filament\Support\ReportPeriod;
 use App\Reports\Statement;
 use App\Services\Reports\IncomeStatementReport;
+use App\Support\ReportGlossary;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Schema;
@@ -23,6 +24,11 @@ class IncomeStatement extends StatementPage
         [$from, $to] = ReportPeriod::from(null);
 
         $this->form->fill(['from' => $from->toDateString(), 'to' => $to->toDateString()]);
+    }
+
+    public function getSubheading(): string
+    {
+        return ReportGlossary::PAGES['income-statement'].' Hover over or tap a ? to see what a line means.';
     }
 
     public function form(Schema $schema): Schema

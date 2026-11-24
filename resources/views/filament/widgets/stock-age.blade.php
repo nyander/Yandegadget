@@ -1,6 +1,6 @@
 @php use App\Reports\StatementLine; @endphp
 <x-filament-widgets::widget>
-    <x-filament::section data-tour="stock-age" heading="Stock age" description="Items in store or reserved, by days since they arrived. Amounts at cost, in whole cedis. Click a row to see the items.">
+    <x-filament::section data-tour="stock-age" :heading="app(\App\Support\ReportGlossary::class)->label('Stock age', 'dashboard:stock-age')" description="Items in store or reserved, by days since they arrived. Amounts at cost, in whole cedis. Click a row to see the items.">
         <div class="yg-panel">
             <table class="yg-table">
                 <thead>

@@ -21,7 +21,7 @@ class AdminTours
     private const TABLE = '.fi-ta';
 
     /**
-     * @return array{key: string, steps: list<array{element: string|null, title: string, text: string}>}|null
+     * @return array{key: string, steps: list<array{element: string|null, title: string, text: string}>, panels: array<string, list<array{element: string|null, title: string, text: string}>>}|null
      */
     public function forRoute(?string $route): ?array
     {
@@ -38,11 +38,48 @@ class AdminTours
 
         return [
             'key' => $key,
-            'steps' => array_map(fn (array $step) => [
-                'element' => $step[0],
-                'title' => $step[1],
-                'text' => $step[2],
-            ], $steps),
+            'steps' => $this->format($steps),
+            'panels' => array_map(fn (array $panel) => $this->format($panel), $this->panels()),
+        ];
+    }
+
+    /**
+     * @param  list<array{0: string|null, 1: string, 2: string}>  $steps
+     * @return list<array{element: string|null, title: string, text: string}>
+     */
+    private function format(array $steps): array
+    {
+        return array_map(fn (array $step) => [
+            'element' => $step[0],
+            'title' => $step[1],
+            'text' => $step[2],
+        ], $steps);
+    }
+
+    /**
+     * Tips for panels and pop-ups, keyed by their data-tour-panel attribute.
+     * They show the first time a panel opens, and whenever it opens during a
+     * page tour (which then carries on when the panel closes). Selectors are
+     * looked up inside the panel.
+     *
+     * @return array<string, list<array{0: string|null, 1: string, 2: string}>>
+     */
+    public function panels(): array
+    {
+        return [
+            'what-sold-details' => [
+                ['[data-tour="panel-suggestion"]', 'The suggestion', 'Whether to buy more, hold off or buy carefully, and why. It aims for about two months of stock, counting what\'s already on the way.'],
+                ['[data-tour="panel-figures"]', 'The figures', 'How much these made, how fast they sell, and how many you already have in the store, on the way or on your buying list.'],
+                ['[data-tour="panel-best-sellers"]', 'Best sellers', 'What sold most, with what you paid in the UK on average: a good price to beat on your next trip.'],
+                ['.fi-modal-footer-actions', 'Add to buying list', '<strong>Add to buying list</strong> saves the best seller to your list, already filled in. <strong>Close</strong> takes you back to where you were.'],
+            ],
+            'stock-age-details' => [
+                ['[data-tour="panel-advice"]', 'What to do', 'Advice for stock of this age, for example when to lower a price.'],
+                ['[data-tour="panel-items"]', 'The items', 'Oldest first. Click a reference to open the item, for example to change its price.'],
+            ],
+            'add-to-buying-list' => [
+                ['.fi-modal-content', 'Add to buying list', 'Filled in from the sales you were looking at: the best seller, how many to buy, and the most to pay for each in the UK. Change anything, then click <strong>Add to list</strong>.'],
+            ],
         ];
     }
 
@@ -133,13 +170,18 @@ class AdminTours
             ],
             'pages.income-statement' => [
                 [null, 'Income statement', 'Your profit for a period: sales, minus what the items cost, minus shipping, wages and expenses.'],
-                ['[data-tour="dates"]', 'Choose the dates', 'The statement updates as you change them.'],
-                ['.yg-statement', 'Reading it', '<strong>Gross profit</strong> is sales minus item costs. <strong>Net profit</strong> is what\'s left after everything else. Negative numbers are red, in brackets.'],
+                ['[data-tour="dates"]', 'Choose the dates', 'The statement updates as you change them. <strong>Today</strong> next to a date jumps to today.'],
+                ['.yg-statement__header', 'Reading it', 'Read from the top: sales, then what the items cost, then other income and expenses. Negative numbers are red, in brackets.'],
+                ['[data-tour="total-gross-profit"]', 'Gross profit', 'Sales minus what the items cost you in the UK.'],
+                ['[data-tour="total-net-profit"]', 'Net profit', 'What\'s left after shipping, wages and every other expense. This is the number to watch.'],
                 [self::HEADER_ACTIONS, 'Download', 'Save it as a PDF for your records, or a CSV to open in Excel.'],
             ],
             'pages.balance-sheet' => [
                 [null, 'Balance sheet', 'What the business owns and owes on a given day.'],
-                ['.yg-statement', 'Reading it', 'Stock, deposits held and profit to date are worked out for you; the rest comes from the ledger. Until your opening balances are entered, a line shows what isn\'t explained yet.'],
+                ['[data-tour="dates"]', 'Pick the day', 'The balance sheet is for the end of this day. <strong>Today</strong> jumps to today.'],
+                ['.yg-statement__header', 'Reading it', 'What you own (assets) comes first, then what you owe (liabilities), then equity. Stock, customer deposits and profit to date are worked out for you; the rest comes from the ledger.'],
+                ['[data-tour="total-net-assets"]', 'Net assets', 'What you own minus what you owe: what the business is worth on paper.'],
+                ['[data-tour="unexplained"]', 'Not yet explained', 'The gap between net assets and equity. It\'s usually opening balances (cash in hand, money put into the business) that haven\'t been entered in the ledger yet. Once they are, this line goes away.'],
                 [self::HEADER_ACTIONS, 'Download', 'PDF or CSV.'],
             ],
             'resources.exchange-rates.index' => [

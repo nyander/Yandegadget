@@ -3,9 +3,9 @@
     use App\Filament\Resources\StockUnits\StockUnitResource;
     use App\Reports\StatementLine;
 @endphp
-<div class="yg-details">
+<div class="yg-details" data-tour-panel="stock-age-details">
     @if ($band['advice'])
-        <div @class(['yg-callout', 'is-hold' => str_starts_with($band['advice'], 'Recently'), 'is-careful' => ! str_starts_with($band['advice'], 'Recently')])>
+        <div @class(['yg-callout', 'is-hold' => str_starts_with($band['advice'], 'Recently'), 'is-careful' => ! str_starts_with($band['advice'], 'Recently')]) data-tour="panel-advice">
             <x-filament::icon icon="heroicon-o-light-bulb" class="yg-callout__icon" />
             <p>{{ $band['advice'] }}</p>
         </div>
@@ -24,7 +24,7 @@
     </dl>
 
     @if (count($band['items']) > 0)
-        <div class="yg-panel">
+        <div class="yg-panel" data-tour="panel-items">
             <table class="yg-table">
                 <thead>
                     <tr><th scope="col">Item</th><th scope="col">Days</th><th scope="col">Cost</th><th scope="col">Listed at</th></tr>

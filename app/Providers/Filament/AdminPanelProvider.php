@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,6 +22,21 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        // Every date box gets a "Today" link beside its label.
+        DatePicker::configureUsing(fn (DatePicker $picker) => $picker->hintAction(
+            Action::make('today')
+                ->label('Today')
+                ->link()
+                ->visible(fn () => ! $picker->isDisabled())
+                ->action(function () use ($picker): void {
+                    $picker->state(today()->toDateString());
+                    $picker->callAfterStateUpdated();
+                }),
+        ));
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel

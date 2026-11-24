@@ -5,8 +5,8 @@
     $cedis = fn ($money) => 'GH₵'.StatementLine::format($money, true);
     $tone = $insights['suggestion']['tone'];
 @endphp
-<div class="yg-details">
-    <div @class(['yg-callout', 'is-'.$tone])>
+<div class="yg-details" data-tour-panel="what-sold-details">
+    <div @class(['yg-callout', 'is-'.$tone]) data-tour="panel-suggestion">
         <x-filament::icon
             :icon="match ($tone) { 'buy' => 'heroicon-o-shopping-cart', 'careful' => 'heroicon-o-exclamation-triangle', default => 'heroicon-o-pause-circle' }"
             class="yg-callout__icon"
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <dl class="yg-stats">
+    <dl class="yg-stats" data-tour="panel-figures">
         <div class="yg-stat"><dt>Items sold</dt><dd>{{ $insights['units'] }}</dd></div>
         <div class="yg-stat"><dt>Sales</dt><dd>{{ $cedis($insights['revenue']) }}</dd></div>
         <div class="yg-stat">
@@ -36,7 +36,7 @@
     </dl>
 
     @if (count($insights['bestSellers']) > 0)
-        <div class="yg-panel">
+        <div class="yg-panel" data-tour="panel-best-sellers">
             <table class="yg-table">
                 <caption>Best sellers</caption>
                 <thead>

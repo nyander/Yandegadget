@@ -201,6 +201,7 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
             ->icon(Heroicon::OutlinedClipboardDocumentList)
             ->model(BuyingListItem::class)
             ->modalHeading('Add to buying list')
+            ->extraModalWindowAttributes(['data-tour-panel' => 'add-to-buying-list'])
             ->modalDescription('For your next UK buying trip. You can change everything before saving.')
             ->modalSubmitActionLabel('Add to list')
             ->createAnother(false)

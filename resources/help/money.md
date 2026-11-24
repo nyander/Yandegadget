@@ -30,6 +30,8 @@ Under **Reports**:
 - **Income statement** — for the dates you choose: sales, minus what the items cost, gives your **gross profit**. Then minus shipping, wages and expenses gives your **net profit**.
 - **Balance sheet** — on a given day: what the business owns (cash, stock, equipment) and owes (loans, deposits held).
 
+Not sure what a line means? Hover over the **?** next to it (or tap it on a tablet). It says what the line is, where the number comes from, and why it matters. The dashboard figures have one too.
+
 Negative numbers are **red, in brackets**. Both download as **PDF** or **CSV** (for Excel).
 
 The balance sheet only adds up once your opening balances are in the ledger. Until then it shows a line called **Not yet explained by the ledger**.

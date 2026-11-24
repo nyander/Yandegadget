@@ -11,7 +11,19 @@ Everyone who signs in has a role:
 
 ## Adding staff or suppliers
 
-Go to **Settings → Users → Add a person**. Enter their name and email, choose the role and, for staff, their store. They get an email with a link to set their own password. You never need to know anyone's password.
+Go to **Settings → Users → Add a person**. Enter their name and email, choose the role and, for staff, their store. Then choose how they get their password:
+
+- **Email them a link to choose their own** — the best way. You never need to know their password.
+- **Set one now and tell them** — for staff who don't easily get email. Type a password, or click **Generate** for a strong one that's easy to read out (like `Kp7m-Xq3r-Tz9w`). Click the copy button, then give it to them in person or by phone, never by email or text message.
+
+## Passwords
+
+Open someone under **Settings → Users**:
+
+- **Email a password link** — sends them the same email as "Forgot password". Their old password keeps working until they choose a new one.
+- **Set password** — type or **Generate** a new password and tell them it. They're signed out on their other devices and get an email saying the shop changed their password (the email doesn't include it).
+
+Anyone can change their own password later under **Settings → Password** on the main site. To change yours, use that page too, not **Set password**.
 
 Customers sign themselves up on the website.
 

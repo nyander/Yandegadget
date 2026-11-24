@@ -116,22 +116,23 @@ class AdminTours
             'resources.products.edit' => [
                 [null, 'Editing a product', 'Change what customers see: name, description, photos and whether it\'s on the website.'],
                 ['.fi-sc-form', 'Product details', 'Turn off <strong>Published</strong> to hide it from the website. <strong>Featured</strong> puts it on the home page.'],
-                ['.fi-resource-relation-manager', 'Stock units', 'Each physical item you own. Use <strong>Add unit</strong> for one you\'ve bought: its condition, cost and list price in pounds. Choose <strong>In store</strong> if it\'s already in Accra.'],
+                ['.fi-resource-relation-manager', 'Stock units', 'Each physical item you own. Use <strong>Add unit</strong> for one you\'ve bought: its condition, cost and list price in pounds. Bought a batch of the same thing? <strong>Add several</strong> records them all at once, each with its own reference.'],
             ],
             'resources.stock-units.index' => [
                 [null, 'Stock units', 'Every physical item, one row each, with its status: in the UK, in transit, in store, reserved or sold. '.$guide('stock', 'Read more')],
+                [self::HEADER_ACTIONS, 'Add items', '<strong>Add several</strong> records a batch of the same product bought together: same grade, cost and price, with a serial number each if they have one.'],
                 [self::FILTERS, 'Filter the list', 'Show only items in the store, in transit, and so on.'],
                 [self::ROW_ACTIONS, 'Change an item', 'Edit its price or condition, or use <strong>Move</strong> to write off something lost or broken.'],
             ],
             'resources.shipments.index' => [
                 [null, 'Shipments', 'Boxes of items sent from the UK to Accra. '.$guide('shipments', 'Read more')],
                 [self::HEADER_ACTIONS, 'Start a shipment', 'Create one, then add the items going in the boxes.'],
-                [self::TABLE, 'Your shipments', 'Draft ones are still being packed. In-transit ones are on the way. Received ones have been checked in by staff.'],
+                [self::TABLE, 'Your shipments', 'Draft ones are still being packed. In-transit ones are on the way: <strong>Track</strong> opens the carrier\'s tracking page. Received ones have been checked in by staff.'],
             ],
             'resources.shipments.edit' => [
                 [null, 'A shipment', 'Add items while it\'s a draft, then dispatch it when it leaves.'],
                 ['.fi-resource-relation-manager', 'Items in the boxes', 'Use <strong>Add items</strong> to choose what\'s going. Only items bought in the UK and not already on a shipment can be added.'],
-                [self::HEADER_ACTIONS, 'Dispatch', 'When it leaves, click <strong>Dispatch</strong> and enter the carrier, cost and date. Staff in Accra are told it\'s coming.'],
+                [self::HEADER_ACTIONS, 'Dispatch and track', 'When it leaves, click <strong>Dispatch</strong> and enter the carrier, tracking number, cost and date. Staff in Accra are told it\'s coming. Then <strong>Track</strong> opens the carrier\'s page for it.'],
             ],
             'resources.product-requests.index' => [
                 [null, 'Customer requests', 'Customers asking you to find something, with a deposit paid. '.$guide('requests', 'Read more')],
@@ -200,9 +201,13 @@ class AdminTours
                 ['input[id*="request_collection_reminder_days"]', 'Reminder', 'Customers get an email this many days before their item goes back on sale, so fewer forget to collect.'],
                 ['[data-tour="setting-changes"]', 'Change history', 'Every change, who made it and what it was before.'],
             ],
+            'resources.users.edit' => [
+                [null, 'One person', 'Their name, email, role and store. '.$guide('people', 'Read more')],
+                [self::HEADER_ACTIONS, 'Passwords and closing', '<strong>Set password</strong> sets one for them (<strong>Generate</strong> makes a strong one). <strong>Email a password link</strong> lets them choose their own. <strong>Close account</strong> removes their details if they ask.'],
+            ],
             'resources.users.index' => [
                 [null, 'People', 'Everyone with an account: you, staff, customers and suppliers. '.$guide('people', 'Read more')],
-                [self::HEADER_ACTIONS, 'Add a person', 'For staff and suppliers. They get an email to set their own password.'],
+                [self::HEADER_ACTIONS, 'Add a person', 'For staff and suppliers. Email them a link to choose their password, or set one for them.'],
                 [self::ROW_ACTIONS, 'Change someone', 'Change their role or store. To delete a customer\'s data when they ask, open them and use <strong>Close account</strong>.'],
             ],
         ];

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\WagePeriod;
+use App\Models\Concerns\BroadcastsChanges;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['user_id', 'name', 'location_id', 'rate', 'period', 'starts_on', 'ends_on', 'notes'])]
 class StaffWage extends Model
 {
+    use BroadcastsChanges;
+
     /**
      * @return BelongsTo<User, $this>
      */
@@ -55,5 +58,10 @@ class StaffWage extends Model
             'starts_on' => 'date',
             'ends_on' => 'date',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'finance';
     }
 }

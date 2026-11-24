@@ -15,6 +15,8 @@ export default defineConfig({
                 'resources/js/app.tsx',
                 // Guided tours in the Filament admin panel.
                 'resources/js/admin/tour.ts',
+                // Live updates in the admin panel (Reverb).
+                'resources/js/admin/live.ts',
             ],
             refresh: true,
             fonts: [

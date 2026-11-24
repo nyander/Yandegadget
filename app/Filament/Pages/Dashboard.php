@@ -7,6 +7,7 @@ use App\Filament\Widgets\SalesBreakdown;
 use App\Filament\Widgets\SalesOverview;
 use App\Filament\Widgets\SalesTrendChart;
 use App\Filament\Widgets\StockAge;
+use App\Support\ReportGlossary;
 use Filament\Forms\Components\DatePicker;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
@@ -21,6 +22,11 @@ class Dashboard extends BaseDashboard
     use HasFiltersForm;
 
     protected static ?string $title = 'Dashboard';
+
+    public function getSubheading(): string
+    {
+        return ReportGlossary::PAGES['dashboard'].' Hover over or tap a ? to see what a figure means.';
+    }
 
     public function filtersForm(Schema $schema): Schema
     {

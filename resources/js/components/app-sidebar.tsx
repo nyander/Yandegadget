@@ -21,6 +21,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { tk } from '@/hooks/use-trans';
 import { dashboard, home } from '@/routes';
 import { index as myRequests } from '@/routes/requests';
 import { index as supplierOffers } from '@/routes/supplier/offers';
@@ -33,36 +34,42 @@ export function AppSidebar() {
     const can = (permission: string) => auth.permissions.includes(permission);
 
     const mainNavItems: NavItem[] = [
-        { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+        { title: tk('Account'), href: dashboard(), icon: LayoutGrid },
         ...(can('requests.create') && !can('requests.manage')
             ? [
                   {
-                      title: 'My requests',
+                      title: tk('My requests'),
                       href: myRequests(),
                       icon: PackageSearch,
                   },
               ]
             : []),
         ...(can('supplier-offers.submit')
-            ? [{ title: 'My offers', href: supplierOffers(), icon: Handshake }]
+            ? [
+                  {
+                      title: tk('My offers'),
+                      href: supplierOffers(),
+                      icon: Handshake,
+                  },
+              ]
             : []),
         ...(can('sales.record')
-            ? [{ title: 'Sell', href: staffSell(), icon: Banknote }]
+            ? [{ title: tk('Sell'), href: staffSell(), icon: Banknote }]
             : []),
         ...(can('shipments.receive')
-            ? [{ title: 'Shipments', href: staffShipments(), icon: Truck }]
+            ? [{ title: tk('Shipments'), href: staffShipments(), icon: Truck }]
             : []),
     ];
 
     const footerNavItems: NavItem[] = [
-        { title: 'View the shop', href: home(), icon: Store },
+        { title: tk('View the shop'), href: home(), icon: Store },
         ...(can('catalogue.manage')
-            ? [{ title: 'Admin', href: '/admin', icon: ShieldCheck }]
+            ? [{ title: tk('Admin'), href: '/admin', icon: ShieldCheck }]
             : []),
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" className="vt-sidebar">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

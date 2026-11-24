@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
 use Carbon\CarbonImmutable;
 use Database\Factories\SupplierFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Supplier extends Model
 {
     /** @use HasFactory<SupplierFactory> */
-    use HasFactory;
+    use BroadcastsChanges, HasFactory;
 
     /**
      * @return BelongsTo<User, $this>
@@ -53,5 +54,10 @@ class Supplier extends Model
     public function stockUnits(): HasMany
     {
         return $this->hasMany(StockUnit::class);
+    }
+
+    public function liveTopic(): string
+    {
+        return 'suppliers';
     }
 }

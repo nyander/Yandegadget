@@ -3,6 +3,8 @@
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\SetLocale;
+use App\Support\Locales;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,10 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
+        $middleware->encryptCookies(except: ['appearance', 'sidebar_state', SetLocale::COOKIE]);
 
         // Payment providers post webhooks without a CSRF token; they're verified by signature instead.
         $middleware->preventRequestForgery(except: ['webhooks/*']);
@@ -28,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             HandleAppearance::class,
+            SetLocale::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
@@ -49,8 +53,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $response;
             }
 
+            // Errors can happen before the locale middleware runs (unmatched URLs, expired forms).
+            $locale = $request->cookie(SetLocale::COOKIE);
+            if (is_string($locale) && Locales::supports($locale)) {
+                app()->setLocale($locale);
+            }
+
             if ($status === 419) {
-                Inertia::flash('toast', ['type' => 'error', 'message' => 'Your session expired. Please try again.']);
+                Inertia::flash('toast', ['type' => 'error', 'message' => __('Your session expired. Please try again.')]);
 
                 return back();
             }

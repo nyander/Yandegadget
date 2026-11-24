@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link } from '@inertiajs/react';
 import { CheckCircle2, PackageOpen, Truck } from 'lucide-react';
 import Heading from '@/components/heading';
@@ -12,6 +13,10 @@ type Props = {
 };
 
 export default function StaffShipments({ inTransit, recentlyReceived }: Props) {
+    useLiveRefresh(10, ['inTransit', 'recentlyReceived'], {
+        channel: 'store',
+        topics: ['shipments'],
+    });
     return (
         <>
             <Head title="Shipments" />

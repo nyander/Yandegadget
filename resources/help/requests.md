@@ -4,8 +4,8 @@ When a customer wants something you don't have, they can ask you to find it on t
 
 1. **The customer asks** for an item: what it is, the category and the lowest condition they'll accept.
 2. **They pay a deposit** online with mobile money or card. The amount depends on the condition. You set it per grade under **Catalogue → Conditions**.
-3. **You look for it.** Paid requests appear under **Sales → Customer requests**, and you get a notification.
-4. **You match an item.** When you've bought one, use **Match an item** on the request and pick it. If it's already in the store, it's reserved straight away. If it's still in the UK, it's reserved when staff check it in.
+3. **You look for it.** Paid requests appear under **Sales → Customer requests**, and you get a notification. **Click a request** to open it: what they want, the lowest condition they'll accept, their notes and email, the deposit, and what's happened so far. If you can't get the item, click **Decline** and give a reason; the customer gets all of the deposit back.
+4. **You match an item.** When you've bought one, open the request, click **Match an item** and pick it. If it's already in the store, it's reserved straight away. If it's still in the UK, it's reserved when staff check it in.
 5. **The customer is told** it's ready and has a number of days to collect it.
 6. **They buy it in store.** Staff sell the reserved item; the deposit comes off the price.
 

@@ -21,6 +21,7 @@ use App\Models\ProductRequest;
 use App\Models\Shipment;
 use App\Models\StockUnit;
 use App\Models\User;
+use App\Notifications\CollectionReminder;
 use App\Notifications\NewProductRequest;
 use App\Notifications\ProductRequestUpdated;
 use App\Services\Payments\PaymentGateway;
@@ -342,6 +343,38 @@ class ProductRequestFlowTest extends TestCase
         $this->assertSame(RequestStatus::ReadyForCollection, $recent->fresh()?->status);
         Notification::assertSentTo($this->customer, ProductRequestUpdated::class, fn (ProductRequestUpdated $n) => $n->request->is($late)
             && str_contains((string) $n->toDatabase($this->customer)['body'], 'cancellation fee'));
+    }
+
+    public function test_customers_are_reminded_once_a_few_days_before_their_item_goes_back_on_sale(): void
+    {
+        Notification::fake();
+        $service = app(ProductRequestService::class);
+
+        // 14 days to collect, reminder 3 days before: due on day 11.
+        $due = $this->paidRequest();
+        $service->source($due, StockUnit::factory()->received()->create());
+        $due->forceFill(['ready_at' => now()->subDays(11)])->save();
+
+        $early = $this->paidRequest();
+        $service->source($early, StockUnit::factory()->received()->create());
+        $early->forceFill(['ready_at' => now()->subDays(5)])->save();
+
+        $this->artisan('requests:release-uncollected')->expectsOutputToContain('Reminded 1 customer')->assertSuccessful();
+
+        Notification::assertSentToTimes($this->customer, CollectionReminder::class, 1);
+        Notification::assertSentTo($this->customer, CollectionReminder::class, fn (CollectionReminder $n) => $n->request->is($due)
+            && str_contains((string) $n->toDatabase($this->customer)['body'], '25% of your deposit is kept'));
+        $this->assertNotNull($due->fresh()?->collection_reminded_at);
+        $this->assertNull($early->fresh()?->collection_reminded_at);
+
+        // Only once per request.
+        $this->artisan('requests:release-uncollected')->expectsOutputToContain('Reminded 0 customers');
+        Notification::assertSentToTimes($this->customer, CollectionReminder::class, 1);
+
+        // 0 turns reminders off.
+        app(ShopSettings::class)->set(ShopSettings::COLLECTION_REMINDER_DAYS, 0);
+        $early->forceFill(['ready_at' => now()->subDays(13)])->save();
+        $this->assertSame(0, $service->remindUncollected());
     }
 
     public function test_signed_paystack_webhooks_confirm_payments_once(): void

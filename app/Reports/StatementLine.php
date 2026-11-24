@@ -25,9 +25,11 @@ final readonly class StatementLine
         return self::format($this->amount);
     }
 
-    public static function format(Money $amount): string
+    /** Negatives in brackets. $wholeUnits rounds to whole cedis for compact dashboard tables. */
+    public static function format(Money $amount, bool $wholeUnits = false): string
     {
-        $number = number_format($amount->abs()->getAmount()->toFloat(), $amount->getCurrency()->getDefaultFractionDigits());
+        $decimals = $wholeUnits ? 0 : $amount->getCurrency()->getDefaultFractionDigits();
+        $number = number_format($amount->abs()->getAmount()->toFloat(), $decimals);
 
         return $amount->isNegative() ? "({$number})" : $number;
     }

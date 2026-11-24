@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, PartyPopper } from 'lucide-react';
 import { CheckInCard } from '@/components/staff/check-in-card';
@@ -11,6 +12,10 @@ type Props = {
 };
 
 export default function StaffShipmentShow({ shipment, items }: Props) {
+    useLiveRefresh(5, ['shipment', 'items'], {
+        channel: 'store',
+        topics: ['shipments', 'stock'],
+    });
     const remaining = shipment.items_count - shipment.checked_count;
     const done = shipment.status === 'received';
 
@@ -41,6 +46,19 @@ export default function StaffShipmentShow({ shipment, items }: Props) {
                             ` · Tracking ${shipment.tracking_number}`}
                         {shipment.dispatched_on &&
                             ` · Dispatched ${formatDate(shipment.dispatched_on)}`}
+                        {shipment.tracking_url && (
+                            <>
+                                {' · '}
+                                <a
+                                    href={shipment.tracking_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-brand-green underline-offset-4 hover:underline"
+                                >
+                                    Track
+                                </a>
+                            </>
+                        )}
                     </p>
                     <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
                         <div

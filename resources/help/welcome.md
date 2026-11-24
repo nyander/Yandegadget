@@ -19,10 +19,14 @@ Customers only ever see the website.
 
 ## Help on every page
 
-The first time you open a page, a short tour points out its parts, one pop-up at a time. Use **Next** and **Back** to move through it, or **Skip tour** to stop.
+The first time you open a page, a short tour points out its parts, one pop-up at a time. Use **Next** and **Back** to move through it, or **Skip tour** to stop. The tour follows what you do: if you open a panel, for example the details behind a row on the dashboard, the tour explains that panel, then carries on where you left off when you close it.
 
 To see a tour again, or to turn the tours off, click the **lifebuoy** button at the top right, next to the bell. It also opens this guide.
 
 ## Where to start
 
 Work through [Getting set up](help:first-week). The checklist on your dashboard shows what's left to do.
+
+## Pages keep themselves up to date
+
+You don't need to refresh. If someone else adds to the buying list, a customer pays a deposit, or staff check in a shipment, it appears on your screen by itself, normally within a second. If the connection drops, pages keep checking every few seconds until it's back. Anything you're typing is left alone.

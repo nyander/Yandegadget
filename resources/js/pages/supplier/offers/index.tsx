@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link } from '@inertiajs/react';
 import { ImageOff, PackagePlus, Plus } from 'lucide-react';
 import Heading from '@/components/heading';
@@ -26,6 +27,10 @@ type Props = {
 };
 
 export default function SupplierOffers({ supplier, stats, offers }: Props) {
+    useLiveRefresh(15, ['stats', 'offers'], {
+        channel: 'me',
+        topics: ['supplier-offers'],
+    });
     return (
         <>
             <Head title="My offers" />

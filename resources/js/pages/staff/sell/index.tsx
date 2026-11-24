@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Form, Head, Link } from '@inertiajs/react';
 import { ImageOff, Receipt, Search } from 'lucide-react';
 import Heading from '@/components/heading';
@@ -27,6 +28,10 @@ type Props = {
 };
 
 export default function SellIndex({ search, units, today }: Props) {
+    useLiveRefresh(10, ['units', 'today'], {
+        channel: 'store',
+        topics: ['stock', 'sales', 'rates'],
+    });
     return (
         <>
             <Head title="Sell" />

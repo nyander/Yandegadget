@@ -3,7 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Support\ReportPeriod;
+use App\Providers\Filament\AdminPanelProvider;
 use App\Services\Reports\SalesReport;
+use App\Support\ReportGlossary;
 use Brick\Money\Money;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget;
@@ -17,7 +19,20 @@ class SalesOverview extends StatsOverviewWidget
     /** Loaded with the page, so the dashboard tour can point at it. */
     protected static bool $isLazy = false;
 
+    /** Picks up new sales every 30 seconds (see AdminPanelProvider::DASHBOARD_REFRESH). */
+    protected ?string $pollingInterval = AdminPanelProvider::DASHBOARD_REFRESH;
+
     protected static ?int $sort = 1;
+
+    /**
+     * Two across until each card has room for figures like GH₵1,234,567, then four.
+     *
+     * @return array<string, int>
+     */
+    protected function getColumns(): array
+    {
+        return ['@lg' => 2, '@4xl' => 4, '!@md' => 2, '!@xl' => 4];
+    }
 
     protected function getStats(): array
     {
@@ -26,18 +41,19 @@ class SalesOverview extends StatsOverviewWidget
         $summary = $report->summary($from, $to);
         $stock = $report->stockAge();
 
+        $glossary = app(ReportGlossary::class);
         $margin = $summary['marginPercent'];
         $discount = $summary['averageDiscount'];
 
         return [
-            Stat::make('Sales', self::money($summary['revenue']))
+            Stat::make($glossary->label('Sales', 'dashboard:sales'), self::money($summary['revenue']))
                 ->description($from->format('j M').' – '.$to->format('j M Y')),
-            Stat::make('Gross profit', self::money($summary['profit']))
+            Stat::make($glossary->label('Gross profit', 'dashboard:gross-profit'), self::money($summary['profit']))
                 ->description($margin === null ? 'No sales yet' : number_format($margin, 1).'% margin')
                 ->color($summary['profit']->isNegative() ? 'danger' : 'success'),
-            Stat::make('Items sold', (string) $summary['units'])
+            Stat::make($glossary->label('Items sold', 'dashboard:items-sold'), (string) $summary['units'])
                 ->description($discount === null ? 'No sales yet' : number_format($discount, 1).'% average discount from listed'),
-            Stat::make('In store', (string) $stock['units'])
+            Stat::make($glossary->label('In store', 'dashboard:in-store'), (string) $stock['units'])
                 ->description(self::money($stock['value']).' at cost'.($stock['averageDays'] === null ? '' : ', '.number_format($stock['averageDays'], 0).' days on average')),
         ];
     }

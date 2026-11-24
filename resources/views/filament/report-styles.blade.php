@@ -1,15 +1,58 @@
 {{-- Plain CSS for report pages; the admin panel's Tailwind build doesn't include app classes. --}}
 <style>
-    :root { --yg-link: #047857; --yg-done: #059669; --yg-muted: #6b7280; --yg-rule: #e5e7eb; --yg-strong: #111827; --yg-negative: #dc2626; --yg-warn: #b45309; }
-    .dark { --yg-link: #34d399; --yg-done: #34d399; --yg-muted: #9ca3af; --yg-rule: rgba(255,255,255,.1); --yg-strong: #f9fafb; --yg-negative: #f87171; --yg-warn: #fbbf24; }
+    /* Shared colours for both themes. Light first, then dark (Filament puts .dark on <html>). */
+    :root {
+        --yg-link: #047857; --yg-done: #059669; --yg-muted: #6b7280; --yg-rule: #e5e7eb; --yg-strong: #111827;
+        --yg-negative: #dc2626; --yg-warn: #b45309;
+        --yg-panel: #ffffff; --yg-panel-border: #e5e7eb; --yg-head: #f9fafb; --yg-hover: #f3f4f6;
+        --yg-share: #059669; --yg-share-track: #ecfdf5;
+    }
+    .dark {
+        --yg-link: #34d399; --yg-done: #34d399; --yg-muted: #9ca3af; --yg-rule: rgba(255,255,255,.08); --yg-strong: #f9fafb;
+        --yg-negative: #f87171; --yg-warn: #fbbf24;
+        --yg-panel: rgba(255,255,255,.02); --yg-panel-border: rgba(255,255,255,.1); --yg-head: rgba(255,255,255,.04); --yg-hover: rgba(255,255,255,.05);
+        --yg-share: #34d399; --yg-share-track: rgba(52,211,153,.12);
+    }
     @include('reports.statement-css')
-    .yg-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
-    .yg-table { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; }
-    .yg-table caption { text-align: left; font-weight: 600; padding-bottom: .5rem; }
-    .yg-table th, .yg-table td { padding: .4rem .5rem; border-bottom: 1px solid var(--yg-rule); text-align: right; white-space: nowrap; }
-    .yg-table th:first-child, .yg-table td:first-child { text-align: left; white-space: normal; }
-    .yg-table thead th { font-size: .75rem; font-weight: 500; color: var(--yg-muted); }
-    .yg-table__empty { color: var(--yg-muted); font-style: italic; }
+    .yg-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .yg-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
+    /* What sold: tabs, filters and sort above one roomy table. */
+    .yg-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .yg-toolbar__fields { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
+    .yg-field { display: grid; gap: .3rem; min-width: 10rem; }
+    .yg-field__label { font-size: .75rem; font-weight: 500; color: var(--yg-muted); }
+    .yg-field__row { display: flex; align-items: center; gap: .25rem; }
+    .yg-filters-note { margin: -.25rem 0 .75rem; font-size: .85rem; color: var(--yg-muted); }
+    .yg-is-loading { opacity: .6; transition: opacity .15s; }
+    .yg-table--wide th, .yg-table--wide td { padding-top: .8rem; padding-bottom: .8rem; padding-left: 1rem; padding-right: 1rem; }
+    .yg-table--wide th:first-child, .yg-table--wide td:first-child { padding-left: 1.25rem; width: 28%; min-width: 10rem; }
+    .yg-table--wide th:last-child, .yg-table--wide td:last-child { padding-right: 1.25rem; }
+    .yg-sort { display: inline-flex; align-items: center; gap: .3rem; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; border-radius: .25rem; }
+    .yg-sort:hover, .yg-sort.is-active { color: var(--yg-strong); }
+    .yg-sort:focus-visible { outline: 2px solid var(--yg-link); outline-offset: 2px; }
+    .yg-sort__arrow { width: .9rem; height: .9rem; opacity: .45; }
+    .yg-sort.is-active .yg-sort__arrow { opacity: 1; color: var(--yg-link); }
+    .yg-share-cell { display: inline-flex; align-items: center; justify-content: flex-end; gap: .6rem; }
+    .yg-share-cell .yg-share { width: 5rem; margin: 0; height: 6px; }
+
+    /* Report tables: one look everywhere (What sold, Stock age). Each sits in a panel, rows keep their natural height. */
+    .yg-panel { border: 1px solid var(--yg-panel-border); border-radius: .75rem; background: var(--yg-panel); overflow-x: auto; }
+    .yg-table { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; color: var(--yg-strong); }
+    .yg-table caption { text-align: left; font-weight: 600; font-size: .875rem; padding: .75rem 1rem .6rem; color: var(--yg-strong); }
+    .yg-table th, .yg-table td { padding: .55rem .75rem; border-bottom: 1px solid var(--yg-rule); text-align: right; white-space: nowrap; vertical-align: middle; }
+    .yg-table th:first-child, .yg-table td:first-child { padding-left: 1rem; text-align: left; white-space: normal; min-width: 6rem; }
+    .yg-table th:last-child, .yg-table td:last-child { padding-right: 1rem; }
+    .yg-table thead th { background: var(--yg-head); font-size: .7rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--yg-muted); border-top: 1px solid var(--yg-rule); }
+    .yg-table tbody th { font-weight: 500; }
+    .yg-table tbody tr { transition: background-color .15s; }
+    .yg-table tbody tr:hover { background: var(--yg-hover); }
+    .yg-table tbody tr:last-child th, .yg-table tbody tr:last-child td { border-bottom: 0; }
+    .yg-table tfoot th, .yg-table tfoot td { font-weight: 600; background: var(--yg-head); border-top: 1px solid var(--yg-panel-border); border-bottom: 0; }
+    .yg-table__label { display: block; }
+    .yg-share { display: block; height: 3px; margin-top: .3rem; max-width: 7rem; border-radius: 999px; background: var(--yg-share-track); overflow: hidden; }
+    .yg-share > span { display: block; height: 100%; border-radius: inherit; background: var(--yg-share); }
+    .yg-table__empty { color: var(--yg-muted); font-style: italic; text-align: left !important; }
+    .yg-table .yg-neg { color: var(--yg-negative); }
     /* Guide */
     .yg-help { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
     @media (min-width: 1024px) { .yg-help { grid-template-columns: 15rem minmax(0, 1fr); } }
@@ -60,4 +103,57 @@
     .yg-switch > span { position: absolute; top: .125rem; left: .125rem; width: 1rem; height: 1rem; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .3); transition: transform .15s; }
     .yg-switch.is-on { background: var(--yg-done); }
     .yg-switch.is-on > span { transform: translateX(1rem); }
+    /* Motion: each admin page eases in; cards and rows respond to the pointer. Off for reduced motion. */
+    @keyframes yg-enter { from { opacity: 0; transform: translateY(6px); } }
+    .fi-main { animation: yg-enter .32s cubic-bezier(.2,.7,.2,1) backwards; }
+    .fi-wi-stats-overview-stat, .fi-section, .yg-checklist { transition: box-shadow .25s, transform .25s; }
+    .fi-wi-stats-overview-stat:hover { transform: translateY(-2px); box-shadow: 0 8px 24px -12px rgb(0 0 0 / .25); }
+    .fi-ta-row { transition: background-color .15s; }
+    .fi-btn, .fi-icon-btn, .fi-sidebar-item-button { transition: background-color .15s, color .15s, transform .12s; }
+    .fi-btn:active, .fi-icon-btn:active { transform: scale(.97); }
+    @media (prefers-reduced-motion: reduce) {
+        .fi-main { animation: none; }
+        .fi-wi-stats-overview-stat:hover, .fi-btn:active, .fi-icon-btn:active { transform: none; }
+    }
+    /* Clickable report rows and the details panels they open. */
+    .yg-row-link { cursor: pointer; }
+    .yg-row-link:focus-visible { outline: 2px solid var(--yg-link); outline-offset: -2px; }
+    .yg-row-link th .yg-table__label::after { content: '\00a0›'; color: var(--yg-muted); opacity: 0; transition: opacity .15s; }
+    .yg-row-link:hover th .yg-table__label::after, .yg-row-link:focus-visible th .yg-table__label::after { opacity: 1; }
+    .yg-table__sub { display: block; margin-top: .1rem; font-size: .75rem; font-weight: 400; color: var(--yg-muted); }
+    .yg-table__link { color: var(--yg-link); font-weight: 500; }
+    .yg-table__link:hover { text-decoration: underline; }
+    .yg-details { display: grid; gap: 1.25rem; }
+    .yg-details__foot { font-size: .8rem; color: var(--yg-muted); }
+    .yg-callout { display: flex; gap: .75rem; align-items: flex-start; padding: .9rem 1rem; border-radius: .75rem; border: 1px solid var(--yg-panel-border); background: var(--yg-head); font-size: .875rem; color: var(--yg-strong); }
+    .yg-callout__icon { flex: none; width: 1.25rem; height: 1.25rem; margin-top: .05rem; color: var(--yg-muted); }
+    .yg-callout__title { font-weight: 600; margin-bottom: .15rem; }
+    .yg-callout.is-buy { border-color: color-mix(in srgb, var(--yg-done) 40%, transparent); background: color-mix(in srgb, var(--yg-done) 10%, transparent); }
+    .yg-callout.is-buy .yg-callout__icon { color: var(--yg-done); }
+    .yg-callout.is-careful { border-color: color-mix(in srgb, var(--yg-warn) 40%, transparent); background: color-mix(in srgb, var(--yg-warn) 10%, transparent); }
+    .yg-callout.is-careful .yg-callout__icon { color: var(--yg-warn); }
+    .yg-stats { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); }
+    .yg-stat { padding: .75rem .9rem; border: 1px solid var(--yg-panel-border); border-radius: .75rem; background: var(--yg-panel); }
+    .yg-stat dt { font-size: .7rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--yg-muted); }
+    .yg-stat dd { margin-top: .2rem; font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--yg-strong); }
+    .yg-stat dd.yg-stat__text { font-size: 1rem; }
+    .yg-stat dd.yg-neg { color: var(--yg-negative); }
+    .yg-stat__note { display: block; margin-top: .1rem; font-size: .72rem; color: var(--yg-muted); }
+    /* Dashboard figures: shrink a little in a narrow card rather than spill out of it. */
+    .fi-wi-stats-overview-stat { container-type: inline-size; min-width: 0; }
+    .fi-wi-stats-overview-stat-value { font-size: clamp(1.25rem, 14cqi, 1.875rem); overflow-wrap: anywhere; }
+    /* Shop settings: compact inputs, and a live example under each. */
+    .yg-setting { max-width: 26rem; }
+    .yg-setting__help { font-size: .85rem; color: var(--yg-muted); }
+    .yg-setting__example { margin-top: .4rem; padding: .5rem .75rem; border-radius: .5rem; background: var(--yg-head); border: 1px solid var(--yg-panel-border); font-size: .85rem; color: var(--yg-strong); }
+    .yg-setting__example.is-warn { border-color: color-mix(in srgb, var(--yg-warn) 45%, transparent); background: color-mix(in srgb, var(--yg-warn) 10%, transparent); }
+    /* "?" explanations on report lines (x-yg-explain). */
+    .yg-explain-label { display: inline-flex; align-items: center; gap: .3rem; }
+    .yg-explain { display: inline-flex; vertical-align: middle; margin-left: .3rem; padding: .1rem; border-radius: 999px; color: var(--yg-muted); cursor: help; transition: color .15s; text-transform: none; letter-spacing: normal; }
+    .yg-explain-label .yg-explain { margin-left: 0; }
+    .yg-explain:hover, .yg-explain:focus-visible { color: var(--yg-link); }
+    .yg-explain:focus-visible { outline: 2px solid var(--yg-link); outline-offset: 1px; }
+    .yg-explain__icon { width: 1rem; height: 1rem; }
+    .yg-explain__tip { display: grid; gap: .45rem; padding: .2rem 0; text-align: left; font-size: .8rem; line-height: 1.45; font-weight: 400; }
+    .yg-explain__tip strong { display: block; font-size: .68rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; opacity: .7; }
 </style>

@@ -4,6 +4,6 @@
     </x-filament::section>
 
     <x-filament::section>
-        @include('reports.statement', ['statement' => $this->statement()])
+        @include('reports.statement', ['statement' => $this->statement(), 'explain' => true])
     </x-filament::section>
 </x-filament-panels::page>

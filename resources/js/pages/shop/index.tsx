@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { ProductGrid } from '@/components/shop/product-card';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,6 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { tk, useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { create as createRequest } from '@/routes/requests';
 import { index as shopIndex } from '@/routes/shop';
@@ -22,9 +23,9 @@ type Props = {
 };
 
 const sortLabels: Record<ShopSort, string> = {
-    newest: 'Newest',
-    price_asc: 'Price: low to high',
-    price_desc: 'Price: high to low',
+    newest: tk('Newest'),
+    price_asc: tk('Price: low to high'),
+    price_desc: tk('Price: high to low'),
 };
 
 export default function ShopIndex({
@@ -33,6 +34,7 @@ export default function ShopIndex({
     filters,
     activeCategory,
 }: Props) {
+    const { t } = useTrans();
     const query = (overrides: Partial<Props['filters']>) => {
         const next = { ...filters, ...overrides };
 
@@ -47,8 +49,8 @@ export default function ShopIndex({
     };
 
     const title = filters.q
-        ? `Results for “${filters.q}”`
-        : (activeCategory?.name ?? 'Shop all');
+        ? t('Results for “:query”', { query: filters.q })
+        : (activeCategory?.name ?? t('Shop all'));
 
     return (
         <>
@@ -57,13 +59,18 @@ export default function ShopIndex({
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1
+                            key={title}
+                            className="enter text-2xl font-semibold tracking-tight"
+                        >
                             {title}
                         </h1>
                         <p className="mt-1 text-sm text-muted-foreground">
                             {products.total === 1
-                                ? '1 product in store'
-                                : `${products.total} products in store`}
+                                ? t('1 product in store')
+                                : t(':count products in store', {
+                                      count: products.total,
+                                  })}
                         </p>
                     </div>
 
@@ -79,14 +86,17 @@ export default function ShopIndex({
                             )
                         }
                     >
-                        <SelectTrigger className="w-48" aria-label="Sort by">
+                        <SelectTrigger
+                            className="w-48"
+                            aria-label={t('Sort by')}
+                        >
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                             {(Object.keys(sortLabels) as ShopSort[]).map(
                                 (sort) => (
                                     <SelectItem key={sort} value={sort}>
-                                        {sortLabels[sort]}
+                                        {t(sortLabels[sort])}
                                     </SelectItem>
                                 ),
                             )}
@@ -100,7 +110,7 @@ export default function ShopIndex({
                             query: query({ category: null }),
                         })}
                         active={!filters.category}
-                        label="All"
+                        label={t('All')}
                     />
                     {categories.map((category) => (
                         <CategoryChip
@@ -122,7 +132,8 @@ export default function ShopIndex({
                                     query: query({ q: '' }),
                                 })}
                             >
-                                Search: {filters.q} <X />
+                                {t('Search: :query', { query: filters.q })}{' '}
+                                <X />
                             </Link>
                         </Button>
                     </div>
@@ -132,15 +143,14 @@ export default function ShopIndex({
                     {products.data.length > 0 ? (
                         <ProductGrid products={products.data} />
                     ) : (
-                        <div className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">
-                            Nothing matches that right now.{' '}
+                        <div className="enter rounded-xl border border-dashed p-10 text-center text-muted-foreground">
+                            {t('Nothing matches that right now.')}{' '}
                             <Link
                                 href={createRequest()}
                                 className="font-medium text-foreground underline"
                             >
-                                Request it
-                            </Link>{' '}
-                            and we&rsquo;ll find one for you.
+                                {t('Request it and we’ll find one for you.')}
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -148,7 +158,7 @@ export default function ShopIndex({
                 {products.last_page > 1 && (
                     <nav
                         className="mt-8 flex flex-wrap justify-center gap-1"
-                        aria-label="Pagination"
+                        aria-label={t('Pagination')}
                     >
                         {products.links.map((link, i) =>
                             link.url ? (
@@ -160,20 +170,18 @@ export default function ShopIndex({
                                 >
                                     <Link
                                         href={link.url}
-                                        preserveScroll
-                                        dangerouslySetInnerHTML={{
-                                            __html: link.label,
-                                        }}
-                                    />
+                                        aria-label={pageLabel(link.label, t)}
+                                    >
+                                        <PageLabel label={link.label} />
+                                    </Link>
                                 </Button>
                             ) : (
                                 <span
                                     key={i}
-                                    className="px-3 py-1.5 text-sm text-muted-foreground"
-                                    dangerouslySetInnerHTML={{
-                                        __html: link.label,
-                                    }}
-                                />
+                                    className="flex items-center px-3 py-1.5 text-sm text-muted-foreground"
+                                >
+                                    <PageLabel label={link.label} />
+                                </span>
                             ),
                         )}
                     </nav>
@@ -181,6 +189,39 @@ export default function ShopIndex({
             </div>
         </>
     );
+}
+
+// Laravel's pagination links say "« Previous" and "Next »"; show arrows instead so they read in any language.
+function isPrevious(label: string) {
+    return label.includes('&laquo;') || label.includes('«');
+}
+
+function isNext(label: string) {
+    return label.includes('&raquo;') || label.includes('»');
+}
+
+function pageLabel(label: string, t: (text: string) => string) {
+    if (isPrevious(label)) {
+        return t('Previous page');
+    }
+
+    if (isNext(label)) {
+        return t('Next page');
+    }
+
+    return undefined;
+}
+
+function PageLabel({ label }: { label: string }) {
+    if (isPrevious(label)) {
+        return <ChevronLeft className="size-4" />;
+    }
+
+    if (isNext(label)) {
+        return <ChevronRight className="size-4" />;
+    }
+
+    return <>{label}</>;
 }
 
 function CategoryChip({
@@ -197,7 +238,7 @@ function CategoryChip({
             href={href}
             preserveScroll
             className={cn(
-                'shrink-0 rounded-full border px-3 py-1.5 text-sm transition',
+                'shrink-0 rounded-full border px-3 py-1.5 text-sm transition duration-200 active:scale-95',
                 active
                     ? 'border-foreground bg-foreground text-background'
                     : 'hover:bg-muted',

@@ -1,5 +1,5 @@
 {{-- A financial statement table, shared by the admin pages and the PDF. --}}
-@php /** @var \App\Reports\Statement $statement */ @endphp
+@php /** @var \App\Reports\Statement $statement */ $explain ??= false; @endphp
 <div class="yg-statement__header">
     <span class="yg-statement__title">{{ $statement->title }}</span>
     <span class="yg-statement__period">{{ $statement->period }} · amounts in {{ $statement->currency }}</span>
@@ -8,9 +8,10 @@
     @foreach ($statement->sections as $section)
         @if ($section->isStandaloneTotal())
             <tbody>
-                <tr class="yg-statement__grand">
+                <tr class="yg-statement__grand" data-tour="total-{{ \Illuminate\Support\Str::slug($section->total->label) }}">
                     <th scope="row">
                         {{ $section->total->label }}
+                        @if ($explain)<x-yg-explain :label="$section->total->label" />@endif
                         @if ($section->total->hint)
                             <span class="yg-statement__hint">{{ $section->total->hint }}</span>
                         @endif
@@ -21,12 +22,13 @@
         @else
             <tbody>
                 <tr class="yg-statement__heading">
-                    <th scope="rowgroup" colspan="2">{{ $section->title }}</th>
+                    <th scope="rowgroup" colspan="2">{{ $section->title }}@if ($explain)<x-yg-explain :label="$section->title" />@endif</th>
                 </tr>
                 @forelse ($section->lines as $line)
-                    <tr>
+                    <tr @if (str_starts_with($line->label, 'Not yet explained')) data-tour="unexplained" @endif>
                         <th scope="row">
                             {{ $line->label }}
+                            @if ($explain)<x-yg-explain :label="$line->label" />@endif
                             @if ($line->hint)
                                 <span class="yg-statement__hint">{{ $line->hint }}</span>
                             @endif

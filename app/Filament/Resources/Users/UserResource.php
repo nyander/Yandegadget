@@ -7,20 +7,27 @@ use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Models\User;
+use App\Support\PasswordGenerator;
 use BackedEnum;
 use Closure;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
 use UnitEnum;
 
@@ -65,7 +72,56 @@ class UserResource extends Resource
                             ->relationship('location', 'name')
                             ->helperText('For staff. Leave empty to give access to every store.'),
                     ]),
+                Section::make('Password')
+                    ->description('How they\'ll get their password.')
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->visibleOn('create')
+                    ->schema([
+                        Radio::make('password_method')
+                            ->hiddenLabel()
+                            ->options([
+                                'email' => 'Email them a link to choose their own',
+                                'set' => 'Set one now and tell them',
+                            ])
+                            ->descriptions([
+                                'email' => 'Best when they use email. The link works for 60 minutes; you can send another from their page.',
+                                'set' => 'For staff without easy email access. They can change it later under Settings → Password.',
+                            ])
+                            ->default('email')
+                            ->live()
+                            ->dehydrated(false),
+                        self::passwordInput('new_password')
+                            ->required(fn (Get $get) => $get('password_method') === 'set')
+                            ->visible(fn (Get $get) => $get('password_method') === 'set')
+                            ->dehydrated(false),
+                    ]),
             ]);
+    }
+
+    /**
+     * A password box with "Generate" (a strong, readable password) and "Copy",
+     * checked against the same rules as the sign-up form.
+     */
+    public static function passwordInput(string $name = 'password'): TextInput
+    {
+        return TextInput::make($name)
+            ->label('Password')
+            ->password()
+            ->revealable()
+            ->copyable(copyMessage: 'Password copied')
+            ->rule(Password::default())
+            ->maxLength(255)
+            ->helperText('At least 12 characters with upper and lower case, a number and a symbol, or use Generate. Share it with them in person or by phone, not by email.')
+            ->suffixAction(
+                Action::make('generate')
+                    ->label('Generate')
+                    ->icon(Heroicon::OutlinedSparkles)
+                    ->tooltip('Make a strong password')
+                    ->action(function (Set $set) use ($name): void {
+                        $set($name, PasswordGenerator::make());
+                    }),
+            );
     }
 
     public static function table(Table $table): Table
@@ -75,7 +131,7 @@ class UserResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['roles', 'location', 'supplier']))
             ->columns([
                 TextColumn::make('name')->searchable()->sortable()
-                    ->description(fn (User $record) => $record->supplier?->name),
+                    ->description(fn (User $record) => $record->isClosed() ? 'Closed: personal details removed' : $record->supplier?->name),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('roles.name')->label('Roles')->badge()
                     ->formatStateUsing(fn (string $state) => RoleEnum::tryFrom($state)?->label() ?? $state),
@@ -85,6 +141,18 @@ class UserResource extends Resource
                 TextColumn::make('created_at')->label('Joined')->date()->sortable(),
             ])
             ->filters([
+                // Closed accounts stay as anonymous rows (their sales and deposits point to them), out of the way.
+                TernaryFilter::make('closed')
+                    ->label('Closed accounts')
+                    ->placeholder('Show all')
+                    ->trueLabel('Only closed accounts')
+                    ->falseLabel('Hide closed accounts')
+                    ->default(false)
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('email', 'like', '%'.User::CLOSED_EMAIL_DOMAIN),
+                        false: fn (Builder $query) => $query->where('email', 'not like', '%'.User::CLOSED_EMAIL_DOMAIN),
+                        blank: fn (Builder $query) => $query,
+                    ),
                 SelectFilter::make('roles')->relationship('roles', 'name')
                     ->getOptionLabelFromRecordUsing(fn (Role $record) => RoleEnum::tryFrom($record->name)?->label() ?? $record->name),
             ])

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,8 @@ use Illuminate\Support\Carbon;
 #[Fillable(['name', 'slug', 'sort_order', 'is_active'])]
 class Category extends Model
 {
+    use BroadcastsChanges;
+
     /**
      * @return HasMany<Product, $this>
      */
@@ -33,5 +36,10 @@ class Category extends Model
             'sort_order' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'catalogue';
     }
 }

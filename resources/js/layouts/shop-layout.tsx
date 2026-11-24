@@ -2,8 +2,10 @@ import { Form, Link, usePage } from '@inertiajs/react';
 import { Search, ShieldCheck, User } from 'lucide-react';
 import type { ReactNode } from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useTrans } from '@/hooks/use-trans';
 import { dashboard, home, login, register } from '@/routes';
 import { privacy, terms } from '@/routes/legal';
 import { create as createRequest } from '@/routes/requests';
@@ -18,6 +20,7 @@ const ADMIN_PERMISSIONS = [
 
 export default function ShopLayout({ children }: { children: ReactNode }) {
     const { auth, name } = usePage().props;
+    const { t } = useTrans();
     const canUseAdmin = auth.permissions?.some((permission) =>
         ADMIN_PERMISSIONS.includes(permission),
     );
@@ -33,13 +36,13 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                 <div className="flex-1 bg-brand-gold" />
                 <div className="flex-1 bg-brand-green" />
             </div>
-            <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
+            <header className="vt-header sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
                 <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
                     <Link
                         href={home()}
-                        className="flex shrink-0 items-center gap-2"
+                        className="group flex shrink-0 items-center gap-2"
                     >
-                        <span className="flex size-8 items-center justify-center rounded-md bg-brand-green text-white">
+                        <span className="flex size-8 items-center justify-center rounded-md bg-brand-green text-white transition-transform duration-300 group-hover:-rotate-6">
                             <AppLogoIcon className="size-5 fill-current" />
                         </span>
                         <span className="hidden font-semibold sm:inline">
@@ -49,15 +52,15 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
 
                     <Link
                         href={shopIndex()}
-                        className="hidden text-sm font-medium text-muted-foreground hover:text-foreground md:inline"
+                        className="hidden text-sm font-medium text-muted-foreground transition-colors hover:text-foreground md:inline"
                     >
-                        Shop all
+                        {t('Shop all')}
                     </Link>
                     <Link
                         href={createRequest()}
-                        className="hidden text-sm font-medium whitespace-nowrap text-muted-foreground hover:text-foreground lg:inline"
+                        className="hidden text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground lg:inline"
                     >
-                        Request an item
+                        {t('Request an item')}
                     </Link>
 
                     <Form
@@ -71,13 +74,14 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                             type="search"
                             name="q"
                             defaultValue={currentQuery}
-                            placeholder="Search phones, laptops, TVs…"
-                            aria-label="Search the shop"
-                            className="pl-9"
+                            placeholder={t('Search phones, laptops, TVs…')}
+                            aria-label={t('Search the shop')}
+                            className="pl-9 transition-shadow focus-visible:shadow-md"
                         />
                     </Form>
 
                     <nav className="flex shrink-0 items-center gap-1">
+                        <LanguageSwitcher />
                         {auth.user ? (
                             <>
                                 {canUseAdmin && (
@@ -85,7 +89,7 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                                         <a href="/admin">
                                             <ShieldCheck />
                                             <span className="hidden sm:inline">
-                                                Admin
+                                                {t('Admin')}
                                             </span>
                                         </a>
                                     </Button>
@@ -94,7 +98,7 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                                     <Link href={dashboard()}>
                                         <User />
                                         <span className="hidden sm:inline">
-                                            Account
+                                            {t('Account')}
                                         </span>
                                     </Link>
                                 </Button>
@@ -102,14 +106,16 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                         ) : (
                             <>
                                 <Button variant="ghost" size="sm" asChild>
-                                    <Link href={login()}>Log in</Link>
+                                    <Link href={login()}>{t('Log in')}</Link>
                                 </Button>
                                 <Button
                                     size="sm"
                                     asChild
                                     className="hidden sm:inline-flex"
                                 >
-                                    <Link href={register()}>Register</Link>
+                                    <Link href={register()}>
+                                        {t('Register')}
+                                    </Link>
                                 </Button>
                             </>
                         )}
@@ -124,13 +130,14 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                     <div>
                         <p className="font-semibold text-foreground">{name}</p>
                         <p className="mt-2">
-                            Quality second-hand electronics from the UK, sold in
-                            Accra since 2011.
+                            {t(
+                                'Quality second-hand electronics from the UK, sold in Accra since 2011.',
+                            )}
                         </p>
                     </div>
                     <div>
                         <p className="font-semibold text-foreground">
-                            Visit the store
+                            {t('Visit the store')}
                         </p>
                         <p className="mt-2">
                             27 Ayawaso, Legon Boundary
@@ -140,11 +147,12 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                     </div>
                     <div>
                         <p className="font-semibold text-foreground">
-                            About our prices
+                            {t('About our prices')}
                         </p>
                         <p className="mt-2">
-                            Prices are shown in cedis at today&rsquo;s exchange
-                            rate. The final price is agreed with you in store.
+                            {t(
+                                'Prices are shown in cedis at today’s exchange rate. The final price is agreed with you in store.',
+                            )}
                         </p>
                     </div>
                 </div>
@@ -153,10 +161,10 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
                         &copy; {new Date().getFullYear()} {name}
                     </span>
                     <Link href={privacy()} className="hover:text-foreground">
-                        Privacy policy
+                        {t('Privacy policy')}
                     </Link>
                     <Link href={terms()} className="hover:text-foreground">
-                        Terms of use
+                        {t('Terms of use')}
                     </Link>
                 </div>
             </footer>

@@ -2,8 +2,11 @@
 
 namespace App\Filament\Widgets;
 
+use App\Providers\Filament\AdminPanelProvider;
 use App\Services\Reports\SalesReport;
+use App\Support\ReportGlossary;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Contracts\Support\Htmlable;
 
 class SalesTrendChart extends ChartWidget
 {
@@ -14,7 +17,13 @@ class SalesTrendChart extends ChartWidget
 
     protected static ?int $sort = 2;
 
-    protected ?string $heading = 'Last 12 months';
+    public function getHeading(): string|Htmlable|null
+    {
+        return app(ReportGlossary::class)->label('Last 12 months', 'dashboard:trend');
+    }
+
+    /** Picks up new sales every 30 seconds (see AdminPanelProvider::DASHBOARD_REFRESH). */
+    protected ?string $pollingInterval = AdminPanelProvider::DASHBOARD_REFRESH;
 
     protected ?string $description = 'Sales and gross profit per month, in cedis';
 

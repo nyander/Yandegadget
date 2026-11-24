@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Models\Concerns\BroadcastsChanges;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,8 @@ use Illuminate\Support\Carbon;
 #[Fillable(['grade', 'name', 'description', 'deposit', 'sort_order'])]
 class Condition extends Model
 {
+    use BroadcastsChanges;
+
     /**
      * @return HasMany<StockUnit, $this>
      */
@@ -38,5 +41,10 @@ class Condition extends Model
             'deposit' => MoneyCast::class.':deposit_amount,deposit_currency',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'catalogue';
     }
 }

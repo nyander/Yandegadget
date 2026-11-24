@@ -1,11 +1,13 @@
 import { Head, useForm } from '@inertiajs/react';
 import { AlertTriangle, ShieldCheck } from 'lucide-react';
+import type { CSSProperties } from 'react';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { index, store } from '@/routes/requests';
 import type { ConditionOption } from '@/types';
@@ -21,6 +23,7 @@ export default function RequestCreate({
     conditions,
     depositsAvailable,
 }: Props) {
+    const { t } = useTrans();
     const form = useForm({
         description: '',
         category_id: '',
@@ -33,25 +36,31 @@ export default function RequestCreate({
 
     return (
         <>
-            <Head title="Request an item" />
+            <Head title={t('Request an item')} />
             <div className="mx-auto w-full max-w-2xl space-y-6 p-4 sm:p-6">
-                <Heading
-                    title="Request an item"
-                    description="Tell us what you want. We'll look for it in the UK and let you know when it's in the Accra store."
-                />
+                <div className="enter">
+                    <Heading
+                        title={t('Request an item')}
+                        description={t(
+                            'Tell us what you want. We’ll look for it in the UK and let you know when it’s in the Accra store.',
+                        )}
+                    />
+                </div>
 
                 {!depositsAvailable && (
-                    <div className="flex gap-3 rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 text-sm">
+                    <div className="enter flex gap-3 rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 text-sm">
                         <AlertTriangle className="size-5 shrink-0" />
                         <p>
-                            Deposits can&rsquo;t be taken online right now.
-                            Please try again later or visit the store.
+                            {t(
+                                'Deposits can’t be taken online right now. Please try again later or visit the store.',
+                            )}
                         </p>
                     </div>
                 )}
 
                 <form
-                    className="space-y-6"
+                    className="enter space-y-6"
+                    style={{ '--i': 1 } as CSSProperties}
                     onSubmit={(e) => {
                         e.preventDefault();
                         form.post(store.url());
@@ -59,7 +68,7 @@ export default function RequestCreate({
                 >
                     <div className="space-y-2">
                         <Label htmlFor="description">
-                            What are you looking for?
+                            {t('What are you looking for?')}
                         </Label>
                         <Input
                             id="description"
@@ -67,7 +76,9 @@ export default function RequestCreate({
                             onChange={(e) =>
                                 form.setData('description', e.target.value)
                             }
-                            placeholder="e.g. iPhone 14 Pro 256GB, any colour"
+                            placeholder={t(
+                                'e.g. iPhone 14 Pro 256GB, any colour',
+                            )}
                             maxLength={255}
                             required
                         />
@@ -75,7 +86,7 @@ export default function RequestCreate({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="category_id">Category</Label>
+                        <Label htmlFor="category_id">{t('Category')}</Label>
                         <select
                             id="category_id"
                             value={form.data.category_id}
@@ -86,7 +97,7 @@ export default function RequestCreate({
                             className="h-9 w-full rounded-md border bg-transparent px-3 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         >
                             <option value="" disabled>
-                                Choose a category
+                                {t('Choose a category')}
                             </option>
                             {categories.map((c) => (
                                 <option key={c.id} value={c.id}>
@@ -99,7 +110,7 @@ export default function RequestCreate({
 
                     <fieldset className="space-y-2">
                         <legend className="text-sm font-medium">
-                            Lowest condition you&rsquo;d accept
+                            {t('Lowest condition you’d accept')}
                         </legend>
                         <div className="grid gap-2">
                             {conditions.map((c) => {
@@ -110,9 +121,9 @@ export default function RequestCreate({
                                     <label
                                         key={c.id}
                                         className={cn(
-                                            'flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition',
+                                            'flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition duration-200 active:scale-[0.99]',
                                             active
-                                                ? 'border-foreground ring-1 ring-foreground'
+                                                ? 'border-foreground bg-muted/30 ring-1 ring-foreground'
                                                 : 'hover:bg-muted/50',
                                         )}
                                     >
@@ -131,7 +142,10 @@ export default function RequestCreate({
                                         />
                                         <div className="flex-1">
                                             <p className="font-medium">
-                                                Grade {c.grade} – {c.name}
+                                                {t('Grade :grade', {
+                                                    grade: c.grade,
+                                                })}{' '}
+                                                – {c.name}
                                             </p>
                                             {c.description && (
                                                 <p className="text-sm text-muted-foreground">
@@ -142,7 +156,7 @@ export default function RequestCreate({
                                         <p className="text-sm font-semibold whitespace-nowrap">
                                             {c.deposit?.formatted ?? '—'}
                                             <span className="block text-xs font-normal text-muted-foreground">
-                                                deposit
+                                                {t('deposit')}
                                             </span>
                                         </p>
                                     </label>
@@ -153,7 +167,9 @@ export default function RequestCreate({
                     </fieldset>
 
                     <div className="space-y-2">
-                        <Label htmlFor="notes">Anything else? (optional)</Label>
+                        <Label htmlFor="notes">
+                            {t('Anything else? (optional)')}
+                        </Label>
                         <textarea
                             id="notes"
                             rows={3}
@@ -161,7 +177,9 @@ export default function RequestCreate({
                             onChange={(e) =>
                                 form.setData('notes', e.target.value)
                             }
-                            placeholder="Colour, storage, budget, when you need it…"
+                            placeholder={t(
+                                'Colour, storage, budget, when you need it…',
+                            )}
                             className="w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         />
                         <InputError message={form.errors.notes} />
@@ -170,10 +188,9 @@ export default function RequestCreate({
                     <div className="flex gap-3 rounded-xl bg-muted/60 p-4 text-sm">
                         <ShieldCheck className="size-5 shrink-0 text-brand-green" />
                         <p>
-                            You&rsquo;ll pay the deposit securely with mobile
-                            money or card through Paystack. It counts towards
-                            the price when you collect the item, and it&rsquo;s
-                            refunded if we can&rsquo;t find one.
+                            {t(
+                                'You’ll pay the deposit securely with mobile money or card through Paystack. It counts towards the price when you collect the item, and it’s refunded if we can’t find one.',
+                            )}
                         </p>
                     </div>
 
@@ -184,8 +201,11 @@ export default function RequestCreate({
                         disabled={form.processing || !depositsAvailable}
                     >
                         {form.processing && <Spinner />}
-                        Continue to pay
-                        {selected?.deposit && ` ${selected.deposit.formatted}`}
+                        {selected?.deposit
+                            ? t('Continue to pay :amount', {
+                                  amount: selected.deposit.formatted,
+                              })
+                            : t('Continue to pay')}
                     </Button>
                 </form>
             </div>

@@ -6,6 +6,8 @@ use App\Casts\MoneyCast;
 use App\Enums\CancellationCause;
 use App\Enums\PaymentStatus;
 use App\Enums\RequestStatus;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -34,6 +36,7 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable|null $paid_at
  * @property CarbonImmutable|null $sourced_at
  * @property CarbonImmutable|null $ready_at
+ * @property CarbonImmutable|null $collection_reminded_at
  * @property CarbonImmutable|null $fulfilled_at
  * @property CarbonImmutable|null $cancelled_at
  * @property string|null $cancel_reason
@@ -48,6 +51,8 @@ use Illuminate\Support\Str;
 #[Fillable(['customer_id', 'category_id', 'condition_id', 'description', 'notes', 'deposit'])]
 class ProductRequest extends Model
 {
+    use BroadcastsChanges;
+
     protected $attributes = [
         'status' => 'awaiting_deposit',
     ];
@@ -133,9 +138,23 @@ class ProductRequest extends Model
             'paid_at' => 'datetime',
             'sourced_at' => 'datetime',
             'ready_at' => 'datetime',
+            'collection_reminded_at' => 'datetime',
             'fulfilled_at' => 'datetime',
             'cancelled_at' => 'datetime',
             'cancelled_by' => CancellationCause::class,
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'requests';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::userChannel($this->customer_id)];
     }
 }

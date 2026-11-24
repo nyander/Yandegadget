@@ -7,6 +7,7 @@ The app is a standard Laravel 13 app. It needs:
 - Node 24 to build the frontend (`.nvmrc`)
 - `mysqldump` (or `pg_dump`) on the server, for backups
 - A queue worker, the scheduler (one cron entry), and HTTPS
+- Laravel Reverb (websockets) for live updates, optional: without it pages still update by themselves every few seconds
 
 Two ways to host it. Both work with this repo as it is; the choice is budget versus how much server work you want.
 
@@ -15,6 +16,7 @@ Two ways to host it. Both work with this repo as it is; the choice is budget ver
 | Cost                | VPS (e.g. a 2 GB DigitalOcean or Hetzner box) + Forge subscription | Pay for usage; more per month at this size                             |
 | You look after      | OS updates (Forge automates most), PHP version, disk space         | Very little                                                            |
 | Queue and scheduler | Forge daemon + scheduler tick box                                  | Built in                                                               |
+| Live updates        | Forge "Reverb" daemon (on the site's Application tab)              | Built in: turn on WebSockets for the environment                       |
 | Photos              | Local disk is fine at first; move to R2 later                      | Use an object storage bucket from the start (no persistent local disk) |
 
 ## Environment
@@ -103,6 +105,39 @@ php artisan filament:optimize
 
 - **Worker:** `php artisan queue:work --tries=3 --max-time=3600`. Notifications and emails are queued; without a worker nobody gets them. On Forge add it as a daemon; on Cloud enable a worker.
 - **Scheduler:** one cron entry, `* * * * * cd /path/to/app && php artisan schedule:run`. It runs the nightly backup (01:30), backup cleanup (01:00) and a morning backup health check that emails `BACKUP_NOTIFY_EMAIL` if anything is wrong. See `routes/console.php`.
+
+## Live updates (Reverb)
+
+Open pages redraw the moment someone saves a change (`App\Support\LiveUpdates`): a few words go over a websocket saying which area changed, and the page fetches fresh data as usual. Without Reverb, pages still check by themselves every few seconds, so it's safe to launch without it and add it later.
+
+1. **Environment:**
+
+    ```
+    BROADCAST_CONNECTION=reverb
+    REVERB_APP_ID=<any number>
+    REVERB_APP_KEY=<random string>
+    REVERB_APP_SECRET=<random string, kept secret>
+    REVERB_HOST=<your domain, e.g. shop.example.com>
+    REVERB_PORT=443
+    REVERB_SCHEME=https
+    VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+    VITE_REVERB_HOST="${REVERB_HOST}"
+    VITE_REVERB_PORT="${REVERB_PORT}"
+    VITE_REVERB_SCHEME="${REVERB_SCHEME}"
+    ```
+
+    `php artisan reverb:install` fills in random values locally. Build the frontend (`npm run build`) **after** setting the `VITE_` values: they're baked into the JavaScript.
+
+2. **Run the server.**
+    - **Forge:** on the site, enable Reverb (Application tab). Forge runs `php artisan reverb:start` as a daemon and proxies `wss://<domain>/app` to it through Nginx.
+    - **Laravel Cloud:** enable WebSockets for the environment; Cloud sets the `REVERB_*` values.
+    - **Your own server:** run `php artisan reverb:start --host=127.0.0.1 --port=8080` under Supervisor, and proxy websocket traffic on `/app` and `/apps` to it in Nginx (see the Reverb docs, "Running Reverb in production").
+
+3. **Restart it on every deploy**, after the code is updated: `php artisan reverb:restart` (Forge does this when Reverb is enabled; `scripts/deploy.sh` does it too).
+
+4. **Check it:** open the buying list in two browsers, add an item in one, and it appears in the other within a second.
+
+If Reverb stops, saving still works (each save waits at most about two seconds for it, then carries on) and a warning goes to the log. The admin falls back to checking every 5 seconds, and the staff and customer pages to every 30–90 seconds, until it's back. Private channels are defined in `routes/channels.php`: back office, store staff, and each person's own channel.
 
 ## Paystack
 

@@ -4,7 +4,10 @@ namespace Tests\Feature\Admin;
 
 use App\Enums\Role;
 use App\Filament\Pages\Help;
+use App\Filament\Resources\BuyingListItems\Pages\ManageBuyingListItems;
 use App\Filament\Widgets\GettingStartedChecklist;
+use App\Filament\Widgets\SalesOverview;
+use App\Filament\Widgets\SalesTrendChart;
 use App\Models\ExchangeRate;
 use App\Models\User;
 use App\Support\AdminTours;
@@ -92,6 +95,17 @@ class OwnerGuideTest extends TestCase
         $this->assertFalse(GettingStartedChecklist::canView());
     }
 
+    public function test_lists_and_dashboard_pick_up_other_peoples_changes_by_themselves(): void
+    {
+        // Dashboard figures every 30 seconds; the tours cope with the redraws (tour.ts).
+        foreach ([SalesOverview::class, SalesTrendChart::class] as $widget) {
+            Livewire::test($widget)->assertSeeHtml('wire:poll.30s');
+        }
+
+        // Every admin list every 5 seconds, for example the buying list.
+        Livewire::test(ManageBuyingListItems::class)->assertSeeHtml('wire:poll.5s');
+    }
+
     public function test_every_tour_belongs_to_a_real_admin_page(): void
     {
         $routes = app('router')->getRoutes();
@@ -103,12 +117,25 @@ class OwnerGuideTest extends TestCase
         }
     }
 
+    public function test_every_panel_tour_has_a_panel_marked_for_it(): void
+    {
+        $sources = collect([...glob(resource_path('views/filament/widgets/*.blade.php')) ?: [], ...glob(app_path('Filament/Widgets/*.php')) ?: []])
+            ->map(fn (string $path) => (string) file_get_contents($path))
+            ->implode("\n");
+
+        foreach (array_keys(app(AdminTours::class)->panels()) as $key) {
+            $this->assertMatchesRegularExpression('/data-tour-panel[\'"]?\s*(=>|=)\s*[\'"]'.preg_quote($key, '/').'[\'"]/', $sources, "Nothing is marked data-tour-panel=\"{$key}\".");
+        }
+
+        $this->get('/admin/product-requests')->assertSee('what-sold-details');
+    }
+
     public function test_pages_with_a_tour_send_its_steps_and_offer_it_in_the_help_menu(): void
     {
         $this->get('/admin/product-requests')
             ->assertOk()
             ->assertSee('id="yg-tour-data"', false)
-            ->assertSee('Match or cancel')
+            ->assertSee('Open a request')
             ->assertSee('Show me around this page')
             ->assertSee('Tips on each page');
 

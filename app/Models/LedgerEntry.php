@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Models\Concerns\BroadcastsChanges;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -30,6 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['transaction_type_id', 'occurred_on', 'description', 'money', 'location_id', 'notes', 'recorded_by'])]
 class LedgerEntry extends Model
 {
+    use BroadcastsChanges;
+
     /**
      * @return BelongsTo<TransactionType, $this>
      */
@@ -61,5 +64,10 @@ class LedgerEntry extends Model
             'occurred_on' => 'date',
             'amount' => 'integer',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'finance';
     }
 }

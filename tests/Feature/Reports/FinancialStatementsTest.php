@@ -8,6 +8,7 @@ use App\Enums\Role;
 use App\Enums\ShipmentStatus;
 use App\Enums\StockStatus;
 use App\Enums\WagePeriod;
+use App\Filament\Pages\Reports\BalanceSheet;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\ExchangeRate;
@@ -25,9 +26,12 @@ use App\Reports\Statement;
 use App\Services\Reports\BalanceSheetReport;
 use App\Services\Reports\IncomeStatementReport;
 use App\Services\SaleService;
+use App\Support\ReportGlossary;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
+use Filament\Actions\Testing\TestAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class FinancialStatementsTest extends TestCase
@@ -236,5 +240,43 @@ class FinancialStatementsTest extends TestCase
         // No longer held for the customer.
         $sheet = app(BalanceSheetReport::class)->build(CarbonImmutable::parse('2026-06-30'));
         $this->assertSame('0.00', $this->amount($sheet, 'Customer deposits held'));
+    }
+
+    public function test_today_puts_todays_date_in_a_date_box(): void
+    {
+        $this->actingAs(User::factory()->create()->assignRole(Role::Admin->value));
+
+        Livewire::test(BalanceSheet::class)
+            ->set('data.as_of', '2026-01-31')
+            ->assertSee('Today')
+            ->callAction(TestAction::make('today')->schemaComponent('as_of'))
+            ->assertSet('data.as_of', fn (string $date) => str_starts_with($date, today()->toDateString()));
+    }
+
+    public function test_every_section_and_worked_out_line_explains_itself(): void
+    {
+        $this->sell(100, 150, 2000, '2026-06-10');
+        $this->ledger('Cash', '1000', '2026-06-01');
+        $this->ledger('Rent', '300', '2026-06-05');
+        $this->ledger('Long-Term Debts', '500', '2026-06-05');
+
+        $glossary = app(ReportGlossary::class);
+        $statements = [
+            app(IncomeStatementReport::class)->build(CarbonImmutable::parse('2026-06-01'), CarbonImmutable::parse('2026-06-30')),
+            app(BalanceSheetReport::class)->build(CarbonImmutable::parse('2026-06-30')),
+        ];
+
+        foreach ($statements as $statement) {
+            foreach ($statement->sections as $section) {
+                $labels = [$section->title, $section->total?->label, ...array_map(fn ($line) => $line->label, $section->lines)];
+
+                foreach (array_filter($labels) as $label) {
+                    $this->assertNotNull($glossary->explain($label), "No explanation for [{$label}] on the {$statement->title}.");
+                }
+            }
+        }
+
+        $this->actingAs(User::factory()->create()->assignRole(Role::Admin->value));
+        $this->get('/admin/balance-sheet')->assertOk()->assertSee('yg-explain', false)->assertSee('A snapshot of the business');
     }
 }

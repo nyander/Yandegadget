@@ -28,6 +28,12 @@ class EditShipment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('track')
+                ->label('Track')
+                ->icon(Heroicon::OutlinedMapPin)
+                ->color('gray')
+                ->url(fn () => $this->record->trackingUrl(), shouldOpenInNewTab: true)
+                ->visible(fn () => $this->record->trackingUrl() !== null),
             $this->dispatchAction(),
             DeleteAction::make(),
         ];

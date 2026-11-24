@@ -6,6 +6,14 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import ShopLayout from '@/layouts/shop-layout';
+import { configureEcho } from '@laravel/echo-react';
+
+// Live updates (Reverb), when the build has a key; otherwise pages check every few seconds.
+if (import.meta.env.VITE_REVERB_APP_KEY) {
+    configureEcho({
+        broadcaster: 'reverb',
+    });
+}
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -35,7 +43,22 @@ void createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#006B3F',
+        delay: 150,
+    },
+    defaults: {
+        // Fade between pages where the browser supports it. Filters, sorting
+        // and other in-page updates keep their place without a transition.
+        visitOptions: (_href, options) => ({
+            ...options,
+            viewTransition:
+                options.viewTransition ||
+                (options.method === 'get' &&
+                    !options.preserveState &&
+                    !options.only?.length &&
+                    typeof document !== 'undefined' &&
+                    'startViewTransition' in document),
+        }),
     },
 });
 

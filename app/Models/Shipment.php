@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\ShipmentStatus;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -46,6 +48,8 @@ use Illuminate\Support\Str;
 ])]
 class Shipment extends Model
 {
+    use BroadcastsChanges;
+
     protected $attributes = [
         'status' => 'draft',
     ];
@@ -105,6 +109,27 @@ class Shipment extends Model
     }
 
     /**
+     * The carrier's tracking page for this shipment, if the carrier has one.
+     * "{number}" in the carrier's link is replaced with the tracking number.
+     */
+    public function trackingUrl(): ?string
+    {
+        $link = $this->carrier?->tracking_url;
+
+        if (blank($link)) {
+            return null;
+        }
+
+        if (str_contains($link, '{number}')) {
+            return filled($this->tracking_number)
+                ? str_replace('{number}', rawurlencode(trim((string) $this->tracking_number)), $link)
+                : null;
+        }
+
+        return $link;
+    }
+
+    /**
      * @return BelongsTo<Carrier, $this>
      */
     public function carrier(): BelongsTo
@@ -138,5 +163,18 @@ class Shipment extends Model
             'dispatched_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'shipments';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

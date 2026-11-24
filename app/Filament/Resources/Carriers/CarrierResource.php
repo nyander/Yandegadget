@@ -42,7 +42,12 @@ class CarrierResource extends Resource
                 TextInput::make('postcode')->maxLength(16),
                 TextInput::make('tracking_url')
                     ->label('Tracking page')
-                    ->url()
+                    ->helperText('Put {number} where the tracking number goes, and shipments get a Track button that opens the right page. For example: https://www.dhl.com/gh-en/home/tracking.html?tracking-id={number}')
+                    ->rule(fn () => function (string $attribute, mixed $value, \Closure $fail): void {
+                        if (filled($value) && filter_var(str_replace('{number}', '123', (string) $value), FILTER_VALIDATE_URL) === false) {
+                            $fail('Enter the full web address, starting with https://');
+                        }
+                    })
                     ->maxLength(255),
                 Textarea::make('notes')->columnSpanFull(),
                 Toggle::make('is_active')->label('Available for new shipments')->default(true),

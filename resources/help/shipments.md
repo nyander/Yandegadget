@@ -10,6 +10,10 @@ You can add and remove items until you dispatch it.
 
 When it leaves, click **Dispatch** and enter the date. The items become _In transit_ and the store staff are told it's on its way.
 
+## Tracking
+
+Once it's on its way, **Track** (on the shipment, and on its row in the list) opens the carrier's tracking page for this shipment. Staff see the same link on their tablet. It works when the carrier has a tracking page set up (below) and the shipment has a tracking number.
+
 ## When it arrives
 
 Staff check each item in on their tablet: arrived OK, damaged (with photos and a note), or missing. You get a notification when they're done.
@@ -20,4 +24,4 @@ Staff check each item in on their tablet: arrived OK, damaged (with photos and a
 
 ## Carriers
 
-Keep your shipping companies under **Shipping → Carriers**, with a tracking page link if they have one.
+Keep your shipping companies under **Shipping → Carriers**, with their tracking page. Copy the address of the carrier's tracking page for one parcel and put `{number}` where the tracking number goes, for example `https://www.dhl.com/gh-en/home/tracking.html?tracking-id={number}`. Without `{number}`, **Track** opens the carrier's page and you type the number in yourself.

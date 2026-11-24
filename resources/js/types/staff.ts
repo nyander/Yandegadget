@@ -15,6 +15,7 @@ export type ShipmentSummary = {
 
 export type ShipmentDetail = ShipmentSummary & {
     tracking_number: string | null;
+    tracking_url?: string | null;
     notes: string | null;
 };
 

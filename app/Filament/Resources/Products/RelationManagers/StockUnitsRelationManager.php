@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Products\RelationManagers;
 
+use App\Filament\Resources\StockUnits\Actions\AddSeveralUnitsAction;
 use App\Filament\Resources\StockUnits\Schemas\StockUnitForm;
 use App\Filament\Resources\StockUnits\Tables\StockUnitsTable;
+use App\Models\Product;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
@@ -31,6 +33,12 @@ class StockUnitsRelationManager extends RelationManager
                 CreateAction::make()
                     ->label('Add unit')
                     ->mutateDataUsing(fn (array $data): array => [...$data, 'created_by' => auth()->id()]),
+                AddSeveralUnitsAction::make(function (): Product {
+                    /** @var Product $product */
+                    $product = $this->getOwnerRecord();
+
+                    return $product;
+                }),
             ]);
     }
 

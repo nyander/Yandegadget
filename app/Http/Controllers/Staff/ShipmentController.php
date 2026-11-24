@@ -66,6 +66,7 @@ class ShipmentController extends Controller
             'shipment' => [
                 ...$this->summary($shipment),
                 'tracking_number' => $shipment->tracking_number,
+                'tracking_url' => $shipment->trackingUrl(),
                 'notes' => $shipment->notes,
             ],
             'items' => $items->map(fn (ShipmentItem $item) => [

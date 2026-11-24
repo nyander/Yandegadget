@@ -73,6 +73,7 @@ class StaffCheckInTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('staff/shipments/show')
                 ->has('items', 2)
+                ->where('shipment.tracking_url', null)
                 ->where('items.0.checked', false)
                 ->missing('items.0.cost'));
 

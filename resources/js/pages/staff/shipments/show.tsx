@@ -41,6 +41,19 @@ export default function StaffShipmentShow({ shipment, items }: Props) {
                             ` · Tracking ${shipment.tracking_number}`}
                         {shipment.dispatched_on &&
                             ` · Dispatched ${formatDate(shipment.dispatched_on)}`}
+                        {shipment.tracking_url && (
+                            <>
+                                {' · '}
+                                <a
+                                    href={shipment.tracking_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-brand-green underline-offset-4 hover:underline"
+                                >
+                                    Track
+                                </a>
+                            </>
+                        )}
                     </p>
                     <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
                         <div

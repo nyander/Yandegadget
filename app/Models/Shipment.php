@@ -105,6 +105,27 @@ class Shipment extends Model
     }
 
     /**
+     * The carrier's tracking page for this shipment, if the carrier has one.
+     * "{number}" in the carrier's link is replaced with the tracking number.
+     */
+    public function trackingUrl(): ?string
+    {
+        $link = $this->carrier?->tracking_url;
+
+        if (blank($link)) {
+            return null;
+        }
+
+        if (str_contains($link, '{number}')) {
+            return filled($this->tracking_number)
+                ? str_replace('{number}', rawurlencode(trim((string) $this->tracking_number)), $link)
+                : null;
+        }
+
+        return $link;
+    }
+
+    /**
      * @return BelongsTo<Carrier, $this>
      */
     public function carrier(): BelongsTo

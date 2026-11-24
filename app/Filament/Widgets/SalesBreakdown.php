@@ -2,9 +2,13 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\LocationType;
 use App\Filament\Resources\BuyingListItems\BuyingListItemResource;
 use App\Filament\Support\ReportPeriod;
 use App\Models\BuyingListItem;
+use App\Models\Category;
+use App\Models\Condition;
+use App\Models\Location;
 use App\Services\Reports\BuyingInsights;
 use App\Services\Reports\SalesReport;
 use Brick\Money\Money;
@@ -20,8 +24,9 @@ use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\Widget;
 
 /**
- * "What sold" by category, condition and store. Each row opens the sales
- * behind it, with a buying suggestion and "Add to buying list".
+ * "What sold" by category, condition or store (one table at a time), with
+ * filters and sorting. Each row opens the sales behind it, with a buying
+ * suggestion and "Add to buying list".
  */
 class SalesBreakdown extends Widget implements HasActions, HasSchemas
 {
@@ -39,7 +44,94 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
 
     protected string $view = 'filament.widgets.sales-breakdown';
 
-    public const GROUPS = ['category' => 'By category', 'condition' => 'By condition', 'location' => 'By store'];
+    public const GROUPS = ['category' => 'Category', 'condition' => 'Condition', 'location' => 'Store'];
+
+    public const SORTS = ['revenue' => 'Sales', 'profit' => 'Profit', 'margin' => 'Margin', 'units' => 'Items sold', 'label' => 'Name'];
+
+    /** Which table is showing: category, condition or location. */
+    public string $groupBy = 'category';
+
+    /** Empty means the usual order: conditions by grade, the rest by sales. */
+    public string $sortBy = '';
+
+    public string $sortDirection = 'desc';
+
+    public string $filterCategory = '';
+
+    public string $filterCondition = '';
+
+    public string $filterLocation = '';
+
+    public function showGroup(string $by): void
+    {
+        $this->groupBy = array_key_exists($by, self::GROUPS) ? $by : 'category';
+        $this->sortBy = '';
+    }
+
+    /** Header click: sort by that column, or flip the direction if it already is. */
+    public function sortTable(string $column): void
+    {
+        if (! array_key_exists($column, self::SORTS) && $column !== 'grade') {
+            return;
+        }
+
+        if ($this->sortBy === $column) {
+            $this->flipDirection();
+
+            return;
+        }
+
+        $this->sortBy = $column;
+        $this->sortDirection = in_array($column, ['label', 'grade'], true) ? 'asc' : 'desc';
+    }
+
+    public function updatedSortBy(): void
+    {
+        $this->sortDirection = in_array($this->sortBy, ['label', 'grade'], true) ? 'asc' : 'desc';
+    }
+
+    public function flipDirection(): void
+    {
+        [$sort, $direction] = $this->effectiveSort();
+        $this->sortBy = $sort;
+        $this->sortDirection = $direction === 'asc' ? 'desc' : 'asc';
+    }
+
+    /**
+     * The sort actually used, filling in the usual order when none is chosen.
+     *
+     * @return array{0: 'label'|'units'|'revenue'|'profit'|'margin'|'grade', 1: 'asc'|'desc'}
+     */
+    private function effectiveSort(): array
+    {
+        $direction = $this->sortDirection === 'asc' ? 'asc' : 'desc';
+
+        return match (true) {
+            $this->sortBy === 'grade' && $this->group() === 'condition' => ['grade', $direction],
+            array_key_exists($this->sortBy, self::SORTS) => [$this->sortBy, $direction],
+            $this->group() === 'condition' => ['grade', 'asc'],
+            default => ['revenue', 'desc'],
+        };
+    }
+
+    public function clearFilters(): void
+    {
+        $this->filterCategory = $this->filterCondition = $this->filterLocation = '';
+    }
+
+    /**
+     * Filters in use, leaving out the one the table is grouped by.
+     *
+     * @return array<string, string>
+     */
+    public function activeFilters(): array
+    {
+        return array_filter([
+            'category' => $this->filterCategory,
+            'condition' => $this->filterCondition,
+            'location' => $this->filterLocation,
+        ], fn (string $value, string $by) => $value !== '' && $by !== $this->group(), ARRAY_FILTER_USE_BOTH);
+    }
 
     /**
      * @return array<string, mixed>
@@ -48,17 +140,34 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
     {
         $report = app(SalesReport::class);
         [$from, $to] = ReportPeriod::from($this->pageFilters);
-
-        $tables = [];
-        foreach (self::GROUPS as $by => $caption) {
-            $tables[] = ['by' => $by, 'caption' => $caption, 'rows' => $report->breakdown($from, $to, $by)];
-        }
+        $only = $this->activeFilters();
+        [$sort, $direction] = $this->effectiveSort();
 
         return [
-            'total' => $report->summary($from, $to),
-            'tables' => $tables,
+            'group' => $this->group(),
+            'rows' => $report->breakdown($from, $to, $this->group(), $only, $sort, $direction),
+            'total' => $report->summary($from, $to, $only),
+            'sort' => $sort,
+            'direction' => $direction,
+            'sortOptions' => $this->group() === 'condition' ? ['grade' => 'Grade', ...self::SORTS] : self::SORTS,
+            'filters' => [
+                'category' => ['label' => 'Category', 'all' => 'All categories', 'model' => 'filterCategory', 'options' => Category::query()->orderBy('name')->pluck('name')->all()],
+                'condition' => ['label' => 'Condition', 'all' => 'All conditions', 'model' => 'filterCondition', 'options' => Condition::query()->orderBy('sort_order')->pluck('name')->all()],
+                'location' => ['label' => 'Store', 'all' => 'All stores', 'model' => 'filterLocation', 'options' => Location::query()->where('type', LocationType::Store)->orderBy('name')->pluck('name')->all()],
+            ],
+            'only' => $only,
             'period' => $from->format('j M').' – '.$to->format('j M Y'),
         ];
+    }
+
+    /** @return 'category'|'condition'|'location' */
+    private function group(): string
+    {
+        return match ($this->groupBy) {
+            'condition' => 'condition',
+            'location' => 'location',
+            default => 'category',
+        };
     }
 
     public function detailsAction(): Action
@@ -66,7 +175,7 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
         return Action::make('details')
             ->slideOver()
             ->modalWidth(Width::ThreeExtraLarge)
-            ->modalHeading(fn (array $arguments) => $this->label($arguments))
+            ->modalHeading(fn (array $arguments) => $this->title($arguments))
             ->modalDescription(function (): string {
                 [$from, $to] = ReportPeriod::from($this->pageFilters);
 
@@ -107,7 +216,7 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
             ->mutateDataUsing(fn (array $data) => [
                 ...$data,
                 'added_by' => auth()->id(),
-                'source' => 'What sold · '.$this->label($arguments),
+                'source' => 'What sold · '.$this->title($arguments),
             ])
             ->successNotificationTitle('Added to the buying list');
     }
@@ -120,7 +229,7 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
     {
         [$from, $to] = ReportPeriod::from($this->pageFilters);
 
-        return app(BuyingInsights::class)->forGroup($from, $to, $this->groupBy($arguments), (string) ($arguments['label'] ?? ''));
+        return app(BuyingInsights::class)->forGroup($from, $to, $this->groupBy($arguments), $this->label($arguments), $this->filtersFor($arguments));
     }
 
     /**
@@ -137,10 +246,31 @@ class SalesBreakdown extends Widget implements HasActions, HasSchemas
     }
 
     /**
+     * The row's label, plus any filters, e.g. "Mint · Phones".
+     *
+     * @param  array<string, mixed>  $arguments
+     */
+    private function title(array $arguments): string
+    {
+        return implode(' · ', [$this->label($arguments), ...array_values($this->filtersFor($arguments))]);
+    }
+
+    /**
      * @param  array<string, mixed>  $arguments
      */
     private function label(array $arguments): string
     {
         return (string) ($arguments['label'] ?? '');
+    }
+
+    /**
+     * Filters in use, minus the row's own group.
+     *
+     * @param  array<string, mixed>  $arguments
+     * @return array<string, string>
+     */
+    private function filtersFor(array $arguments): array
+    {
+        return array_diff_key($this->activeFilters(), [$this->groupBy($arguments) => true]);
     }
 }

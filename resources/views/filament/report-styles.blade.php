@@ -16,10 +16,24 @@
     @include('reports.statement-css')
     .yg-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .yg-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
-    /* Breakdown tables: stacked full width, or three side by side once each has room (never two plus one). */
-    .yg-tables { container-type: inline-size; }
-    .yg-grid--tables { gap: 1rem; grid-template-columns: minmax(0, 1fr); }
-    @container (min-width: 64rem) { .yg-grid--tables { grid-template-columns: repeat(3, minmax(0, 1fr)); } .yg-grid--tables .yg-table th, .yg-grid--tables .yg-table td { padding-left: .5rem; padding-right: .5rem; } .yg-grid--tables .yg-table th:first-child, .yg-grid--tables .yg-table td:first-child { padding-left: .875rem; } .yg-grid--tables .yg-table th:last-child, .yg-grid--tables .yg-table td:last-child { padding-right: .875rem; } }
+    /* What sold: tabs, filters and sort above one roomy table. */
+    .yg-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .yg-toolbar__fields { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; }
+    .yg-field { display: grid; gap: .3rem; min-width: 10rem; }
+    .yg-field__label { font-size: .75rem; font-weight: 500; color: var(--yg-muted); }
+    .yg-field__row { display: flex; align-items: center; gap: .25rem; }
+    .yg-filters-note { margin: -.25rem 0 .75rem; font-size: .85rem; color: var(--yg-muted); }
+    .yg-is-loading { opacity: .6; transition: opacity .15s; }
+    .yg-table--wide th, .yg-table--wide td { padding-top: .8rem; padding-bottom: .8rem; padding-left: 1rem; padding-right: 1rem; }
+    .yg-table--wide th:first-child, .yg-table--wide td:first-child { padding-left: 1.25rem; width: 28%; min-width: 10rem; }
+    .yg-table--wide th:last-child, .yg-table--wide td:last-child { padding-right: 1.25rem; }
+    .yg-sort { display: inline-flex; align-items: center; gap: .3rem; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; border-radius: .25rem; }
+    .yg-sort:hover, .yg-sort.is-active { color: var(--yg-strong); }
+    .yg-sort:focus-visible { outline: 2px solid var(--yg-link); outline-offset: 2px; }
+    .yg-sort__arrow { width: .9rem; height: .9rem; opacity: .45; }
+    .yg-sort.is-active .yg-sort__arrow { opacity: 1; color: var(--yg-link); }
+    .yg-share-cell { display: inline-flex; align-items: center; justify-content: flex-end; gap: .6rem; }
+    .yg-share-cell .yg-share { width: 5rem; margin: 0; height: 6px; }
 
     /* Report tables: one look everywhere (What sold, Stock age). Each sits in a panel, rows keep their natural height. */
     .yg-panel { border: 1px solid var(--yg-panel-border); border-radius: .75rem; background: var(--yg-panel); overflow-x: auto; }
@@ -104,7 +118,7 @@
     /* Clickable report rows and the details panels they open. */
     .yg-row-link { cursor: pointer; }
     .yg-row-link:focus-visible { outline: 2px solid var(--yg-link); outline-offset: -2px; }
-    .yg-row-link th .yg-table__label::after { content: ' ›'; color: var(--yg-muted); opacity: 0; transition: opacity .15s; }
+    .yg-row-link th .yg-table__label::after { content: '\00a0›'; color: var(--yg-muted); opacity: 0; transition: opacity .15s; }
     .yg-row-link:hover th .yg-table__label::after, .yg-row-link:focus-visible th .yg-table__label::after { opacity: 1; }
     .yg-table__sub { display: block; margin-top: .1rem; font-size: .75rem; font-weight: 400; color: var(--yg-muted); }
     .yg-table__link { color: var(--yg-link); font-weight: 500; }

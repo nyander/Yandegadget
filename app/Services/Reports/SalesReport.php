@@ -30,11 +30,12 @@ class SalesReport
     ) {}
 
     /**
+     * @param  array<string, string>  $only  Only sales matching these groups, e.g. ['category' => 'Phones'].
      * @return array{units: int, revenue: Money, cost: Money, profit: Money, marginPercent: float|null, averageDiscount: float|null}
      */
-    public function summary(CarbonImmutable $from, CarbonImmutable $to): array
+    public function summary(CarbonImmutable $from, CarbonImmutable $to, array $only = []): array
     {
-        $sales = $this->sales($from, $to);
+        $sales = $this->sales($from, $to, $only);
         $totals = $this->totals($sales);
 
         return [
@@ -47,25 +48,38 @@ class SalesReport
     /**
      * Units sold, revenue and profit grouped by category, condition or location.
      *
+     * Without a $sort, conditions read best to worst (as graded) and everything
+     * else biggest sales first. Ties always go alphabetically.
+     *
      * @param  'category'|'condition'|'location'  $by
+     * @param  array<string, string>  $only  Only sales matching these groups, e.g. ['location' => 'Legon'].
+     * @param  'label'|'units'|'revenue'|'profit'|'margin'|'grade'|null  $sort
+     * @param  'asc'|'desc'  $direction
      * @return list<array{label: string, units: int, revenue: Money, profit: Money, marginPercent: float|null}>
      */
-    public function breakdown(CarbonImmutable $from, CarbonImmutable $to, string $by): array
+    public function breakdown(CarbonImmutable $from, CarbonImmutable $to, string $by, array $only = [], ?string $sort = null, string $direction = 'desc'): array
     {
-        $sales = $this->sales($from, $to);
+        $sales = $this->sales($from, $to, $only);
 
-        $groups = $sales->groupBy(fn (Sale $sale) => match ($by) {
-            'category' => $sale->stockUnit->product->category->name ?? 'Uncategorised',
-            'condition' => $sale->stockUnit->condition->name,
-            'location' => $sale->location->name,
-        });
-
-        // Conditions read best to worst, as graded; everything else biggest sales first.
         $gradeOrder = $sales->mapWithKeys(fn (Sale $sale) => [
             $sale->stockUnit->condition->name => $sale->stockUnit->condition->sort_order,
         ]);
 
-        return array_values($groups
+        if ($sort === null) {
+            [$sort, $direction] = $by === 'condition' ? ['grade', 'asc'] : ['revenue', 'desc'];
+        }
+
+        $key = fn (array $row): int|float|string => match ($sort) {
+            'label' => mb_strtolower($row['label']),
+            'units' => $row['units'],
+            'revenue' => $row['revenue']->getMinorAmount()->toInt(),
+            'profit' => $row['profit']->getMinorAmount()->toInt(),
+            'margin' => $row['marginPercent'] ?? -INF,
+            'grade' => $gradeOrder[$row['label']] ?? PHP_INT_MAX,
+        };
+
+        return array_values($sales
+            ->groupBy(fn (Sale $sale) => self::labelFor($sale, $by))
             ->map(function (Collection $group, string $label) {
                 $totals = $this->totals($group);
 
@@ -77,10 +91,26 @@ class SalesReport
                     'marginPercent' => $totals['marginPercent'],
                 ];
             })
-            ->sort(fn (array $a, array $b) => $by === 'condition'
-                ? [$gradeOrder[$a['label']] ?? 0, $a['label']] <=> [$gradeOrder[$b['label']] ?? 0, $b['label']]
-                : [$b['revenue']->getMinorAmount()->toInt(), $a['label']] <=> [$a['revenue']->getMinorAmount()->toInt(), $b['label']])
+            ->sort(function (array $a, array $b) use ($key, $direction) {
+                $order = $direction === 'asc' ? $key($a) <=> $key($b) : $key($b) <=> $key($a);
+
+                return $order !== 0 ? $order : strnatcasecmp($a['label'], $b['label']);
+            })
             ->all());
+    }
+
+    /**
+     * The group a sale falls in: its category, condition or store name.
+     *
+     * @param  'category'|'condition'|'location'  $by
+     */
+    public static function labelFor(Sale $sale, string $by): string
+    {
+        return match ($by) {
+            'category' => $sale->stockUnit->product->category->name ?? 'Uncategorised',
+            'condition' => $sale->stockUnit->condition->name,
+            'location' => $sale->location->name,
+        };
     }
 
     /**
@@ -152,16 +182,35 @@ class SalesReport
     }
 
     /**
+     * @param  array<string, string>  $only
      * @return Collection<int, Sale>
      */
-    private function sales(CarbonImmutable $from, CarbonImmutable $to): Collection
+    private function sales(CarbonImmutable $from, CarbonImmutable $to, array $only = []): Collection
     {
         return Sale::query()
             ->completed()
             ->whereBetween('sold_at', [$from->startOfDay(), $to->endOfDay()])
             ->with(['stockUnit.product.category', 'stockUnit.condition', 'location'])
             ->get()
-            ->toBase();
+            ->toBase()
+            ->filter(fn (Sale $sale) => self::matches($sale, $only))
+            ->values();
+    }
+
+    /**
+     * Whether a sale is in every one of the given groups.
+     *
+     * @param  array<string, string>  $only
+     */
+    public static function matches(Sale $sale, array $only): bool
+    {
+        foreach ($only as $by => $label) {
+            if (! in_array($by, ['category', 'condition', 'location'], true) || self::labelFor($sale, $by) !== $label) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

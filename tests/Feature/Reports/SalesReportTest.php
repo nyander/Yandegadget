@@ -95,6 +95,40 @@ class SalesReportTest extends TestCase
         $this->assertSame($sorted, $revenues);
     }
 
+    public function test_breakdowns_can_be_sorted_and_filtered(): void
+    {
+        $staff = User::factory()->create()->assignRole(Role::Staff->value);
+        $conditions = Condition::orderBy('sort_order')->get();
+        $best = $conditions->first();
+        $worst = $conditions->last();
+        $this->assertNotNull($best);
+        $this->assertNotNull($worst);
+
+        // Best grade: cheap, high margin. Worst grade: dear, thin margin.
+        foreach ([[$best, 5, 100], [$worst, 45, 500]] as [$condition, $cost, $paid]) {
+            $unit = StockUnit::factory()->received()->create([
+                'condition_id' => $condition->id,
+                'cost' => Money::of($cost, 'GBP'),
+                'price' => Money::of($paid / 10, 'GBP'),
+            ]);
+            app(SaleService::class)->record($unit, Money::of($paid, 'GHS'), PaymentMethod::Cash, $staff, ['sold_at' => CarbonImmutable::parse('2026-06-10')]);
+        }
+
+        $report = app(SalesReport::class);
+        $from = CarbonImmutable::parse('2026-06-01');
+        $to = CarbonImmutable::parse('2026-06-30');
+        $labels = fn (array $rows) => array_column($rows, 'label');
+
+        $this->assertSame([$worst->name, $best->name], $labels($report->breakdown($from, $to, 'condition', sort: 'revenue')));
+        $this->assertSame([$best->name, $worst->name], $labels($report->breakdown($from, $to, 'condition', sort: 'margin')));
+        $this->assertSame([$worst->name, $best->name], $labels($report->breakdown($from, $to, 'condition', sort: 'margin', direction: 'asc')));
+
+        $only = ['condition' => $worst->name];
+        $this->assertSame(1, $report->summary($from, $to, $only)['units']);
+        $this->assertSame([$worst->name], $labels($report->breakdown($from, $to, 'condition', $only)));
+        $this->assertSame([], $report->breakdown($from, $to, 'condition', ['location' => 'Nowhere']));
+    }
+
     public function test_stock_age_buckets_items_in_store_by_days_since_arrival(): void
     {
         foreach ([5, 45, 120] as $days) {

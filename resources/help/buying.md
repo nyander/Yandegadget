@@ -2,7 +2,13 @@ The dashboard shows what's selling. Each row in its tables opens the details beh
 
 ## What sold: the details behind a row
 
-On the **Dashboard**, the **What sold** box splits your sales by category, condition and store for the dates at the top. **Click any row**, for example _Phones_ or _Mint_, and a panel opens on the right with:
+On the **Dashboard**, the **What sold** box shows your sales for the dates at the top, one table at a time:
+
+- **By category**, **By condition** or **By store**: pick one with the tabs.
+- **Narrow it down** with the boxes on the right, for example _Phones_ only, to see which grades of phone sell best. _Show everything_ takes the filters off.
+- **Sort by** sales, profit, margin, items sold or name. The button next to it switches between highest first and lowest first. You can also click a column heading.
+
+**Click any row**, for example _Phones_ or _Mint_, and a panel opens on the right. If you've narrowed the table down, the panel only counts those sales, so _Mint_ with _Phones_ chosen shows only mint phones. The panel has:
 
 - **A suggestion** at the top: _Worth buying more_, _Buy carefully_ or _Hold off for now_, with the reason.
 - **The figures**: items sold, sales, profit and margin, profit per item, how many days items took to sell after arriving, how many you sell a month, and how many are in the store, on the way from the UK, or already on your buying list.

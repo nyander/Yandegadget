@@ -39,17 +39,20 @@ class BuyingInsights
      * One row of "What sold": the sales behind it, best sellers, stock and a suggestion.
      *
      * @param  'category'|'condition'|'location'  $by
+     * @param  array<string, string>  $only  Filters already applied to the table, e.g. ['category' => 'Phones'].
      * @return array<string, mixed>
      */
-    public function forGroup(CarbonImmutable $from, CarbonImmutable $to, string $by, string $label): array
+    public function forGroup(CarbonImmutable $from, CarbonImmutable $to, string $by, string $label, array $only = []): array
     {
+        $groups = [...$only, $by => $label];
+
         $sales = Sale::query()
             ->completed()
             ->whereBetween('sold_at', [$from->startOfDay(), $to->endOfDay()])
             ->with(['stockUnit.product.category', 'stockUnit.condition', 'location'])
             ->latest('sold_at')
             ->get()
-            ->filter(fn (Sale $sale) => $this->labelFor($sale, $by) === $label)
+            ->filter(fn (Sale $sale) => SalesReport::matches($sale, $groups))
             ->values();
 
         $rows = $sales->map(function (Sale $sale) {
@@ -76,7 +79,7 @@ class BuyingInsights
         $months = max(1.0, $from->startOfDay()->diffInDays($to->endOfDay()) / 30.44);
         $perMonth = round($units / $months, 1);
 
-        $stock = $this->stockQuery($by, $label);
+        $stock = $this->stockQuery($groups);
         $inStore = (clone $stock)->whereIn('status', [StockStatus::Received, StockStatus::Reserved])->count();
         $onTheWay = (clone $stock)->whereIn('status', [StockStatus::Purchased, StockStatus::InTransit])->count();
 
@@ -96,7 +99,7 @@ class BuyingInsights
             'perMonth' => $perMonth,
             'inStore' => $inStore,
             'onTheWay' => $onTheWay,
-            'onList' => $this->openOnList($by, $label),
+            'onList' => $this->openOnList($groups),
             'bestSellers' => $bestSellers,
             'recent' => $rows->take(8)->map(fn (array $row) => [
                 'date' => $row['sale']->sold_at,
@@ -108,7 +111,7 @@ class BuyingInsights
                 'days' => $row['days'],
             ])->all(),
             'suggestion' => $suggestion,
-            'prefill' => $this->prefill($by, $label, $bestSellers, $suggestion['quantity']),
+            'prefill' => $this->prefill($groups, $label, $bestSellers, $suggestion['quantity']),
         ];
     }
 
@@ -173,41 +176,44 @@ class BuyingInsights
         ];
     }
 
-    /** @param 'category'|'condition'|'location' $by */
-    private function labelFor(Sale $sale, string $by): string
+    /**
+     * Stock units in the same groups as the row (and any filters).
+     *
+     * @param  array<string, string>  $groups
+     * @return Builder<StockUnit>
+     */
+    private function stockQuery(array $groups): Builder
     {
-        return match ($by) {
-            'category' => $sale->stockUnit->product->category->name ?? 'Uncategorised',
-            'condition' => $sale->stockUnit->condition->name,
-            'location' => $sale->location->name,
-        };
+        $query = StockUnit::query();
+
+        foreach ($groups as $by => $label) {
+            $relation = match ($by) {
+                'category' => 'product.category',
+                'condition' => 'condition',
+                default => 'location',
+            };
+            $query->whereHas($relation, fn (Builder $q) => $q->where('name', $label));
+        }
+
+        return $query;
     }
 
     /**
-     * Stock units in the same group as the row.
+     * Open buying list items for the same category and condition. The list has no store.
      *
-     * @param  'category'|'condition'|'location'  $by
-     * @return Builder<StockUnit>
+     * @param  array<string, string>  $groups
      */
-    private function stockQuery(string $by, string $label): Builder
-    {
-        return match ($by) {
-            'category' => StockUnit::query()->whereHas('product.category', fn (Builder $q) => $q->where('name', $label)),
-            'condition' => StockUnit::query()->whereHas('condition', fn (Builder $q) => $q->where('name', $label)),
-            'location' => StockUnit::query()->whereHas('location', fn (Builder $q) => $q->where('name', $label)),
-        };
-    }
-
-    /** @param 'category'|'condition'|'location' $by */
-    private function openOnList(string $by, string $label): int
+    private function openOnList(array $groups): int
     {
         $query = BuyingListItem::query()->where('status', BuyingListStatus::ToBuy);
 
-        return match ($by) {
-            'category' => $query->whereHas('category', fn (Builder $q) => $q->where('name', $label))->count(),
-            'condition' => $query->whereHas('condition', fn (Builder $q) => $q->where('name', $label))->count(),
-            'location' => $query->count(),
-        };
+        foreach (['category', 'condition'] as $by) {
+            if (isset($groups[$by])) {
+                $query->whereHas($by, fn (Builder $q) => $q->where('name', $groups[$by]));
+            }
+        }
+
+        return $query->count();
     }
 
     /**
@@ -290,19 +296,19 @@ class BuyingInsights
     /**
      * Starting values for "Add to buying list": the best seller in the group.
      *
-     * @param  'category'|'condition'|'location'  $by
+     * @param  array<string, string>  $groups
      * @param  list<array<string, mixed>>  $bestSellers
      * @return array<string, mixed>
      */
-    private function prefill(string $by, string $label, array $bestSellers, int $quantity): array
+    private function prefill(array $groups, string $label, array $bestSellers, int $quantity): array
     {
         $top = $bestSellers[0] ?? null;
 
-        $categoryId = $by === 'category'
-            ? Category::where('name', $label)->value('id')
+        $categoryId = isset($groups['category'])
+            ? Category::where('name', $groups['category'])->value('id')
             : ($top['categoryId'] ?? null);
-        $conditionId = $by === 'condition'
-            ? Condition::where('name', $label)->value('id')
+        $conditionId = isset($groups['condition'])
+            ? Condition::where('name', $groups['condition'])->value('id')
             : ($top['conditionId'] ?? null);
 
         return [

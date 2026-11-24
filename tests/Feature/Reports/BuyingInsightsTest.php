@@ -169,6 +169,38 @@ class BuyingInsightsTest extends TestCase
         $this->assertSame($this->admin->id, $item->added_by);
     }
 
+    public function test_the_owner_switches_tables_sorts_and_filters(): void
+    {
+        $this->sellPhones(2);
+        $laptops = Category::where('slug', '!=', 'phones')->firstOrFail();
+        $laptop = Product::factory()->create(['category_id' => $laptops->id, 'name' => 'MacBook Air']);
+        $this->sellPhones(1, paid: 3000, product: $laptop);
+        $this->actingAs($this->admin);
+
+        $widget = Livewire::test(SalesBreakdown::class, ['pageFilters' => ['from' => '2026-06-01', 'to' => '2026-06-30']])
+            // Biggest sales first by default.
+            ->assertSeeInOrder([$laptops->name, $this->phones->name])
+            ->call('sortTable', 'units')
+            ->assertSet('sortBy', 'units')
+            ->assertSet('sortDirection', 'desc')
+            ->assertSeeInOrder([$this->phones->name, $laptops->name])
+            ->call('sortTable', 'units')
+            ->assertSet('sortDirection', 'asc')
+            ->assertSeeInOrder([$laptops->name, $this->phones->name])
+            ->call('showGroup', 'condition')
+            ->assertSet('sortBy', '')
+            ->assertSee($this->grade->name)
+            ->set('filterCategory', $this->phones->name)
+            ->assertSee('Showing only '.$this->phones->name);
+
+        // The details panel follows the filter: only the phones in that grade.
+        $widget->mountAction('details', ['by' => 'condition', 'label' => $this->grade->name])
+            ->assertMountedActionModalSee([$this->grade->name.' · '.$this->phones->name, 'iPhone 13'])
+            ->assertMountedActionModalDontSee('MacBook Air');
+
+        $widget->call('clearFilters')->assertSet('filterCategory', '');
+    }
+
     public function test_stock_age_rows_open_their_items(): void
     {
         StockUnit::factory()->received()->create()->forceFill(['received_at' => now()->subDays(100)])->save();

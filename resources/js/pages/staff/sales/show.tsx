@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Ban, CheckCircle2, Printer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDateTime } from '@/lib/dates';
@@ -6,6 +6,7 @@ import { index } from '@/routes/staff/sell';
 import type { SaleReceipt } from '@/types';
 
 export default function SaleShow({ sale }: { sale: SaleReceipt }) {
+    const { name: shopName } = usePage().props;
     const rows: [string, string | null][] = [
         ['Item', sale.product],
         ['Reference', sale.unit_reference],
@@ -49,7 +50,7 @@ export default function SaleShow({ sale }: { sale: SaleReceipt }) {
                 <div className="rounded-xl border p-6">
                     <div className="flex items-start justify-between gap-4">
                         <div>
-                            <p className="font-semibold">Yande Gadgets</p>
+                            <p className="font-semibold">{shopName}</p>
                             <p className="text-sm whitespace-pre-line text-muted-foreground">
                                 {sale.address ?? sale.location}
                             </p>

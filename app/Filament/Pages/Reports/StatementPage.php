@@ -97,6 +97,6 @@ abstract class StatementPage extends Page
 
     private function filename(Statement $statement, string $extension): string
     {
-        return Str::slug("yande-gadgets {$statement->title} {$statement->period}").".{$extension}";
+        return Str::slug(config('app.name')." {$statement->title} {$statement->period}").".{$extension}";
     }
 }

@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ChevronLeft, ImageOff, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
@@ -14,13 +14,14 @@ type Props = {
 };
 
 export default function ShopShow({ product, rateUpdatedAt }: Props) {
+    const { name: shopName } = usePage().props;
     const { t, locale } = useTrans();
     const [active, setActive] = useState(0);
     const image: ShopImage | undefined = product.images[active];
     const specs = Object.entries(product.specs);
     const summary = (
         product.description ??
-        `${product.name}, second-hand from the UK, at Yande Gadgets in Legon, Accra.`
+        `${product.name}, second-hand from the UK, at ${shopName} in Legon, Accra.`
     ).slice(0, 160);
 
     return (

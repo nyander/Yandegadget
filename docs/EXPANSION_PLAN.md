@@ -81,7 +81,7 @@ Buying suggestions take each supplier's **lead time** and **minimum order quanti
 - **Returns and exchanges at the till** (clothes that don't fit), putting the item back into stock. This is separate from voiding a sale.
 - **Wholesale price tiers** for traders buying in quantity (for example a lower price for 10 or more).
 - A **CSV import** of order lines. Alibaba's APIs are mostly for sellers, so plan on entering orders by hand or importing a spreadsheet, not a live link.
-- A **broader name and branding** than "Yande Gadgets".
+- ~~A broader name than "Yande Gadgets"~~: done, the shop is now **NYA**. Departments can follow the name: NYA Tech, NYA Home and so on. Logo and colours still to come.
 
 ## Suggested order
 

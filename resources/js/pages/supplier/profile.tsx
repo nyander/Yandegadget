@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ export default function SupplierProfile({
     supplier: SupplierDetails;
     isNew: boolean;
 }) {
+    const { name: shopName } = usePage().props;
     const form = useForm({
         name: supplier.name ?? '',
         contact_name: supplier.contact_name ?? '',
@@ -57,7 +58,7 @@ export default function SupplierProfile({
                     }
                     description={
                         isNew
-                            ? 'We need these details before you can offer items to Yande Gadgets.'
+                            ? `We need these details before you can offer items to ${shopName}.`
                             : 'The details we use to contact and pay you.'
                     }
                 />

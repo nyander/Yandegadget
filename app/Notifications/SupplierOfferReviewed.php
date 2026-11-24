@@ -61,7 +61,7 @@ class SupplierOfferReviewed extends Notification implements ShouldQueue
         if ($this->offer->status === OfferStatus::Accepted) {
             $price = $this->offer->agreed_price?->formatToLocale('en_GB');
 
-            return "Yande Gadgets will buy {$this->offer->title} for {$price}. We'll be in touch to arrange payment and collection.";
+            return config('app.name')." will buy {$this->offer->title} for {$price}. We'll be in touch to arrange payment and collection.";
         }
 
         return "Thanks for offering {$this->offer->title}. We won't be buying it this time: {$this->offer->decline_reason}";

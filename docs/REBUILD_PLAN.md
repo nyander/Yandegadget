@@ -117,7 +117,7 @@ Rough total: 10–15 weeks part-time for one developer, plus the design phase. T
 3. ~~Storefront style.~~ Decided: Inertia + React + TypeScript for the customer, supplier and staff frontend; Filament for back-office data entry.
 4. **Bulk stock.** Confirm the product / stock-unit split (recommended) rather than a plain quantity column. A quantity column would lose per-item condition and cost.
 5. ~~Hosting.~~ Decided: Laravel Forge + a VPS (Richard runs it).
-6. **Domain and branding.** No final business name or domain yet; "Yande Gadgets" is the placeholder (`APP_NAME`). The Ghana-flag theme stays until a brand is chosen.
+6. **Domain and branding.** The shop trades as **NYA** (chosen November 2026; it was "Yande Gadgets"), set by `APP_NAME`. Domain still to buy; the Ghana-flag theme stays until a logo and colours are chosen.
 7. ~~Email.~~ Decided: Resend.
 8. ~~Deposit refunds.~~ Decided: `RefundPolicy` with an admin-set cancellation fee and collection window. Deposit amounts are set per condition grade by the admin.
 9. **Paystack** live account: later.

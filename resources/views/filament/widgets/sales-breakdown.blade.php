@@ -5,15 +5,15 @@
     $totalMinor = max(1, $total['revenue']->getMinorAmount()->toInt());
 @endphp
 <x-filament-widgets::widget>
-    <x-filament::section data-tour="what-sold" heading="What sold" :description="$period.' · amounts in whole cedis'">
+    <x-filament::section data-tour="what-sold" heading="What sold" :description="$period.' · amounts in whole cedis · click a row for details'">
         <div class="yg-tables"><div class="yg-grid yg-grid--tables">
-            @foreach ($tables as $caption => $rows)
+            @foreach ($tables as $table)
                 <div class="yg-panel">
                     <table class="yg-table">
-                        <caption>{{ $caption }}</caption>
+                        <caption>{{ $table['caption'] }}</caption>
                         <thead>
                             <tr>
-                                <th scope="col"><span class="yg-sr-only">{{ \Illuminate\Support\Str::after($caption, 'By ') }}</span></th>
+                                <th scope="col"><span class="yg-sr-only">{{ \Illuminate\Support\Str::after($table['caption'], 'By ') }}</span></th>
                                 <th scope="col">Items</th>
                                 <th scope="col">Sales</th>
                                 <th scope="col">Profit</th>
@@ -21,8 +21,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($rows as $row)
-                                <tr>
+                            @forelse ($table['rows'] as $row)
+                                <tr
+                                    class="yg-row-link"
+                                    tabindex="0"
+                                    role="button"
+                                    aria-label="Details for {{ $row['label'] }}"
+                                    wire:click="mountAction('details', {{ \Illuminate\Support\Js::from(['by' => $table['by'], 'label' => $row['label']]) }})"
+                                    x-on:keydown.enter.prevent="$el.click()"
+                                    x-on:keydown.space.prevent="$el.click()"
+                                >
                                     <th scope="row">
                                         <span class="yg-table__label">{{ $row['label'] }}</span>
                                         {{-- Share of all sales in the period. --}}
@@ -37,7 +45,7 @@
                                 <tr><td colspan="5" class="yg-table__empty">No sales in this period</td></tr>
                             @endforelse
                         </tbody>
-                        @if (count($rows) > 0)
+                        @if (count($table['rows']) > 0)
                             <tfoot>
                                 <tr>
                                     <th scope="row">Total</th>
@@ -53,4 +61,6 @@
             @endforeach
         </div></div>
     </x-filament::section>
+
+    <x-filament-actions::modals />
 </x-filament-widgets::widget>

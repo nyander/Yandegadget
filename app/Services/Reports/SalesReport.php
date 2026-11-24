@@ -16,6 +16,14 @@ use Illuminate\Support\Collection;
  */
 class SalesReport
 {
+    /** Stock age bands: under each 'max' days since arrival. */
+    public const AGE_BANDS = [
+        ['label' => 'Under 30 days', 'min' => 0, 'max' => 30],
+        ['label' => '30–59 days', 'min' => 30, 'max' => 60],
+        ['label' => '60–89 days', 'min' => 60, 'max' => 90],
+        ['label' => '90 days or more', 'min' => 90, 'max' => PHP_INT_MAX],
+    ];
+
     public function __construct(
         private readonly ReportCurrency $currency,
         private readonly SaleFigures $figures,
@@ -83,12 +91,7 @@ class SalesReport
     public function stockAge(): array
     {
         $now = CarbonImmutable::now();
-        $buckets = [
-            ['label' => 'Under 30 days', 'max' => 30],
-            ['label' => '30–59 days', 'max' => 60],
-            ['label' => '60–89 days', 'max' => 90],
-            ['label' => '90 days or more', 'max' => PHP_INT_MAX],
-        ];
+        $buckets = self::AGE_BANDS;
         $rows = array_map(fn (array $b) => ['label' => $b['label'], 'units' => 0, 'value' => $this->currency->zero()], $buckets);
 
         $units = StockUnit::query()

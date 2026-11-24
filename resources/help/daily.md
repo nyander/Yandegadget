@@ -1,12 +1,13 @@
 ## Every day or two
 
-- **Dashboard** — sales, profit, what's selling and how long stock has been sitting. Look at the **Stock age** box: items over 90 days might need a lower price.
+- **Dashboard** — sales, profit, what's selling and how long stock has been sitting. Look at the **Stock age** box: items over 90 days might need a lower price. Click any row in **What sold** to see the details and add items to your buying list ([Deciding what to buy](help:buying)).
 - **Sales → Customer requests** — new paid requests to look for. When you find one, use **Match an item** (see [Customer requests and deposits](help:requests)).
 - **Buying → Supplier offers** — accept or decline items UK suppliers have offered you.
 - **The bell** (top right) — notifications, for example when a shipment has been checked in or a customer has paid a deposit.
 
 ## When you buy in the UK
 
+- Take your **Buying → Buying list** with you, and tick items off as you buy them.
 - Add each item to the catalogue ([Adding stock you've bought](help:stock)).
 - When you're ready to send them, build a shipment and dispatch it ([Sending a shipment](help:shipments)).
 

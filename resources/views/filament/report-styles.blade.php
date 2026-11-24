@@ -101,4 +101,28 @@
         .fi-main { animation: none; }
         .fi-wi-stats-overview-stat:hover, .fi-btn:active, .fi-icon-btn:active { transform: none; }
     }
+    /* Clickable report rows and the details panels they open. */
+    .yg-row-link { cursor: pointer; }
+    .yg-row-link:focus-visible { outline: 2px solid var(--yg-link); outline-offset: -2px; }
+    .yg-row-link th .yg-table__label::after { content: ' ›'; color: var(--yg-muted); opacity: 0; transition: opacity .15s; }
+    .yg-row-link:hover th .yg-table__label::after, .yg-row-link:focus-visible th .yg-table__label::after { opacity: 1; }
+    .yg-table__sub { display: block; margin-top: .1rem; font-size: .75rem; font-weight: 400; color: var(--yg-muted); }
+    .yg-table__link { color: var(--yg-link); font-weight: 500; }
+    .yg-table__link:hover { text-decoration: underline; }
+    .yg-details { display: grid; gap: 1.25rem; }
+    .yg-details__foot { font-size: .8rem; color: var(--yg-muted); }
+    .yg-callout { display: flex; gap: .75rem; align-items: flex-start; padding: .9rem 1rem; border-radius: .75rem; border: 1px solid var(--yg-panel-border); background: var(--yg-head); font-size: .875rem; color: var(--yg-strong); }
+    .yg-callout__icon { flex: none; width: 1.25rem; height: 1.25rem; margin-top: .05rem; color: var(--yg-muted); }
+    .yg-callout__title { font-weight: 600; margin-bottom: .15rem; }
+    .yg-callout.is-buy { border-color: color-mix(in srgb, var(--yg-done) 40%, transparent); background: color-mix(in srgb, var(--yg-done) 10%, transparent); }
+    .yg-callout.is-buy .yg-callout__icon { color: var(--yg-done); }
+    .yg-callout.is-careful { border-color: color-mix(in srgb, var(--yg-warn) 40%, transparent); background: color-mix(in srgb, var(--yg-warn) 10%, transparent); }
+    .yg-callout.is-careful .yg-callout__icon { color: var(--yg-warn); }
+    .yg-stats { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); }
+    .yg-stat { padding: .75rem .9rem; border: 1px solid var(--yg-panel-border); border-radius: .75rem; background: var(--yg-panel); }
+    .yg-stat dt { font-size: .7rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--yg-muted); }
+    .yg-stat dd { margin-top: .2rem; font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--yg-strong); }
+    .yg-stat dd.yg-stat__text { font-size: 1rem; }
+    .yg-stat dd.yg-neg { color: var(--yg-negative); }
+    .yg-stat__note { display: block; margin-top: .1rem; font-size: .72rem; color: var(--yg-muted); }
 </style>

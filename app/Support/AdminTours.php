@@ -59,8 +59,8 @@ class AdminTours
                 ['[data-tour="getting-started"]', 'Getting started', 'Work through this list first. Each step ticks itself off when it\'s done. <strong>Open</strong> takes you to the page; <strong>How?</strong> explains it.'],
                 ['[data-tour="dates"]', 'Pick the dates', 'The figures below cover these dates. Leave them empty for this month so far.'],
                 ['.fi-wi-stats-overview', 'Sales at a glance', 'What you sold, your profit after what the items cost, and how much stock is in the store.'],
-                ['[data-tour="stock-age"]', 'Stock age', 'How long items have been in the store. Items over 90 days might need a lower price.'],
-                ['[data-tour="what-sold"]', 'What sold', 'Sales by category, condition and store, so you know what to buy more of.'],
+                ['[data-tour="stock-age"]', 'Stock age', 'How long items have been in the store. Items over 90 days might need a lower price. <strong>Click a row</strong> to see the items.'],
+                ['[data-tour="what-sold"]', 'What sold', 'Sales by category, condition and store. <strong>Click any row</strong> to see the sales behind it, a buying suggestion, and <strong>Add to buying list</strong>. '.$guide('buying', 'Read more')],
                 ['.fi-sidebar', 'The menu', 'Everything else is here, grouped: <strong>Reports</strong>, <strong>Sales</strong>, <strong>Catalogue</strong>, <strong>Shipping</strong>, <strong>Buying</strong>, <strong>Finance</strong> and <strong>Settings</strong>.'],
                 ['.fi-topbar-database-notifications-btn', 'Notifications', 'The bell shows new deposits, supplier offers and checked-in shipments.'],
                 ['#yg-help-menu', 'Help is always here', 'Open this to take the tour of whichever page you\'re on, read the guide, or turn these tips off.'],
@@ -107,6 +107,11 @@ class AdminTours
             ],
             'resources.payments.index' => [
                 [null, 'Online payments', 'Every deposit customers paid through Paystack, and any refunds. Use this to check a customer\'s payment went through.'],
+            ],
+            'resources.buying-list.index' => [
+                [null, 'Your buying list', 'What to look for on your next UK buying trip. Add items here, or from the dashboard\'s <strong>What sold</strong> details. '.$guide('buying', 'Read more')],
+                [self::FILTERS, 'To buy, bought, not needed', 'The list shows what\'s still <strong>To buy</strong>. Change the filter to see the rest.'],
+                [self::ROW_ACTIONS, 'Tick it off', 'Mark an item <strong>Bought</strong> when you\'ve bought it, or <strong>Not needed</strong> if you\'ve changed your mind.'],
             ],
             'resources.supplier-offers.index' => [
                 [null, 'Supplier offers', 'Items UK suppliers want to sell you. '.$guide('suppliers', 'Read more')],

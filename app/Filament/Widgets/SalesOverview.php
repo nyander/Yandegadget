@@ -18,6 +18,9 @@ class SalesOverview extends StatsOverviewWidget
     /** Loaded with the page, so the dashboard tour can point at it. */
     protected static bool $isLazy = false;
 
+    /** Figures change when the dates change, not by the second; refreshing every few seconds also disturbed the page tours. */
+    protected ?string $pollingInterval = null;
+
     protected static ?int $sort = 1;
 
     protected function getStats(): array

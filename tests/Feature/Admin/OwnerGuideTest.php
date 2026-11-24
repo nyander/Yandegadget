@@ -5,6 +5,8 @@ namespace Tests\Feature\Admin;
 use App\Enums\Role;
 use App\Filament\Pages\Help;
 use App\Filament\Widgets\GettingStartedChecklist;
+use App\Filament\Widgets\SalesOverview;
+use App\Filament\Widgets\SalesTrendChart;
 use App\Models\ExchangeRate;
 use App\Models\User;
 use App\Support\AdminTours;
@@ -90,6 +92,14 @@ class OwnerGuideTest extends TestCase
 
         Livewire::test(GettingStartedChecklist::class)->call('dismiss')->assertRedirect(url('/admin'));
         $this->assertFalse(GettingStartedChecklist::canView());
+    }
+
+    public function test_dashboard_figures_do_not_refresh_themselves(): void
+    {
+        // Refreshing every few seconds redrew the page under the tours, so clicks on Next went missing.
+        foreach ([SalesOverview::class, SalesTrendChart::class] as $widget) {
+            Livewire::test($widget)->assertDontSeeHtml('wire:poll');
+        }
     }
 
     public function test_every_tour_belongs_to_a_real_admin_page(): void

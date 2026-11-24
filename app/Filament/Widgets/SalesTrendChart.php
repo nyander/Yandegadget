@@ -21,6 +21,9 @@ class SalesTrendChart extends ChartWidget
         return app(ReportGlossary::class)->label('Last 12 months', 'dashboard:trend');
     }
 
+    /** Figures change when the dates change, not by the second; refreshing every few seconds also disturbed the page tours. */
+    protected ?string $pollingInterval = null;
+
     protected ?string $description = 'Sales and gross profit per month, in cedis';
 
     protected function getData(): array

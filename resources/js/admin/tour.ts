@@ -121,6 +121,9 @@ function makeTour(steps: DriveStep[], onDone: () => void): Driver {
         prevBtnText: 'Back',
         doneBtnText: 'Done',
         allowClose: true,
+        // driver.js ignores Next, Back and Done while it animates between
+        // steps, which meant clicking twice. Without the slide, every click counts.
+        animate: false,
         overlayOpacity: 0.55,
         stagePadding: 6,
         stageRadius: 10,
@@ -168,6 +171,12 @@ function start(retriesLeft = 0, from = 0): void {
         paused = { index: from };
 
         return;
+    }
+
+    // Never run two tours at once: each would need its own Next and Done.
+    if (current?.isActive()) {
+        stopQuietly(current);
+        current = null;
     }
 
     // Skip steps whose part of the page isn't there (an empty table, a hidden widget).
@@ -299,7 +308,13 @@ function startPanel(key: string, modal: Element, retriesLeft = 4): void {
     }, 350);
 }
 
-/** After Livewire redraws, keep the highlight on the (possibly new) element. */
+/**
+ * After Livewire redraws, keep the highlight on the (possibly new) element.
+ *
+ * Only steps in when the redraw actually affected the highlighted element:
+ * driver.js ignores Next, Back and Done while a step is animating, so moving
+ * the step on every update (notification checks, widgets) swallowed clicks.
+ */
 function followRedraws(): void {
     for (const tour of [current, panelTour?.driver]) {
         if (!tour?.isActive()) {
@@ -309,10 +324,21 @@ function followRedraws(): void {
         const element = tour.getActiveElement();
         const index = tour.getActiveIndex();
 
-        if (element && !element.isConnected && index !== undefined) {
+        // A message in the middle of the screen has nothing to follow.
+        if (
+            !element ||
+            element.id === 'driver-dummy-element' ||
+            index === undefined
+        ) {
+            continue;
+        }
+
+        if (!element.isConnected) {
+            // Replaced by the redraw: highlight the new one.
             tour.moveTo(index);
-        } else {
-            tour.refresh();
+        } else if (!element.classList.contains('driver-active-element')) {
+            // Livewire removed the highlight class while updating it: put it back.
+            element.classList.add('driver-active-element');
         }
     }
 }
@@ -338,59 +364,6 @@ function isTourNode(node: Node): boolean {
     return element?.closest('.driver-popover, .driver-overlay') != null;
 }
 
-// Pop-ups opening or closing (their class changes), or their content arriving.
-new MutationObserver((records) => {
-    const relevant = records.some((record) =>
-        record.type === 'attributes'
-            ? (record.target as Element).classList.contains('fi-modal')
-            : !isTourNode(record.target) &&
-              ![...record.addedNodes, ...record.removedNodes].every(isTourNode),
-    );
-
-    if (relevant) {
-        schedule();
-    }
-}).observe(document.body, {
-    subtree: true,
-    childList: true,
-    attributes: true,
-    attributeFilter: ['class'],
-});
-
-type LivewireHooks = {
-    hook: (
-        name: 'commit',
-        callback: (args: { succeed: (fn: () => void) => void }) => void,
-    ) => void;
-};
-
-// After each Livewire update (a tab, a filter, a sort), follow the redrawn page.
-function hookLivewire(livewire: LivewireHooks): void {
-    livewire.hook('commit', ({ succeed }) =>
-        succeed(() =>
-            window.requestAnimationFrame(() => {
-                followModals();
-                followRedraws();
-            }),
-        ),
-    );
-}
-
-const livewire = (window as unknown as { Livewire?: LivewireHooks }).Livewire;
-
-if (livewire) {
-    hookLivewire(livewire);
-} else {
-    document.addEventListener('livewire:init', () => {
-        const ready = (window as unknown as { Livewire?: LivewireHooks })
-            .Livewire;
-
-        if (ready) {
-            hookLivewire(ready);
-        }
-    });
-}
-
 function tipsEnabled(): boolean {
     return read(TIPS_KEY) !== 'off';
 }
@@ -412,6 +385,7 @@ function setTips(on: boolean): void {
 
 declare global {
     interface Window {
+        ygTourReady?: boolean;
         YandeTour: {
             start: () => void;
             tipsEnabled: () => boolean;
@@ -420,13 +394,6 @@ declare global {
         };
     }
 }
-
-window.YandeTour = {
-    start,
-    tipsEnabled,
-    setTips,
-    hasTour: () => tourData() !== null,
-};
 
 // First visit to a page with a tour: start it once the widgets have loaded.
 // The admin moves between pages without reloading (Filament's SPA mode), so
@@ -441,16 +408,90 @@ function autoStart(): void {
     }
 }
 
-document.addEventListener('livewire:navigating', () => {
-    window.clearTimeout(pending);
-    paused = null;
+// Set up once, even if the admin loads this script again after a page change:
+// a second copy would run its own tours alongside this one.
+if (!window.ygTourReady) {
+    window.ygTourReady = true;
 
-    if (panelTour) {
-        stopQuietly(panelTour.driver);
-        panelTour = null;
+    window.YandeTour = {
+        // From the help menu: start over from the first step.
+        start: () => {
+            window.clearTimeout(pending);
+            paused = null;
+            start();
+        },
+        tipsEnabled,
+        setTips,
+        hasTour: () => tourData() !== null,
+    };
+
+    // Pop-ups opening or closing (their class changes), or their content arriving.
+    new MutationObserver((records) => {
+        const relevant = records.some((record) =>
+            record.type === 'attributes'
+                ? (record.target as Element).classList.contains('fi-modal')
+                : !isTourNode(record.target) &&
+                  ![...record.addedNodes, ...record.removedNodes].every(
+                      isTourNode,
+                  ),
+        );
+
+        if (relevant) {
+            schedule();
+        }
+    }).observe(document.body, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['class'],
+    });
+
+    type LivewireHooks = {
+        hook: (
+            name: 'commit',
+            callback: (args: { succeed: (fn: () => void) => void }) => void,
+        ) => void;
+    };
+
+    // After each Livewire update (a tab, a filter, a sort), follow the redrawn page.
+    function hookLivewire(livewire: LivewireHooks): void {
+        livewire.hook('commit', ({ succeed }) =>
+            succeed(() =>
+                window.requestAnimationFrame(() => {
+                    followModals();
+                    followRedraws();
+                }),
+            ),
+        );
     }
 
-    current?.destroy();
-});
-document.addEventListener('livewire:navigated', autoStart);
-autoStart();
+    const livewire = (window as unknown as { Livewire?: LivewireHooks })
+        .Livewire;
+
+    if (livewire) {
+        hookLivewire(livewire);
+    } else {
+        document.addEventListener('livewire:init', () => {
+            const ready = (window as unknown as { Livewire?: LivewireHooks })
+                .Livewire;
+
+            if (ready) {
+                hookLivewire(ready);
+            }
+        });
+    }
+
+    document.addEventListener('livewire:navigating', () => {
+        window.clearTimeout(pending);
+        paused = null;
+
+        if (panelTour) {
+            stopQuietly(panelTour.driver);
+            panelTour = null;
+        }
+
+        current?.destroy();
+    });
+    document.addEventListener('livewire:navigated', autoStart);
+    autoStart();
+}

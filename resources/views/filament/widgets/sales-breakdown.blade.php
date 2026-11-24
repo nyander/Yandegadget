@@ -16,7 +16,7 @@
     $sortable = ['label', 'units', 'revenue', 'profit', 'margin'];
     $groupName = SalesBreakdown::GROUPS[$group];
 @endphp
-<x-filament-widgets::widget>
+<x-filament-widgets::widget wire:poll.30s>
     <x-filament::section data-tour="what-sold" :heading="app(\App\Support\ReportGlossary::class)->label('What sold', 'dashboard:what-sold')" :description="$period.' · amounts in whole cedis · click a row for details'">
         <div class="yg-toolbar" data-tour="what-sold-tools">
             <x-filament::tabs label="Show sales by" contained class="yg-toolbar__tabs">

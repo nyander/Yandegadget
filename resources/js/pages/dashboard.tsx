@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowRight,
@@ -46,6 +47,7 @@ export default function Dashboard({
     activeRequests,
     readyRequests,
 }: Props) {
+    useLiveRefresh(30, ['recentRequests', 'activeRequests', 'readyRequests']);
     const { auth } = usePage().props;
     const { t, locale } = useTrans();
     const can = (permission: string) => auth.permissions.includes(permission);

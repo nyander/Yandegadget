@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Enums\Role;
 use App\Filament\Pages\Help;
+use App\Filament\Resources\BuyingListItems\Pages\ManageBuyingListItems;
 use App\Filament\Widgets\GettingStartedChecklist;
 use App\Filament\Widgets\SalesOverview;
 use App\Filament\Widgets\SalesTrendChart;
@@ -94,12 +95,15 @@ class OwnerGuideTest extends TestCase
         $this->assertFalse(GettingStartedChecklist::canView());
     }
 
-    public function test_dashboard_figures_do_not_refresh_themselves(): void
+    public function test_lists_and_dashboard_pick_up_other_peoples_changes_by_themselves(): void
     {
-        // Refreshing every few seconds redrew the page under the tours, so clicks on Next went missing.
+        // Dashboard figures every 30 seconds; the tours cope with the redraws (tour.ts).
         foreach ([SalesOverview::class, SalesTrendChart::class] as $widget) {
-            Livewire::test($widget)->assertDontSeeHtml('wire:poll');
+            Livewire::test($widget)->assertSeeHtml('wire:poll.30s');
         }
+
+        // Every admin list every 5 seconds, for example the buying list.
+        Livewire::test(ManageBuyingListItems::class)->assertSeeHtml('wire:poll.5s');
     }
 
     public function test_every_tour_belongs_to_a_real_admin_page(): void

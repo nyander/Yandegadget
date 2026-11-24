@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, PartyPopper } from 'lucide-react';
 import { CheckInCard } from '@/components/staff/check-in-card';
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function StaffShipmentShow({ shipment, items }: Props) {
+    useLiveRefresh(5, ['shipment', 'items']);
     const remaining = shipment.items_count - shipment.checked_count;
     const done = shipment.status === 'received';
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Support\ReportPeriod;
+use App\Providers\Filament\AdminPanelProvider;
 use App\Services\Reports\SalesReport;
 use App\Support\ReportGlossary;
 use Brick\Money\Money;
@@ -18,8 +19,8 @@ class SalesOverview extends StatsOverviewWidget
     /** Loaded with the page, so the dashboard tour can point at it. */
     protected static bool $isLazy = false;
 
-    /** Figures change when the dates change, not by the second; refreshing every few seconds also disturbed the page tours. */
-    protected ?string $pollingInterval = null;
+    /** Picks up new sales every 30 seconds (see AdminPanelProvider::DASHBOARD_REFRESH). */
+    protected ?string $pollingInterval = AdminPanelProvider::DASHBOARD_REFRESH;
 
     protected static ?int $sort = 1;
 

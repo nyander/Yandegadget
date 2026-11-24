@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Form, Head, Link, usePage } from '@inertiajs/react';
 import { Check, ChevronLeft, MapPin } from 'lucide-react';
 import type { CSSProperties } from 'react';
@@ -23,6 +24,7 @@ import { show as shopShow } from '@/routes/shop';
 import type { RequestDetail } from '@/types';
 
 export default function RequestShow({ request }: { request: RequestDetail }) {
+    useLiveRefresh(10, ['request']);
     const { errors } = usePage().props as { errors: Record<string, string> };
     const { t, locale } = useTrans();
     const date = (value: string | null) => formatDate(value, locale);

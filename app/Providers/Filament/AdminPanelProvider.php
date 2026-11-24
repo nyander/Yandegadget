@@ -12,6 +12,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Tables\Table;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -22,8 +23,18 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /** How often open admin lists check for changes other people made. */
+    public const LIST_REFRESH = '5s';
+
+    /** Dashboard figures change slowly; no need to check as often. */
+    public const DASHBOARD_REFRESH = '30s';
+
     public function boot(): void
     {
+        // Every list (and the lists inside a record, like a shipment's items)
+        // picks up other people's changes without a page refresh.
+        Table::configureUsing(fn (Table $table) => $table->poll(self::LIST_REFRESH));
+
         // Every date box gets a "Today" link beside its label.
         DatePicker::configureUsing(fn (DatePicker $picker) => $picker->hintAction(
             Action::make('today')
@@ -56,6 +67,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(PanelsRenderHook::USER_MENU_BEFORE, fn () => view('filament.help-button'))
             ->renderHook(PanelsRenderHook::BODY_END, fn () => view('filament.tour'))
             ->databaseNotifications()
+            ->databaseNotificationsPolling('10s')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

@@ -1,3 +1,4 @@
+import { useLiveRefresh } from '@/hooks/use-live-refresh';
 import { Head, Link } from '@inertiajs/react';
 import { PackageSearch, Plus } from 'lucide-react';
 import type { CSSProperties } from 'react';
@@ -14,6 +15,7 @@ export default function RequestsIndex({
 }: {
     requests: RequestListItem[];
 }) {
+    useLiveRefresh(15, ['requests']);
     const { t, locale } = useTrans();
 
     return (

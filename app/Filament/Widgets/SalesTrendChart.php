@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Providers\Filament\AdminPanelProvider;
 use App\Services\Reports\SalesReport;
 use App\Support\ReportGlossary;
 use Filament\Widgets\ChartWidget;
@@ -21,8 +22,8 @@ class SalesTrendChart extends ChartWidget
         return app(ReportGlossary::class)->label('Last 12 months', 'dashboard:trend');
     }
 
-    /** Figures change when the dates change, not by the second; refreshing every few seconds also disturbed the page tours. */
-    protected ?string $pollingInterval = null;
+    /** Picks up new sales every 30 seconds (see AdminPanelProvider::DASHBOARD_REFRESH). */
+    protected ?string $pollingInterval = AdminPanelProvider::DASHBOARD_REFRESH;
 
     protected ?string $description = 'Sales and gross profit per month, in cedis';
 

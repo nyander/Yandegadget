@@ -125,12 +125,12 @@ class SupplierAndUserAdminTest extends TestCase
             ->mountAction('setPassword')
             ->callAction(TestAction::make('generate')->schemaComponent('password', schema: 'mountedActionSchema0'))
             ->assertSet('mountedActions.0.data.password', fn (string $value) => strlen($value) === 14)
-            ->setActionData(['password' => 'Kp7m-Xq3r-Tz9w'])
+            ->setActionData(['password' => $newPassword = PasswordGenerator::make()])
             ->callMountedAction()
             ->assertHasNoActionErrors()
             ->assertNotified('Password set');
 
-        $this->assertTrue(Hash::check('Kp7m-Xq3r-Tz9w', (string) $staff->fresh()?->password));
+        $this->assertTrue(Hash::check($newPassword, (string) $staff->fresh()?->password));
         $this->assertSame(0, DB::table('sessions')->where('user_id', $staff->id)->count());
         Notification::assertSentTo($staff, PasswordSetByShop::class);
 
@@ -154,13 +154,13 @@ class SupplierAndUserAdminTest extends TestCase
                 'email' => 'kwame@example.test',
                 'roles' => [RoleModel::findByName(Role::Staff->value)->id],
                 'password_method' => 'set',
-                'new_password' => 'Wd4x-Mn7k-Pq2r',
+                'new_password' => $chosen = PasswordGenerator::make(),
             ])
             ->call('create')
             ->assertHasNoFormErrors();
 
         $staff = User::where('email', 'kwame@example.test')->firstOrFail();
-        $this->assertTrue(Hash::check('Wd4x-Mn7k-Pq2r', $staff->password));
+        $this->assertTrue(Hash::check($chosen, $staff->password));
         Notification::assertNotSentTo($staff, ResetPassword::class);
 
         // Choosing "set one now" means a password is needed.

@@ -29,7 +29,7 @@ class PasswordSetByShop extends Notification implements ShouldQueue
     public function toMail(User $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Yande Gadgets password was changed')
+            ->subject('Your '.config('app.name').' password was changed')
             ->greeting("Hello {$notifiable->name},")
             ->line("{$this->changedBy} at the shop has set a new password for your account, and you've been signed out on your other devices.")
             ->line('They\'ll give you the new password. Once you\'re signed in, you can change it to one only you know under Settings → Password.')

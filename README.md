@@ -1,4 +1,6 @@
-# Yande Gadgets
+# NYA
+
+The shop's app (formerly Yande Gadgets). The name shown everywhere comes from `APP_NAME` in `.env`.
 
 Second-hand electronics bought in the UK and sold from the store in Legon, Accra. Laravel 13 with a React (Inertia) shop and staff app, and a Filament back office at `/admin`.
 

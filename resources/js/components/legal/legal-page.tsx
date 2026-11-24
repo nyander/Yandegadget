@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 
 export type LegalProps = {
@@ -37,9 +37,12 @@ export function LegalPage({
 }
 
 export function ContactLines({ contact }: { contact: LegalProps['contact'] }) {
+    const { name: shopName } = usePage().props;
     return (
         <ul>
-            <li>In person: Yande Gadgets, {contact.address}</li>
+            <li>
+                In person: {shopName}, {contact.address}
+            </li>
             {contact.email && (
                 <li>
                     Email:{' '}

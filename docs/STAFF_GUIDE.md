@@ -1,4 +1,4 @@
-# Using Yande Gadgets — a guide for the shop
+# Using NYA — a guide for the shop
 
 Short, practical notes for training. Staff use the main site on a tablet or phone; the owner also uses the admin panel at `/admin`.
 

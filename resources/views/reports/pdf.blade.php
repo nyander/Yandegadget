@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <div class="brand">Yande Gadgets · Legon, Accra</div>
+    <div class="brand">{{ config('app.name') }} · Legon, Accra</div>
     @include('reports.statement', ['statement' => $statement])
     <p class="generated">Generated {{ now()->format('j M Y, H:i') }}</p>
 </body>

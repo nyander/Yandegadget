@@ -9,6 +9,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Models\ExchangeRate;
 use App\Models\StockUnit;
 use App\Models\User;
+use App\Notifications\PasswordSetByShop;
 use App\Services\AccountCloser;
 use App\Services\SaleService;
 use Brick\Money\Money;
@@ -162,5 +163,18 @@ class LaunchReadinessTest extends TestCase
             ->assertCanSeeTableRecords([$leaving])
             ->assertCanNotSeeTableRecords([$staying])
             ->assertSee('Closed: personal details removed');
+    }
+
+    public function test_the_shop_name_comes_from_one_setting(): void
+    {
+        config(['app.name' => 'NYA']);
+        $admin = User::factory()->create()->assignRole(Role::Admin->value);
+        $staff = User::factory()->create(['name' => 'Kofi'])->assignRole(Role::Staff->value);
+
+        $this->get('/')->assertInertia(fn (Assert $page) => $page->where('name', 'NYA'));
+        $this->actingAs($admin)->get('/admin')->assertOk()->assertSee('NYA');
+
+        $mail = (new PasswordSetByShop('Demo Admin'))->toMail($staff);
+        $this->assertSame('Your NYA password was changed', $mail->subject);
     }
 }

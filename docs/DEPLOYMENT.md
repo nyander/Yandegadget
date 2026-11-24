@@ -1,4 +1,4 @@
-# Deploying Yande Gadgets
+# Deploying NYA
 
 The app is a standard Laravel 13 app. It needs:
 

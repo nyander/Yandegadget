@@ -60,7 +60,7 @@ class ReportsAdminTest extends TestCase
             ->fillForm(['from' => '2026-01-01', 'to' => '2026-01-31'])
             ->assertSee('1 Jan 2026 to 31 Jan 2026')
             ->callAction('csv')
-            ->assertFileDownloaded('yande-gadgets-income-statement-1-jan-2026-to-31-jan-2026.csv');
+            ->assertFileDownloaded('nya-income-statement-1-jan-2026-to-31-jan-2026.csv');
 
         Livewire::test(BalanceSheet::class)
             ->callAction('pdf')

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'NYA'),
 
     /*
      * Load balancers or proxies (Laravel Cloud, Cloudflare) in front of the app:

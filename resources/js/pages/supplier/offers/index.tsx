@@ -1,5 +1,5 @@
 import { useLiveRefresh } from '@/hooks/use-live-refresh';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ImageOff, PackagePlus, Plus } from 'lucide-react';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,7 @@ type Props = {
 };
 
 export default function SupplierOffers({ supplier, stats, offers }: Props) {
+    const { name: shopName } = usePage().props;
     useLiveRefresh(15, ['stats', 'offers'], {
         channel: 'me',
         topics: ['supplier-offers'],
@@ -38,7 +39,7 @@ export default function SupplierOffers({ supplier, stats, offers }: Props) {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <Heading
                         title="My offers"
-                        description={`Items ${supplier.name} has offered to Yande Gadgets.`}
+                        description={`Items ${supplier.name} has offered to ${shopName}.`}
                     />
                     <Button asChild>
                         <Link href={create()}>

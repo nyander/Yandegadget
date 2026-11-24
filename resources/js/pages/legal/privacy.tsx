@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import { ContactLines, LegalPage } from '@/components/legal/legal-page';
 import type { LegalProps } from '@/components/legal/legal-page';
 
@@ -6,15 +7,15 @@ export default function Privacy({
     dpcRegistration,
     updatedOn,
 }: LegalProps) {
+    const { name: shopName } = usePage().props;
     return (
         <LegalPage title="Privacy policy" updatedOn={updatedOn}>
             <p>
-                Yande Gadgets is a second-hand electronics shop in Legon
-                Boundary, Accra. This policy explains what personal information
-                we keep when you use this website or buy from our store, why we
-                keep it, and your rights under Ghana&rsquo;s Data Protection
-                Act, 2012 (Act 843). We are the data controller for this
-                information.
+                {shopName} is a second-hand electronics shop in Legon Boundary,
+                Accra. This policy explains what personal information we keep
+                when you use this website or buy from our store, why we keep it,
+                and your rights under Ghana&rsquo;s Data Protection Act, 2012
+                (Act 843). We are the data controller for this information.
                 {dpcRegistration &&
                     ` We are registered with the Data Protection Commission (registration ${dpcRegistration}).`}
             </p>

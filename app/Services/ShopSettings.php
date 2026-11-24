@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Setting;
+use App\Models\SettingChange;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -15,6 +17,8 @@ class ShopSettings
     public const CANCELLATION_FEE = 'request_cancellation_fee_percent';
 
     public const COLLECTION_DAYS = 'request_collection_days';
+
+    public const COLLECTION_REMINDER_DAYS = 'request_collection_reminder_days';
 
     /** Getting-started steps the owner ticked off by hand. */
     public const ONBOARDING_DONE = 'onboarding_done';
@@ -29,6 +33,8 @@ class ShopSettings
         self::CANCELLATION_FEE => 25,
         // Days a found item stays reserved in store before it goes back on sale.
         self::COLLECTION_DAYS => 14,
+        // Days before the collection deadline to remind the customer by email. 0 turns reminders off.
+        self::COLLECTION_REMINDER_DAYS => 3,
         self::ONBOARDING_DONE => [],
         self::ONBOARDING_DISMISSED => false,
     ];
@@ -48,6 +54,11 @@ class ShopSettings
         return (int) $this->get(self::COLLECTION_DAYS);
     }
 
+    public function collectionReminderDays(): int
+    {
+        return (int) $this->get(self::COLLECTION_REMINDER_DAYS);
+    }
+
     public function get(string $key): mixed
     {
         $stored = Cache::rememberForever("settings.{$key}", fn () => Setting::find($key)?->value);
@@ -55,9 +66,19 @@ class ShopSettings
         return $stored ?? self::DEFAULTS[$key] ?? null;
     }
 
-    public function set(string $key, mixed $value): void
+    /**
+     * Saves a setting. When someone changes it (not on first save of an
+     * unchanged default), the change is kept in the history.
+     */
+    public function set(string $key, mixed $value, ?User $by = null): void
     {
+        $old = $this->get($key);
+
         Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         Cache::forget("settings.{$key}");
+
+        if ($by !== null && $old != $value) {
+            SettingChange::create(['key' => $key, 'old_value' => $old, 'new_value' => $value, 'user_id' => $by->id]);
+        }
     }
 }

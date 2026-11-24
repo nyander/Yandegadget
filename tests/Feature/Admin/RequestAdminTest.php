@@ -16,6 +16,7 @@ use App\Models\Condition;
 use App\Models\ExchangeRate;
 use App\Models\Payment;
 use App\Models\ProductRequest;
+use App\Models\SettingChange;
 use App\Models\StockUnit;
 use App\Models\User;
 use App\Services\ProductRequestService;
@@ -109,9 +110,20 @@ class RequestAdminTest extends TestCase
 
         Livewire::test(ShopSettingsPage::class)
             ->assertSchemaStateSet([ShopSettings::CANCELLATION_FEE => 25, ShopSettings::COLLECTION_DAYS => 14], 'form')
-            ->fillForm([ShopSettings::NEGOTIATION_FLOOR => 70, ShopSettings::CANCELLATION_FEE => 20, ShopSettings::COLLECTION_DAYS => 10])
+            ->fillForm([ShopSettings::NEGOTIATION_FLOOR => 70, ShopSettings::CANCELLATION_FEE => 20, ShopSettings::COLLECTION_DAYS => 10, ShopSettings::COLLECTION_REMINDER_DAYS => 2])
+            ->assertSeeText('you keep GH₵100 and refund GH₵400')
             ->call('save')
-            ->assertHasNoFormErrors();
+            ->assertHasNoFormErrors()
+            // Each change is kept, with who made it.
+            ->assertSee(['Cancellation fee', '25%', '20%', 'Reminder before the deadline']);
+
+        $this->assertSame(3, SettingChange::count());
+
+        // The reminder has to come before the deadline.
+        Livewire::test(ShopSettingsPage::class)
+            ->fillForm([ShopSettings::COLLECTION_DAYS => 5, ShopSettings::COLLECTION_REMINDER_DAYS => 5])
+            ->call('save')
+            ->assertHasFormErrors([ShopSettings::COLLECTION_REMINDER_DAYS => 'lt']);
 
         $settings = app(ShopSettings::class);
         $this->assertSame(20, $settings->cancellationFeePercent());

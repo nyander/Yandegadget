@@ -34,6 +34,7 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable|null $paid_at
  * @property CarbonImmutable|null $sourced_at
  * @property CarbonImmutable|null $ready_at
+ * @property CarbonImmutable|null $collection_reminded_at
  * @property CarbonImmutable|null $fulfilled_at
  * @property CarbonImmutable|null $cancelled_at
  * @property string|null $cancel_reason
@@ -133,6 +134,7 @@ class ProductRequest extends Model
             'paid_at' => 'datetime',
             'sourced_at' => 'datetime',
             'ready_at' => 'datetime',
+            'collection_reminded_at' => 'datetime',
             'fulfilled_at' => 'datetime',
             'cancelled_at' => 'datetime',
             'cancelled_by' => CancellationCause::class,

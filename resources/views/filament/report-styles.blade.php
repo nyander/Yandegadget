@@ -142,6 +142,11 @@
     /* Dashboard figures: shrink a little in a narrow card rather than spill out of it. */
     .fi-wi-stats-overview-stat { container-type: inline-size; min-width: 0; }
     .fi-wi-stats-overview-stat-value { font-size: clamp(1.25rem, 14cqi, 1.875rem); overflow-wrap: anywhere; }
+    /* Shop settings: compact inputs, and a live example under each. */
+    .yg-setting { max-width: 26rem; }
+    .yg-setting__help { font-size: .85rem; color: var(--yg-muted); }
+    .yg-setting__example { margin-top: .4rem; padding: .5rem .75rem; border-radius: .5rem; background: var(--yg-head); border: 1px solid var(--yg-panel-border); font-size: .85rem; color: var(--yg-strong); }
+    .yg-setting__example.is-warn { border-color: color-mix(in srgb, var(--yg-warn) 45%, transparent); background: color-mix(in srgb, var(--yg-warn) 10%, transparent); }
     /* "?" explanations on report lines (x-yg-explain). */
     .yg-explain-label { display: inline-flex; align-items: center; gap: .3rem; }
     .yg-explain { display: inline-flex; vertical-align: middle; margin-left: .3rem; padding: .1rem; border-radius: 999px; color: var(--yg-muted); cursor: help; transition: color .15s; text-transform: none; letter-spacing: normal; }

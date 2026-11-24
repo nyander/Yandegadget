@@ -12,6 +12,7 @@ use App\Models\ProductRequest;
 use App\Models\Sale;
 use App\Models\StockUnit;
 use App\Models\User;
+use App\Notifications\CollectionReminder;
 use App\Notifications\NewProductRequest;
 use App\Notifications\ProductRequestUpdated;
 use App\Services\Payments\GatewayException;
@@ -250,6 +251,41 @@ class ProductRequestService
     }
 
     /**
+     * Emails customers whose reserved item goes back on sale within the
+     * reminder window (Shop settings), once per request. Returns how many.
+     */
+    public function remindUncollected(): int
+    {
+        $before = $this->settings->collectionReminderDays();
+
+        if ($before <= 0) {
+            return 0;
+        }
+
+        $refunds = app(RefundPolicy::class);
+        $fee = $this->settings->cancellationFeePercent();
+        $reminded = 0;
+
+        ProductRequest::query()
+            ->where('status', RequestStatus::ReadyForCollection)
+            ->whereNull('collection_reminded_at')
+            ->with('customer')
+            ->each(function (ProductRequest $request) use ($refunds, $before, $fee, &$reminded) {
+                $collectBy = $refunds->collectBy($request);
+
+                if ($collectBy === null || $collectBy->isPast() || now()->lt($collectBy->subDays($before)->startOfDay())) {
+                    return;
+                }
+
+                $request->customer->notify(new CollectionReminder($request, $collectBy, $fee));
+                $request->forceFill(['collection_reminded_at' => now()])->save();
+                $reminded++;
+            });
+
+        return $reminded;
+    }
+
+    /**
      * Cancels requests whose item has waited in store past the collection
      * window, putting the item back on sale. Returns how many were released.
      */
@@ -278,5 +314,7 @@ class ProductRequestService
         $unit->transitionTo(StockStatus::Reserved);
         $request->status = RequestStatus::ReadyForCollection;
         $request->ready_at = now();
+        // A fresh collection window gets its own reminder.
+        $request->collection_reminded_at = null;
     }
 }

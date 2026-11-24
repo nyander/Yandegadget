@@ -1,4 +1,4 @@
-Go to **Settings → Shop settings**.
+Go to **Settings → Shop settings**. Under each setting, a box shows what it means in cedis or dates as you type, and warns you if a number looks risky. Nothing changes until you click **Save settings**; **Undo changes** puts back what's saved.
 
 ## Lowest price staff can accept
 
@@ -14,7 +14,15 @@ Cancelling **before** you've found the item, or when **you** cancel, always refu
 
 How long an item stays reserved once it's in the store. After that it goes back on sale and the cancellation fee applies. 14 days to start with. Customers see the date on their request and in their email.
 
+## Remind the customer before the deadline
+
+Customers get an email (and a note on their account) this many days before their reserved item goes back on sale. 3 days to start with. Each customer is reminded once. Set it to 0 to send no reminders. It has to be fewer days than the days to collect.
+
 The website's terms page updates itself when you change these.
+
+## Change history
+
+At the bottom of the page: every change, who made it, when, and what it was before. Useful if a price or refund ever looks wrong.
 
 ## Other things you can change
 

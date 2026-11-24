@@ -193,10 +193,12 @@ class AdminTours
                 [self::ROW_ACTIONS, 'Change a deposit', 'Edit a grade to change its deposit.'],
             ],
             'pages.shop-settings' => [
-                [null, 'Shop settings', 'Rules that apply across the shop. '.$guide('settings', 'Read more')],
-                ['input[id*="negotiation_floor_percent"]', 'Lowest price', 'Staff can\'t sell below this share of the listed cedi price.'],
+                [null, 'Shop settings', 'The rules the app follows when staff sell and customers request items. '.$guide('settings', 'Read more')],
+                ['input[id*="negotiation_floor_percent"]', 'Lowest price', 'Staff can\'t sell below this share of the listed cedi price. The box underneath shows what that means for a GH₵1,000 item as you type.'],
                 ['input[id*="request_cancellation_fee_percent"]', 'Cancellation fee', 'What you keep from a deposit if a customer cancels after you\'ve found their item.'],
                 ['input[id*="request_collection_days"]', 'Days to collect', 'How long a found item stays reserved before it goes back on sale.'],
+                ['input[id*="request_collection_reminder_days"]', 'Reminder', 'Customers get an email this many days before their item goes back on sale, so fewer forget to collect.'],
+                ['[data-tour="setting-changes"]', 'Change history', 'Every change, who made it and what it was before.'],
             ],
             'resources.users.index' => [
                 [null, 'People', 'Everyone with an account: you, staff, customers and suppliers. '.$guide('people', 'Read more')],

@@ -7,6 +7,7 @@ use App\Services\Payments\GatewayException;
 use App\Services\Payments\PaymentGateway;
 use App\Services\Payments\PaystackGateway;
 use App\Services\Reports\ReportCurrency;
+use App\Support\LiveUpdates;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Support\Facades\Date;
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // One per request, so every report shares rates and missing-rate warnings.
         $this->app->scoped(ReportCurrency::class);
+
+        // One live-update signal per area per request or queued job.
+        $this->app->scoped(LiveUpdates::class);
 
         $this->app->singleton(PaymentGateway::class, function () {
             return match (config('services.payments.driver')) {

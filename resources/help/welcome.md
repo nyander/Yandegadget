@@ -29,4 +29,4 @@ Work through [Getting set up](help:first-week). The checklist on your dashboard 
 
 ## Pages keep themselves up to date
 
-You don't need to refresh. If someone else adds to the buying list, a customer pays a deposit, or staff check in a shipment, it appears on your screen by itself within a few seconds. The dashboard figures update every 30 seconds and the bell every 10. Anything you're typing is left alone.
+You don't need to refresh. If someone else adds to the buying list, a customer pays a deposit, or staff check in a shipment, it appears on your screen by itself, normally within a second. If the connection drops, pages keep checking every few seconds until it's back. Anything you're typing is left alone.

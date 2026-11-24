@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['key', 'old_value', 'new_value', 'user_id'])]
 class SettingChange extends Model
 {
+    use BroadcastsChanges;
+
     public const UPDATED_AT = null;
 
     protected function casts(): array
@@ -34,5 +37,10 @@ class SettingChange extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function liveTopic(): string
+    {
+        return 'settings';
     }
 }

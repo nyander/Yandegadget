@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Permission;
+use App\Models\Concerns\BroadcastsChanges;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -39,7 +40,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use BroadcastsChanges, HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
     /** Closed accounts get an address on this unreachable domain (App\Services\AccountCloser). */
     public const CLOSED_EMAIL_DOMAIN = '@accounts.invalid';
@@ -96,5 +97,10 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Pas
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'users';
     }
 }

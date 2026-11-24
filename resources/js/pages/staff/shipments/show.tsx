@@ -12,7 +12,10 @@ type Props = {
 };
 
 export default function StaffShipmentShow({ shipment, items }: Props) {
-    useLiveRefresh(5, ['shipment', 'items']);
+    useLiveRefresh(5, ['shipment', 'items'], {
+        channel: 'store',
+        topics: ['shipments', 'stock'],
+    });
     const remaining = shipment.items_count - shipment.checked_count;
     const done = shipment.status === 'received';
 

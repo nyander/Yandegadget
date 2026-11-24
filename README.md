@@ -29,12 +29,13 @@ nvm use
 composer dev
 ```
 
-Open http://127.0.0.1:8000. `composer dev` runs four things together; stop them all with Ctrl+C:
+Open http://127.0.0.1:8000. `composer dev` runs these together; stop them all with Ctrl+C:
 
 - **server:** the site
 - **vite:** reloads the page when you change React or CSS files
 - **queue:** sends notifications and emails
 - **logs:** live log; emails appear here instead of being sent (`MAIL_MAILER=log`)
+- **reverb:** live updates, so open pages redraw as soon as something changes. They're on when `.env` has `BROADCAST_CONNECTION=reverb` (run `php artisan reverb:install` once to fill in the `REVERB_*` values, then `npm run build`). With `log`, pages check every few seconds instead.
 
 `php artisan serve` on its own also works after `npm run build`, but without the queue no emails or notifications go out, and frontend changes need another build.
 

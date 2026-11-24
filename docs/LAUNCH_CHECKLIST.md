@@ -29,6 +29,7 @@ Work through this before telling customers about the site. Items marked **owner*
 - [ ] `php artisan backup:run` succeeds, a copy lands in the off-site bucket, and a **test restore** works.
 - [ ] Sentry DSN set; trigger a test with `php artisan sentry:test`.
 - [ ] Uptime monitor on `https://<domain>/up`.
+- [ ] Live updates: Reverb running (`DEPLOYMENT.md`, "Live updates"); add to the buying list in one browser and see it appear in another within a second. Optional for launch.
 - [ ] Paystack webhook URL set; one live deposit paid and refunded end to end.
 - [ ] `https://<domain>/robots.txt` and `/sitemap.xml` load; submit the sitemap in Google Search Console.
 

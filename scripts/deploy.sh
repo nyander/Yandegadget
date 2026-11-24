@@ -26,5 +26,7 @@ php artisan filament:optimize
 
 # Workers pick up the new code after their current job.
 php artisan queue:restart
+# Live updates: pick up the new code (does nothing if Reverb isn't used).
+php artisan reverb:restart || true
 
 echo "Deployed $(git rev-parse --short HEAD)"

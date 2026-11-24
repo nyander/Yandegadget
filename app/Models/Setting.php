@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['key', 'value'])]
 class Setting extends Model
 {
+    use BroadcastsChanges;
+
     protected $primaryKey = 'key';
 
     public $incrementing = false;
@@ -26,5 +29,10 @@ class Setting extends Model
     protected function casts(): array
     {
         return ['value' => 'json'];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'settings';
     }
 }

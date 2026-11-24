@@ -27,7 +27,10 @@ type Props = {
 };
 
 export default function SupplierOffers({ supplier, stats, offers }: Props) {
-    useLiveRefresh(15, ['stats', 'offers']);
+    useLiveRefresh(15, ['stats', 'offers'], {
+        channel: 'me',
+        topics: ['supplier-offers'],
+    });
     return (
         <>
             <Head title="My offers" />

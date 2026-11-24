@@ -13,7 +13,10 @@ type Props = {
 };
 
 export default function StaffShipments({ inTransit, recentlyReceived }: Props) {
-    useLiveRefresh(10, ['inTransit', 'recentlyReceived']);
+    useLiveRefresh(10, ['inTransit', 'recentlyReceived'], {
+        channel: 'store',
+        topics: ['shipments'],
+    });
     return (
         <>
             <Head title="Shipments" />

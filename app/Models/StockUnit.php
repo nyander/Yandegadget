@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Casts\MoneyCast;
 use App\Enums\StockStatus;
 use App\Exceptions\InvalidStockTransition;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Database\Factories\StockUnitFactory;
@@ -59,7 +61,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class StockUnit extends Model implements HasMedia
 {
     /** @use HasFactory<StockUnitFactory> */
-    use HasFactory, InteractsWithMedia;
+    use BroadcastsChanges, HasFactory, InteractsWithMedia;
 
     protected $attributes = [
         'status' => 'purchased',
@@ -229,5 +231,18 @@ class StockUnit extends Model implements HasMedia
             'received_at' => 'datetime',
             'sold_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'stock';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\PaymentMethod;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -54,6 +56,8 @@ use Illuminate\Support\Str;
  */
 class Sale extends Model
 {
+    use BroadcastsChanges;
+
     /** Sales are written by SaleService only. */
     protected $guarded = ['*'];
 
@@ -201,5 +205,18 @@ class Sale extends Model
             'sold_at' => 'datetime',
             'voided_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'sales';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

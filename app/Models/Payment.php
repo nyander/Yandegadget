@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\PaymentStatus;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -38,6 +40,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Payment extends Model
 {
+    use BroadcastsChanges;
+
     protected $guarded = ['*'];
 
     /**
@@ -73,5 +77,18 @@ class Payment extends Model
             'refunded_at' => 'datetime',
             'provider_response' => 'array',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'payments';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::userChannel($this->customer_id)];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ReceiptOutcome;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +33,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 #[Fillable(['shipment_id', 'stock_unit_id'])]
 class ShipmentItem extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use BroadcastsChanges, InteractsWithMedia;
 
     public function isChecked(): bool
     {
@@ -79,5 +81,18 @@ class ShipmentItem extends Model implements HasMedia
             'outcome' => ReceiptOutcome::class,
             'checked_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'shipments';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

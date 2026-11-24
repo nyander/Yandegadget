@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StockStatus;
+use App\Models\Concerns\BroadcastsChanges;
 use Carbon\CarbonImmutable;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -42,7 +43,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     /** @use HasFactory<ProductFactory> */
-    use HasFactory, InteractsWithMedia, Searchable, SoftDeletes;
+    use BroadcastsChanges, HasFactory, InteractsWithMedia, Searchable, SoftDeletes;
 
     /** Mirrors the column defaults so new models behave the same before a refresh. */
     protected $attributes = [
@@ -152,5 +153,10 @@ class Product extends Model implements HasMedia
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'catalogue';
     }
 }

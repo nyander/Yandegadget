@@ -47,7 +47,10 @@ export default function Dashboard({
     activeRequests,
     readyRequests,
 }: Props) {
-    useLiveRefresh(30, ['recentRequests', 'activeRequests', 'readyRequests']);
+    useLiveRefresh(30, ['recentRequests', 'activeRequests', 'readyRequests'], {
+        channel: 'me',
+        topics: ['requests', 'payments'],
+    });
     const { auth } = usePage().props;
     const { t, locale } = useTrans();
     const can = (permission: string) => auth.permissions.includes(permission);

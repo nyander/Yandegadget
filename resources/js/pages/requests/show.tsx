@@ -24,7 +24,10 @@ import { show as shopShow } from '@/routes/shop';
 import type { RequestDetail } from '@/types';
 
 export default function RequestShow({ request }: { request: RequestDetail }) {
-    useLiveRefresh(10, ['request']);
+    useLiveRefresh(10, ['request'], {
+        channel: 'me',
+        topics: ['requests', 'payments'],
+    });
     const { errors } = usePage().props as { errors: Record<string, string> };
     const { t, locale } = useTrans();
     const date = (value: string | null) => formatDate(value, locale);

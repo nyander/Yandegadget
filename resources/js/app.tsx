@@ -6,6 +6,14 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import ShopLayout from '@/layouts/shop-layout';
+import { configureEcho } from '@laravel/echo-react';
+
+// Live updates (Reverb), when the build has a key; otherwise pages check every few seconds.
+if (import.meta.env.VITE_REVERB_APP_KEY) {
+    configureEcho({
+        broadcaster: 'reverb',
+    });
+}
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

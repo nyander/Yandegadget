@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\ShipmentStatus;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -46,6 +48,8 @@ use Illuminate\Support\Str;
 ])]
 class Shipment extends Model
 {
+    use BroadcastsChanges;
+
     protected $attributes = [
         'status' => 'draft',
     ];
@@ -159,5 +163,18 @@ class Shipment extends Model
             'dispatched_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'shipments';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

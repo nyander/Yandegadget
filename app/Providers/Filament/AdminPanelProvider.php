@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
+use App\Support\LiveUpdates;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Http\Middleware\Authenticate;
@@ -23,8 +24,15 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
-    /** How often open admin lists check for changes other people made. */
-    public const LIST_REFRESH = '5s';
+    /**
+     * How often open admin lists check for changes other people made. With
+     * live updates (Reverb) they redraw the moment something changes, so the
+     * check is only a slow safety net.
+     */
+    public static function listRefresh(): string
+    {
+        return LiveUpdates::enabled() ? '60s' : '5s';
+    }
 
     /** Dashboard figures change slowly; no need to check as often. */
     public const DASHBOARD_REFRESH = '30s';
@@ -33,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
     {
         // Every list (and the lists inside a record, like a shipment's items)
         // picks up other people's changes without a page refresh.
-        Table::configureUsing(fn (Table $table) => $table->poll(self::LIST_REFRESH));
+        Table::configureUsing(fn (Table $table) => $table->poll(self::listRefresh()));
 
         // Every date box gets a "Today" link beside its label.
         DatePicker::configureUsing(fn (DatePicker $picker) => $picker->hintAction(

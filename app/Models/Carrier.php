@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['name', 'contact_name', 'email', 'phone', 'address', 'postcode', 'tracking_url', 'notes', 'is_active'])]
 class Carrier extends Model
 {
+    use BroadcastsChanges;
+
     /**
      * @return HasMany<Shipment, $this>
      */
@@ -35,5 +38,10 @@ class Carrier extends Model
     protected function casts(): array
     {
         return ['is_active' => 'boolean'];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'shipments';
     }
 }

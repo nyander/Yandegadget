@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\OfferStatus;
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -47,7 +49,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class SupplierOffer extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use BroadcastsChanges, InteractsWithMedia;
 
     protected $guarded = ['*'];
 
@@ -150,5 +152,22 @@ class SupplierOffer extends Model implements HasMedia
             'status' => OfferStatus::class,
             'reviewed_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'supplier-offers';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        $supplierUser = $this->supplier->user_id;
+
+        return $supplierUser === null
+            ? [LiveUpdates::BACKOFFICE]
+            : [LiveUpdates::BACKOFFICE, LiveUpdates::userChannel($supplierUser)];
     }
 }

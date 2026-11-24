@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\BuyingListStatus;
+use App\Models\Concerns\BroadcastsChanges;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['description', 'category_id', 'condition_id', 'quantity', 'target_cost', 'status', 'source', 'notes', 'added_by', 'bought_at'])]
 class BuyingListItem extends Model
 {
+    use BroadcastsChanges;
+
     /** @var array<string, mixed> */
     protected $attributes = [
         'status' => 'to_buy',
@@ -66,5 +69,10 @@ class BuyingListItem extends Model
             'quantity' => 'integer',
             'bought_at' => 'immutable_datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'buying-list';
     }
 }

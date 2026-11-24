@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BroadcastsChanges;
+use App\Support\LiveUpdates;
 use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -24,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['base_currency', 'quote_currency', 'rate', 'effective_at', 'set_by'])]
 class ExchangeRate extends Model
 {
+    use BroadcastsChanges;
+
     public static function current(string $base, string $quote): ?self
     {
         return static::asOf($base, $quote, now());
@@ -57,5 +61,18 @@ class ExchangeRate extends Model
             'rate' => 'decimal:6',
             'effective_at' => 'datetime',
         ];
+    }
+
+    public function liveTopic(): string
+    {
+        return 'rates';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function liveChannels(): array
+    {
+        return [LiveUpdates::BACKOFFICE, LiveUpdates::STORE];
     }
 }

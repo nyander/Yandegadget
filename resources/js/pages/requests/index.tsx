@@ -15,7 +15,10 @@ export default function RequestsIndex({
 }: {
     requests: RequestListItem[];
 }) {
-    useLiveRefresh(15, ['requests']);
+    useLiveRefresh(15, ['requests'], {
+        channel: 'me',
+        topics: ['requests', 'payments'],
+    });
     const { t, locale } = useTrans();
 
     return (

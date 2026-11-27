@@ -41,6 +41,16 @@ Open http://127.0.0.1:8000. `composer dev` runs these together; stop them all wi
 
 `php artisan serve` on its own also works after `npm run build`, but without the queue no emails or notifications go out, and frontend changes need another build.
 
+### Sample photos
+
+The demo products and items come with drawn sample photos, each labelled "SAMPLE PHOTO". If your local database was set up before they existed, add them with:
+
+```bash
+php artisan demo:photos
+```
+
+It only fills in products and items that have no photos, and takes a minute or so. It never runs on the live site.
+
 ### Demo accounts
 
 Password `password` for all of them:

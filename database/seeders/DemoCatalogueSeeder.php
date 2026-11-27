@@ -22,6 +22,7 @@ use App\Services\SaleService;
 use App\Services\ShipmentService;
 use App\Services\SupplierOfferService;
 use Brick\Money\Money;
+use Database\Seeders\Support\SamplePhotos;
 use Illuminate\Database\Seeder;
 
 /**
@@ -96,6 +97,9 @@ class DemoCatalogueSeeder extends Seeder
         }
 
         $this->shipDemoStock($toShip);
+
+        // Clearly-labelled sample photos for every product and item.
+        SamplePhotos::addMissing();
         $this->seedDemoSalesAndFinances($supplier, $grades->all());
 
         $supplierUser = $supplier->user;

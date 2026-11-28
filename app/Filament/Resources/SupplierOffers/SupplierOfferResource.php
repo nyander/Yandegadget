@@ -91,9 +91,8 @@ class SupplierOfferResource extends Resource
                             ->options(fn () => Product::orderBy('name')->pluck('name', 'id'))
                             ->searchable()
                             ->helperText('Leave empty to create a new product from the offer.'),
-                        MoneyInput::make('agreed_price', $currency)->label('Agreed price (what we pay)')->required(),
-                        MoneyInput::make('list_price', $currency)->label('List price in the shop')->required()
-                            ->helperText('Customers see this converted to cedis.'),
+                        MoneyInput::withCedis(MoneyInput::make('agreed_price', $currency)->label('Agreed price (what we pay)')->required(), $currency),
+                        MoneyInput::withCedis(MoneyInput::make('list_price', $currency)->label('List price in the shop')->required(), $currency, 'Customers see '),
                         Select::make('location_id')
                             ->label('Bought at')
                             ->options(fn () => Location::where('type', LocationType::Buying)->pluck('name', 'id'))

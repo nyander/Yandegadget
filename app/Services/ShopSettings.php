@@ -20,6 +20,10 @@ class ShopSettings
 
     public const COLLECTION_REMINDER_DAYS = 'request_collection_reminder_days';
 
+    public const RESERVATION_DEPOSIT = 'reservation_deposit_percent';
+
+    public const RESERVATION_DAYS = 'reservation_collect_days';
+
     /** Getting-started steps the owner ticked off by hand. */
     public const ONBOARDING_DONE = 'onboarding_done';
 
@@ -35,6 +39,9 @@ class ShopSettings
         self::COLLECTION_DAYS => 14,
         // Days before the collection deadline to remind the customer by email. 0 turns reminders off.
         self::COLLECTION_REMINDER_DAYS => 3,
+        // Online reservations: the deposit, as a share of the price, and days to collect before a full refund.
+        self::RESERVATION_DEPOSIT => 20,
+        self::RESERVATION_DAYS => 3,
         self::ONBOARDING_DONE => [],
         self::ONBOARDING_DISMISSED => false,
     ];
@@ -57,6 +64,16 @@ class ShopSettings
     public function collectionReminderDays(): int
     {
         return (int) $this->get(self::COLLECTION_REMINDER_DAYS);
+    }
+
+    public function reservationDepositPercent(): int
+    {
+        return (int) $this->get(self::RESERVATION_DEPOSIT);
+    }
+
+    public function reservationDays(): int
+    {
+        return (int) $this->get(self::RESERVATION_DAYS);
     }
 
     public function get(string $key): mixed

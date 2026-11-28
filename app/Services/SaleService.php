@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\RequestStatus;
+use App\Enums\ReservationPayment;
+use App\Enums\ReservationStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\SaleRuleViolation;
 use App\Models\ProductRequest;
+use App\Models\Reservation;
 use App\Models\Sale;
 use App\Models\StockUnit;
 use App\Models\User;
@@ -26,7 +29,34 @@ class SaleService
         private readonly Pricing $pricing,
         private readonly ShopSettings $settings,
         private readonly ProductRequestService $requests,
+        private readonly ReservationService $reservations,
     ) {}
+
+    /**
+     * The online reservation this unit is held for, and what the customer has
+     * already paid towards it (in the store's currency), if any.
+     *
+     * @return array{reservation: Reservation, paid: Money, inFull: bool}|null
+     */
+    public function onlineReservationFor(StockUnit $unit): ?array
+    {
+        $reservation = $this->reservations->activeFor($unit);
+
+        if ($reservation === null) {
+            return null;
+        }
+
+        $currency = $unit->location->currency;
+        $paid = $reservation->status === ReservationStatus::Reserved && $reservation->due->getCurrency()->getCurrencyCode() === $currency
+            ? $reservation->due
+            : Money::zero($currency);
+
+        return [
+            'reservation' => $reservation,
+            'paid' => $paid,
+            'inFull' => $reservation->payment_option === ReservationPayment::Full && $reservation->status === ReservationStatus::Reserved,
+        ];
+    }
 
     /**
      * The customer request this unit is reserved for, and the deposit already
@@ -108,15 +138,28 @@ class SaleService
                 throw new SaleRuleViolation('The price can\'t be less than the deposit already paid.');
             }
 
+            $online = $this->onlineReservationFor($unit);
+
+            if ($online !== null && $online['reservation']->status === ReservationStatus::AwaitingPayment) {
+                throw new SaleRuleViolation("{$unit->reference} is being paid for online right now. If the payment doesn't go through, it's back on sale within half an hour.");
+            }
+
+            if ($online !== null && $pricePaid->isLessThan($online['paid'])) {
+                throw new SaleRuleViolation('The price can\'t be less than the '.$online['paid']->formatToLocale((string) config('shop.display_locale')).' already paid online.');
+            }
+
+            $applied = $online['paid'] ?? $reservation['deposit'] ?? null;
+
             $sale = new Sale;
             $sale->forceFill([
                 'stock_unit_id' => $unit->id,
                 'location_id' => $unit->location_id,
                 'sold_by' => $seller->id,
                 'product_request_id' => $reservation['request']->id ?? null,
-                'deposit_applied_amount' => isset($reservation) ? $reservation['deposit']->getMinorAmount()->toInt() : 0,
-                'customer_id' => $details['customer_id'] ?? $reservation['request']->customer_id ?? null,
-                'customer_name' => $details['customer_name'] ?? $reservation['request']->customer->name ?? null,
+                'reservation_id' => $online['reservation']->id ?? null,
+                'deposit_applied_amount' => $applied?->getMinorAmount()->toInt() ?? 0,
+                'customer_id' => $details['customer_id'] ?? $reservation['request']->customer_id ?? $online['reservation']->customer_id ?? null,
+                'customer_name' => $details['customer_name'] ?? $reservation['request']->customer->name ?? $online['reservation']->customer->name ?? null,
                 'customer_phone' => $details['customer_phone'] ?? null,
                 'list_price_amount' => $quote->listPrice->getMinorAmount()->toInt(),
                 'list_price_currency' => $quote->listPrice->getCurrency()->getCurrencyCode(),
@@ -139,6 +182,10 @@ class SaleService
 
             if ($reservation !== null) {
                 $this->requests->fulfil($reservation['request'], $sale);
+            }
+
+            if ($online !== null) {
+                $this->reservations->collected($online['reservation'], $sale);
             }
 
             return $sale;
@@ -180,6 +227,11 @@ class SaleService
             // A requested item goes back to being reserved for that customer.
             if ($sale->product_request_id !== null && ($request = ProductRequest::find($sale->product_request_id))) {
                 $this->requests->saleVoided($request);
+            }
+
+            // An item reserved online goes back to being kept for that customer.
+            if ($sale->reservation_id !== null && ($reservation = Reservation::find($sale->reservation_id))) {
+                $this->reservations->saleVoided($reservation);
             }
         });
     }

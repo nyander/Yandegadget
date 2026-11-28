@@ -29,10 +29,15 @@ type Props = {
         currency: string;
         rate: { value: string; effective_at: string } | null;
         reservation: {
+            kind: 'request' | 'online';
             reference: string;
             customer: string;
             deposit: Price;
+            paid_in_full: boolean;
+            awaiting_payment: boolean;
+            collect_by: string | null;
         } | null;
+        prefill?: Price;
     } | null;
     problem: string | null;
     paymentMethods: PaymentMethodOption[];
@@ -50,7 +55,9 @@ export default function SellCreate({
 }: Props) {
     const [showMore, setShowMore] = useState(false);
     const form = useForm({
-        price: pricing ? (pricing.listed.amount / 100).toFixed(2) : '',
+        price: pricing
+            ? ((pricing.prefill ?? pricing.listed).amount / 100).toFixed(2)
+            : '',
         payment_method: 'cash',
         payment_reference: '',
         customer_name: '',
@@ -127,21 +134,39 @@ export default function SellCreate({
                     </div>
                 ) : (
                     <form onSubmit={submit} className="space-y-6">
-                        {pricing.reservation && (
-                            <div className="rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 text-sm">
-                                <p className="font-medium">
-                                    Reserved for {pricing.reservation.customer}{' '}
-                                    (request {pricing.reservation.reference})
-                                </p>
-                                <p className="mt-1">
-                                    They&rsquo;ve paid a{' '}
-                                    {pricing.reservation.deposit.formatted}{' '}
-                                    deposit online.
-                                    {priceMinor !== null &&
-                                        ` Collect ${formatMoney(Math.max(0, priceMinor - pricing.reservation.deposit.amount) / 100, pricing.currency)} in store.`}
-                                </p>
-                            </div>
-                        )}
+                        {pricing.reservation &&
+                            pricing.reservation.awaiting_payment && (
+                                <div className="rounded-xl border border-brand-red/40 bg-brand-red/10 p-4 text-sm">
+                                    <p className="font-medium">
+                                        Being paid for online by{' '}
+                                        {pricing.reservation.customer} (
+                                        {pricing.reservation.reference})
+                                    </p>
+                                    <p className="mt-1">
+                                        Don&rsquo;t sell it yet. If the payment
+                                        doesn&rsquo;t go through, it&rsquo;s
+                                        back on sale within half an hour.
+                                    </p>
+                                </div>
+                            )}
+                        {pricing.reservation &&
+                            !pricing.reservation.awaiting_payment && (
+                                <div className="rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 text-sm">
+                                    <p className="font-medium">
+                                        Reserved for{' '}
+                                        {pricing.reservation.customer} (
+                                        {pricing.reservation.kind === 'online'
+                                            ? 'online reservation'
+                                            : 'request'}{' '}
+                                        {pricing.reservation.reference})
+                                    </p>
+                                    <p className="mt-1">
+                                        {pricing.reservation.paid_in_full
+                                            ? `Paid in full online: ${pricing.reservation.deposit.formatted}. Nothing to collect; just hand it over.`
+                                            : `They’ve paid ${pricing.reservation.deposit.formatted} online.${priceMinor !== null ? ` Collect ${formatMoney(Math.max(0, priceMinor - pricing.reservation.deposit.amount) / 100, pricing.currency)} in store.` : ''}`}
+                                    </p>
+                                </div>
+                            )}
                         <div className="grid grid-cols-2 gap-3">
                             <div className="rounded-xl bg-muted/60 p-4">
                                 <p className="text-sm text-muted-foreground">

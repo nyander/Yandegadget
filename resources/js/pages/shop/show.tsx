@@ -1,8 +1,9 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ChevronLeft, ImageOff, MapPin } from 'lucide-react';
+import { ChevronLeft, ImageOff, MapPin, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { intlLocale, useTrans } from '@/hooks/use-trans';
 import { cn } from '@/lib/utils';
 import { index as shopIndex } from '@/routes/shop';
@@ -14,7 +15,11 @@ type Props = {
 };
 
 export default function ShopShow({ product, rateUpdatedAt }: Props) {
-    const { name: shopName } = usePage().props;
+    const { name: shopName, errors } = usePage().props;
+    const available = product.units.reduce(
+        (sum, unit) => sum + unit.available,
+        0,
+    );
     const { t, locale } = useTrans();
     const [active, setActive] = useState(0);
     const image: ShopImage | undefined = product.images[active];
@@ -129,10 +134,10 @@ export default function ShopShow({ product, rateUpdatedAt }: Props) {
                         )}
 
                         <h2 className="mt-8 font-semibold">
-                            {product.units.length === 1
+                            {available === 1
                                 ? t('1 available')
                                 : t(':count available', {
-                                      count: product.units.length,
+                                      count: available,
                                   })}
                         </h2>
                         <p className="text-sm text-muted-foreground">
@@ -148,6 +153,20 @@ export default function ShopShow({ product, rateUpdatedAt }: Props) {
                                         month: 'short',
                                     }),
                                 })}`}
+                        </p>
+
+                        {errors.reserve && (
+                            <p
+                                role="alert"
+                                className="mt-4 rounded-lg border border-brand-red/40 bg-brand-red/10 p-3 text-sm"
+                            >
+                                {errors.reserve}
+                            </p>
+                        )}
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            {t(
+                                'Reserve online and pay by mobile money or card: in full, or a deposit with the rest in store. We keep it for you to collect.',
+                            )}
                         </p>
 
                         <ul className="mt-4 space-y-3">
@@ -171,6 +190,17 @@ export default function ShopShow({ product, rateUpdatedAt }: Props) {
                                                         {t('Reserved')}
                                                     </Badge>
                                                 )}
+                                                {unit.bulk &&
+                                                    unit.available > 0 && (
+                                                        <Badge variant="outline">
+                                                            {t(
+                                                                ':count in stock',
+                                                                {
+                                                                    count: unit.available,
+                                                                },
+                                                            )}
+                                                        </Badge>
+                                                    )}
                                             </div>
                                             {unit.condition.description && (
                                                 <p className="mt-2 text-sm text-muted-foreground">
@@ -214,11 +244,21 @@ export default function ShopShow({ product, rateUpdatedAt }: Props) {
                                             ))}
                                         </div>
                                     )}
-                                    <p className="mt-3 text-xs text-muted-foreground">
-                                        {t('Ref :reference', {
-                                            reference: unit.reference,
-                                        })}
-                                    </p>
+                                    <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                                        <p className="text-xs text-muted-foreground">
+                                            {t('Ref :reference', {
+                                                reference: unit.reference,
+                                            })}
+                                        </p>
+                                        {unit.reserve_url && (
+                                            <Button asChild size="sm">
+                                                <Link href={unit.reserve_url}>
+                                                    <ShoppingBag className="size-4" />
+                                                    {t('Reserve and pay')}
+                                                </Link>
+                                            </Button>
+                                        )}
+                                    </div>
                                 </li>
                             ))}
                         </ul>

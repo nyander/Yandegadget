@@ -35,6 +35,14 @@ Made a mistake? Don't record a second sale. Tell the owner, who can **void** the
 
 ---
 
+## Staff: items reserved online
+
+Customers can reserve an item on the website and pay by mobile money or card. Those items show as **Reserved**; keep them aside. When the customer comes in, open the item on **Sell**: it says what they paid online. If they paid in full, the price is filled in; just record the sale. If they paid a deposit, agree the price and collect the rest. You can't sell a reserved item to someone else.
+
+## Staff: bulk items in a shipment
+
+A batch of the same thing (e.g. 50 watches) shows as one card. Check any damaged or missing ones one by one (**Check one by one**), then tap **All arrived** for the rest.
+
 ## Owner: the admin panel (`/admin`)
 
 ### Every day or two

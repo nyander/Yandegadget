@@ -6,11 +6,13 @@ use App\Enums\LocationType;
 use App\Filament\Support\MoneyInput;
 use App\Models\Location;
 use App\Models\Shipment;
+use Database\Seeders\LocationSeeder;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -32,7 +34,16 @@ class ShipmentForm
                             ->label('From')
                             ->relationship('origin', 'name', fn (Builder $query) => $query->where('type', LocationType::Buying))
                             ->default(fn () => Location::where('code', 'UK-BUYING')->value('id'))
+                            ->helperText('"Direct from supplier" is for goods a supplier (e.g. on Alibaba) sends straight to Accra.')
+                            ->live()
                             ->required(),
+                        Select::make('supplier_id')
+                            ->label('Supplier sending it')
+                            ->relationship('supplier', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->visible(fn (Get $get) => (int) $get('origin_location_id') === (int) Location::where('code', LocationSeeder::DIRECT)->value('id'))
+                            ->helperText('Who ships it to Accra. Their tracking number goes in when you dispatch.'),
                         Select::make('destination_location_id')
                             ->label('To')
                             ->relationship('destination', 'name', fn (Builder $query) => $query->where('type', LocationType::Store))

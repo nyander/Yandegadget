@@ -9,6 +9,7 @@ use App\Enums\StockStatus;
 use App\Exceptions\ShipmentRuleViolation;
 use App\Models\Shipment;
 use App\Models\ShipmentItem;
+use App\Models\StockBatch;
 use App\Models\StockUnit;
 use App\Models\User;
 use App\Notifications\ShipmentDispatched;
@@ -159,6 +160,30 @@ class ShipmentService
         if ($completed) {
             Notification::send($this->shipmentManagers(), new ShipmentReceived($shipment->refresh()));
         }
+    }
+
+    /**
+     * Checks in every item of a bulk purchase on this shipment that hasn't been
+     * checked yet, as arrived. Damaged or missing ones are checked one by one first.
+     *
+     * @return int How many were checked in.
+     */
+    public function checkInBatch(Shipment $shipment, StockBatch $batch, User $by): int
+    {
+        $items = $shipment->items()
+            ->whereNull('checked_at')
+            ->whereHas('stockUnit', fn ($q) => $q->where('batch_id', $batch->id))
+            ->get();
+
+        if ($items->isEmpty()) {
+            throw new ShipmentRuleViolation('There\'s nothing left to check in for this batch.');
+        }
+
+        foreach ($items as $item) {
+            $this->checkIn($item, ReceiptOutcome::Received, $by);
+        }
+
+        return $items->count();
     }
 
     private function ensureDraft(Shipment $shipment): void

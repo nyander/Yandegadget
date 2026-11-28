@@ -60,13 +60,12 @@ class StockUnitForm
                             ->required()
                             ->default(now())
                             ->maxDate(now()),
-                        MoneyInput::make('cost', $listCurrency)
+                        MoneyInput::withCedis(MoneyInput::make('cost', $listCurrency)
                             ->label('Cost')
-                            ->required(),
-                        MoneyInput::make('price', $listCurrency)
+                            ->required(), $listCurrency),
+                        MoneyInput::withCedis(MoneyInput::make('price', $listCurrency)
                             ->label('List price')
-                            ->required()
-                            ->helperText('Customers see this converted to cedis at the current rate.'),
+                            ->required(), $listCurrency, 'Customers see '),
                     ]),
                 Section::make('Where it is')
                     ->columns(2)

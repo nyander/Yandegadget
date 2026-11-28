@@ -142,6 +142,10 @@
     /* Dashboard figures: shrink a little in a narrow card rather than spill out of it. */
     .fi-wi-stats-overview-stat { container-type: inline-size; min-width: 0; }
     .fi-wi-stats-overview-stat-value { font-size: clamp(1.25rem, 14cqi, 1.875rem); overflow-wrap: anywhere; }
+    /* Cedi equivalent under GBP price boxes. */
+    .yg-rate { display: block; margin-top: .35rem; font-size: .85rem; color: var(--yg-muted); }
+    .yg-rate strong { color: var(--yg-strong); }
+    .yg-rate.is-missing { color: var(--yg-warn); }
     /* Shop settings: compact inputs, and a live example under each. */
     .yg-setting { max-width: 26rem; }
     .yg-setting__help { font-size: .85rem; color: var(--yg-muted); }

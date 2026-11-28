@@ -20,13 +20,23 @@ So if you buy three iPhone 13s, that's one product with three items, each with i
     - **Starting status** — _Purchased (UK)_ for something still in the UK, or _In store_ for something already in Accra.
 4. Add photos of this exact item if it has marks or wear.
 
-## Bought several of the same?
+## Bought several of the same? (bulk stock)
 
-If you bought a batch of the same product, for example ten iPhone 13s in grade B at £250 each, use **Add several** instead of adding them one by one. It's on the product's **Stock units** list, and on **Catalogue → Stock units**.
+Things bought in bulk, like 50 watches from one supplier, are kept as a **batch** (`BT-…`), so you can treat them as one:
 
-Fill in **how many**, then the details they share once: condition, cost and list price of each, supplier, date, and where they are now. Paste or type their **serial / IMEI numbers one per line**, if they have them; the form tells you how many you've entered. Each item still gets its own reference (`YG-…`), so you can ship, sell and track them separately. Open any item afterwards to add photos or a note about its marks.
+- **Add them:** **Catalogue → Bulk stock → Add bulk stock** (or **Add several** on a product's stock units). Fill in **how many**, then what they share once: condition, cost and list price of each, supplier, date, and where they are now (still in the UK, **the supplier ships straight to Accra**, or already in the store). Paste their serial / IMEI numbers one per line if they have them.
+- **Change them all:** open the batch under **Bulk stock** and **Edit all**. The new price, cost, condition or notes go on every item **not yet sold**; sold ones keep what they had, so past sales don't change.
+- **See where they are:** the Bulk stock list shows how many are still in the UK, on the way, in store, reserved and sold.
+- **Ship them together:** on a shipment, **Add items → Bulk purchases** adds the whole batch at once.
+- **In the shop** they show as one line ("47 in stock"), not 47 separate items.
 
-Up to 50 at a time.
+Each item still has its own reference (`YG-…`), so a single one can still be sold, reserved or written off on its own.
+
+One-off and second-hand items don't have a batch; they stay one by one under **Stock units** (the **Bought as** column says "One-off").
+
+**Changing several items that aren't a batch:** on **Stock units**, tick them and use **Edit selected**. Fill in only what you want to change.
+
+While you type a cost or price in pounds, the cedi amount at today's rate shows underneath.
 
 ## Where items are
 

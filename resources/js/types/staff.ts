@@ -29,6 +29,8 @@ export type ShipmentItemRow = {
     serial_number: string | null;
     condition: { grade: string; name: string };
     condition_notes: string | null;
+    /** The bulk purchase it belongs to, if any. */
+    batch: { id: number; reference: string } | null;
     image: string | null;
     checked: boolean;
     outcome: ReceiptOutcomeValue | null;

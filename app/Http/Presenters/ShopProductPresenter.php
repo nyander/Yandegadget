@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\StockUnit;
 use App\Services\Pricing;
 use Brick\Money\Money;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -72,19 +73,58 @@ class ShopProductPresenter
                 'slug' => $product->category->slug,
             ],
             'images' => $product->getMedia('gallery')->map(fn (Media $media) => $this->image($media))->values()->all(),
-            'units' => $units->map(fn (StockUnit $unit) => [
-                'reference' => $unit->reference,
-                'status' => $unit->status === StockStatus::Received ? 'in_store' : 'reserved',
-                'price' => $this->pricing->presentForCustomer($unit->price),
+            'units' => $this->groupBulk($units)->map(fn (array $group) => [
+                'reference' => $group['unit']->reference,
+                'status' => $group['available'] > 0 ? 'in_store' : 'reserved',
+                // Bulk stock shows as one line: how many of them are still available.
+                'bulk' => $group['unit']->batch_id !== null,
+                'available' => $group['available'],
+                'price' => $this->pricing->presentForCustomer($group['unit']->price),
                 'condition' => [
-                    'grade' => $unit->condition->grade,
-                    'name' => $unit->condition->name,
-                    'description' => $unit->condition->description,
+                    'grade' => $group['unit']->condition->grade,
+                    'name' => $group['unit']->condition->name,
+                    'description' => $group['unit']->condition->description,
                 ],
-                'condition_notes' => $unit->condition_notes,
-                'photos' => $unit->getMedia('photos')->map(fn (Media $media) => $this->image($media))->values()->all(),
-            ])->all(),
+                'condition_notes' => $group['unit']->condition_notes,
+                'photos' => $group['unit']->getMedia('photos')->map(fn (Media $media) => $this->image($media))->values()->all(),
+                'reserve_url' => $group['available'] > 0
+                    ? route('reservations.create', ['product' => $product->slug, 'reference' => $group['unit']->reference])
+                    : null,
+            ])->values()->all(),
         ];
+    }
+
+    /**
+     * One-off items stay one each; items from the same bulk purchase become one
+     * entry showing the first available unit and how many are left.
+     *
+     * @param  Collection<int, StockUnit>  $units
+     * @return Collection<int, array{unit: StockUnit, available: int}>
+     */
+    private function groupBulk(Collection $units): Collection
+    {
+        $groups = collect();
+
+        foreach ($units as $unit) {
+            $key = $unit->batch_id !== null ? "batch-{$unit->batch_id}" : "unit-{$unit->id}";
+            $inStore = $unit->status === StockStatus::Received ? 1 : 0;
+
+            if (! $groups->has($key)) {
+                $groups->put($key, ['unit' => $unit, 'available' => $inStore]);
+
+                continue;
+            }
+
+            $group = $groups->get($key);
+            $group['available'] += $inStore;
+            // Show (and reserve) an available one if the first was reserved.
+            if ($group['unit']->status !== StockStatus::Received && $inStore === 1) {
+                $group['unit'] = $unit;
+            }
+            $groups->put($key, $group);
+        }
+
+        return $groups->values();
     }
 
     /**

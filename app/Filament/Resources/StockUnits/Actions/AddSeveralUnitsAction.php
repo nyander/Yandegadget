@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\StockUnits\Actions;
 
-use App\Enums\LocationType;
 use App\Enums\StockStatus;
 use App\Filament\Support\MoneyInput;
 use App\Models\Condition;
@@ -11,6 +10,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Services\StockIntake;
+use Database\Seeders\LocationSeeder;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -35,7 +35,8 @@ class AddSeveralUnitsAction
     public static function make(?callable $product = null): Action
     {
         $listCurrency = (string) config('shop.list_currency');
-        $ukBase = fn () => Location::where('type', LocationType::Buying)->value('id');
+        $ukBase = fn () => Location::where('code', 'UK-BUYING')->value('id');
+        $direct = fn () => Location::where('code', LocationSeeder::DIRECT)->value('id');
         $store = fn () => Location::where('code', 'ACC-LEGON')->value('id');
 
         return Action::make('addSeveral')
@@ -70,11 +71,10 @@ class AddSeveralUnitsAction
                             ->label('Condition')
                             ->options(fn () => Condition::query()->orderBy('sort_order')->get()->mapWithKeys(fn (Condition $c) => [$c->id => "{$c->grade} – {$c->name}"]))
                             ->required(),
-                        MoneyInput::make('cost', $listCurrency)->label('Cost of each')->required(),
-                        MoneyInput::make('price', $listCurrency)
+                        MoneyInput::withCedis(MoneyInput::make('cost', $listCurrency)->label('Cost of each')->required(), $listCurrency),
+                        MoneyInput::withCedis(MoneyInput::make('price', $listCurrency)
                             ->label('List price of each')
-                            ->required()
-                            ->helperText('Customers see this in cedis at the current rate.'),
+                            ->required(), $listCurrency, 'Customers see '),
                         Select::make('supplier_id')
                             ->label('Supplier')
                             ->options(fn () => Supplier::query()->orderBy('name')->pluck('name', 'id'))
@@ -84,12 +84,17 @@ class AddSeveralUnitsAction
                             ->label('Where they are now')
                             ->options([
                                 StockStatus::Purchased->value => 'Bought, still in the UK',
+                                'direct' => 'Bought, the supplier ships straight to Accra',
                                 StockStatus::Received->value => 'Already in the Accra store',
                             ])
                             ->default(StockStatus::Purchased->value)
                             ->required()
                             ->live()
-                            ->afterStateUpdated(fn (?string $state, Set $set) => $set('location_id', $state === StockStatus::Received->value ? $store() : $ukBase())),
+                            ->afterStateUpdated(fn (?string $state, Set $set) => $set('location_id', match ($state) {
+                                StockStatus::Received->value => $store(),
+                                'direct' => $direct(),
+                                default => $ukBase(),
+                            })),
                         Select::make('location_id')
                             ->label('Location')
                             ->options(fn () => Location::query()->orderBy('name')->pluck('name', 'id'))
@@ -123,6 +128,9 @@ class AddSeveralUnitsAction
 
                     return;
                 }
+
+                // Bought for direct delivery: still "purchased", waiting to be shipped by the supplier.
+                $data['status'] = $data['status'] === 'direct' ? StockStatus::Purchased->value : $data['status'];
 
                 $units = $intake->addSeveral(
                     $target,

@@ -8,6 +8,7 @@ import {
     Plus,
     Settings,
     ShieldCheck,
+    ShoppingBag,
     Store,
     Truck,
 } from 'lucide-react';
@@ -22,6 +23,7 @@ import {
     index as myRequests,
     show as showRequest,
 } from '@/routes/requests';
+import { index as myReservations } from '@/routes/reservations';
 import { index as staffSell } from '@/routes/staff/sell';
 import { index as staffShipments } from '@/routes/staff/shipments';
 import { index as supplierOffers } from '@/routes/supplier/offers';
@@ -76,6 +78,12 @@ export default function Dashboard({
                                   {t(':count ready', { count: readyRequests })}
                               </span>
                           ) : null,
+                  },
+                  {
+                      title: t('My reservations'),
+                      text: t('Items you’ve reserved and paid for online'),
+                      href: myReservations.url(),
+                      icon: ShoppingBag,
                   },
                   {
                       title: t('Request an item'),

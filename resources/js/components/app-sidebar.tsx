@@ -5,6 +5,7 @@ import {
     LayoutGrid,
     PackageSearch,
     ShieldCheck,
+    ShoppingBag,
     Store,
     Truck,
 } from 'lucide-react';
@@ -24,6 +25,7 @@ import {
 import { tk } from '@/hooks/use-trans';
 import { dashboard, home } from '@/routes';
 import { index as myRequests } from '@/routes/requests';
+import { index as myReservations } from '@/routes/reservations';
 import { index as supplierOffers } from '@/routes/supplier/offers';
 import { index as staffShipments } from '@/routes/staff/shipments';
 import { index as staffSell } from '@/routes/staff/sell';
@@ -37,6 +39,11 @@ export function AppSidebar() {
         { title: tk('Account'), href: dashboard(), icon: LayoutGrid },
         ...(can('requests.create') && !can('requests.manage')
             ? [
+                  {
+                      title: tk('My reservations'),
+                      href: myReservations(),
+                      icon: ShoppingBag,
+                  },
                   {
                       title: tk('My requests'),
                       href: myRequests(),

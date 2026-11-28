@@ -98,6 +98,7 @@ final class SampleProductImage
 
         return match (true) {
             str_contains($lower, 'soundbar') => 'soundbar',
+            str_contains($lower, 'buds') || str_contains($lower, 'airpods') || str_contains($lower, 'earbuds') => 'earbuds',
             str_contains($lower, 'switch') => 'handheld',
             str_contains($lower, 'watch') => 'watch',
             $categorySlug === 'phones' => 'phone',
@@ -135,7 +136,7 @@ final class SampleProductImage
         // "Sample photo" label, so nobody mistakes it for the real item.
         $label = 'SAMPLE PHOTO';
         $box = imagettfbbox(26, 0, $this->fontBold, $label) ?: [0, 0, 260, 0];
-        $this->roundedRect(48, 48, 48 + ($box[2] - $box[0]) + 64, 116, 34, $this->colour('#111827', 20));
+        $this->roundedRect(48, 48, 48 + ($box[2] - $box[0]) + 64, 116, 34, $this->colour('#1f2937'));
         imagettftext($this->img, 26, 0, 80, 96, $this->colour('#ffffff'), $this->fontBold, $label);
     }
 
@@ -206,6 +207,19 @@ final class SampleProductImage
                 $this->roundedRect($cx + $s(330), $cy - $s(190), $cx + $s(470), $cy + $s(190), $s(60), $this->colour('#ef4444'));
                 imagefilledellipse($this->img, $cx - $s(400), $cy - $s(80), $s(50), $s(50), $darker);
                 imagefilledellipse($this->img, $cx + $s(400), $cy + $s(60), $s(50), $s(50), $darker);
+                break;
+
+            case 'earbuds':
+                // An open charging case with a bud either side.
+                $this->roundedRect($cx - $s(230), $cy - $s(40), $cx + $s(230), $cy + $s(300), $s(120), $white);
+                $this->roundedRect($cx - $s(230), $cy - $s(40), $cx + $s(230), $cy + $s(10), $s(20), $silver);
+                imagefilledellipse($this->img, $cx, $cy + $s(120), $s(40), $s(40), $this->colour('#10b981'));
+                foreach ([-1, 1] as $side) {
+                    $bx = $cx + $side * $s(150);
+                    imagefilledellipse($this->img, $bx, $cy - $s(230), $s(190), $s(190), $darker);
+                    imagefilledellipse($this->img, $bx, $cy - $s(230), $s(110), $s(110), $this->colour($screenTop));
+                    $this->roundedRect($bx - $s(30), $cy - $s(200), $bx + $s(30), $cy - $s(60), $s(30), $darker);
+                }
                 break;
 
             case 'camera':

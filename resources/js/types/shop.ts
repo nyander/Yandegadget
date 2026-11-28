@@ -39,6 +39,11 @@ export type StockUnitOffer = {
     };
     condition_notes: string | null;
     photos: ShopImage[];
+    /** Several identical items bought in bulk, shown as one line. */
+    bulk: boolean;
+    available: number;
+    /** Where to reserve and pay online; null when none are free. */
+    reserve_url: string | null;
 };
 
 export type ProductDetail = {
@@ -73,3 +78,31 @@ export type Paginated<T> = {
 };
 
 export type ShopSort = 'newest' | 'price_asc' | 'price_desc';
+
+export type ReservationDetail = {
+    id: number;
+    reference: string;
+    status: 'awaiting_payment' | 'reserved' | 'collected' | 'cancelled';
+    status_label: string;
+    payment_option: 'full' | 'deposit';
+    paid_in_full: boolean;
+    item: {
+        reference: string;
+        name: string;
+        slug: string;
+        grade: string;
+        condition: string;
+        image: string | null;
+    };
+    price: Price;
+    due: Price;
+    balance: Price;
+    paid_at: string | null;
+    collect_by: string | null;
+    hold_expires_at: string | null;
+    cancelled_at: string | null;
+    cancel_reason: string | null;
+    refunded: boolean;
+    channel: string | null;
+    created_at: string | null;
+};

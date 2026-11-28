@@ -15,7 +15,6 @@ use App\Models\Product;
 use App\Models\ProductRequest;
 use App\Models\User;
 use App\Services\Payments\GatewayException;
-use App\Services\Payments\PaymentService;
 use App\Services\Pricing;
 use App\Services\ProductRequestService;
 use App\Services\RefundPolicy;
@@ -175,24 +174,6 @@ class ProductRequestController extends Controller
      * Where Paystack sends the customer back. The redirect proves nothing on
      * its own, so the payment is checked with Paystack before anything changes.
      */
-    public function callback(Request $request, PaymentService $payments): RedirectResponse
-    {
-        $reference = $request->string('reference')->toString() ?: $request->string('trxref')->toString();
-        $payment = Payment::where('reference', $reference)->first();
-
-        if ($payment === null || ! $payment->payable instanceof ProductRequest) {
-            return to_route('requests.index');
-        }
-
-        try {
-            $payments->confirm($reference);
-        } catch (GatewayException) {
-            // The webhook will confirm it if the provider was briefly unreachable.
-        }
-
-        return to_route('requests.show', $payment->payable);
-    }
-
     private function checkout(ProductRequest $productRequest): HttpResponse
     {
         try {

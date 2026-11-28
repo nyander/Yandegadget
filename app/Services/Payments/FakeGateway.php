@@ -4,10 +4,13 @@ namespace App\Services\Payments;
 
 use App\Models\Payment;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 /**
- * Local stand-in for Paystack: "checkout" goes straight to the callback and
- * every payment succeeds. Refuses to run in production.
+ * Local stand-in for Paystack. Checkout opens a pretend mobile money page
+ * (/payments/test/{reference}) where you approve or decline; verify reports
+ * what you chose (approved if nothing was chosen, e.g. in tests). Refuses to
+ * run in production.
  */
 class FakeGateway implements PaymentGateway
 {
@@ -25,21 +28,30 @@ class FakeGateway implements PaymentGateway
 
     public function initialize(Payment $payment, User $customer, string $callbackUrl): string
     {
-        return $callbackUrl.(str_contains($callbackUrl, '?') ? '&' : '?').http_build_query(['reference' => $payment->reference]);
+        return route('payments.test', $payment);
+    }
+
+    /** The test checkout's answer, remembered for verify(). */
+    public function decide(Payment $payment, bool $approved, string $channel): void
+    {
+        Cache::put("fake-payment:{$payment->reference}", ['approved' => $approved, 'channel' => $channel], now()->addDay());
     }
 
     public function verify(string $reference): GatewayTransaction
     {
         $payment = Payment::where('reference', $reference)->firstOrFail();
+        /** @var array{approved: bool, channel: string}|null $decision */
+        $decision = Cache::get("fake-payment:{$reference}");
+        $approved = $decision['approved'] ?? true;
 
         return new GatewayTransaction(
             reference: $reference,
-            status: 'success',
+            status: $approved ? 'success' : 'failed',
             amount: $payment->amount,
             currency: $payment->currency,
             transactionId: 'fake_'.$payment->id,
-            channel: 'mobile_money',
-            paidAt: now(),
+            channel: $decision['channel'] ?? 'mobile_money',
+            paidAt: $approved ? now() : null,
         );
     }
 

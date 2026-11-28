@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Enums\PaymentMethod;
+use App\Enums\ReservationStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\SaleRuleViolation;
 use App\Http\Controllers\Controller;
@@ -101,10 +102,31 @@ class SaleController extends Controller
             $problem = null;
             $reservation = $this->sales->reservationFor($unit);
             $pricing['reservation'] = $reservation ? [
+                'kind' => 'request',
                 'reference' => $reservation['request']->reference,
                 'customer' => $reservation['request']->customer->name,
                 'deposit' => $this->pricing->present($reservation['deposit']),
+                'paid_in_full' => false,
+                'awaiting_payment' => false,
+                'collect_by' => null,
             ] : null;
+
+            $online = $this->sales->onlineReservationFor($unit);
+            if ($online !== null) {
+                $pricing['reservation'] = [
+                    'kind' => 'online',
+                    'reference' => $online['reservation']->reference,
+                    'customer' => $online['reservation']->customer->name,
+                    'deposit' => $this->pricing->present($online['paid']),
+                    'paid_in_full' => $online['inFull'],
+                    'awaiting_payment' => $online['reservation']->status === ReservationStatus::AwaitingPayment,
+                    'collect_by' => $online['reservation']->collect_by?->toIso8601String(),
+                ];
+                // Paid in full online: the agreed price is what they paid.
+                if ($online['inFull']) {
+                    $pricing['prefill'] = $this->pricing->present($online['paid']);
+                }
+            }
         } catch (SaleRuleViolation $e) {
             $pricing = null;
             $problem = $e->getMessage();

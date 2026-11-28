@@ -16,6 +16,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
 /**
@@ -44,15 +46,31 @@ class EditShipment extends EditRecord
         return $this->record->isDraft() ? parent::getFormActions() : [];
     }
 
-    private function dispatchAction(): Action
+    /**
+     * The form, the items, then a second Dispatch button at the bottom, so
+     * after adding items there's no need to scroll back up.
+     */
+    public function content(Schema $schema): Schema
     {
-        return Action::make('dispatch')
+        return parent::content($schema)->components([
+            $this->getFormContentComponent(),
+            $this->getRelationManagersContentComponent(),
+            Actions::make([$this->dispatchAction('dispatchBottom')->size('lg')])
+                ->key('bottomActions')
+                ->alignEnd()
+                ->visible(fn () => $this->record->isDraft())
+                ->extraAttributes(['data-tour' => 'dispatch-bottom']),
+        ]);
+    }
+
+    private function dispatchAction(string $name = 'dispatch'): Action
+    {
+        return Action::make($name)
             ->label('Dispatch')
             ->icon(Heroicon::OutlinedPaperAirplane)
             ->color('primary')
             ->visible(fn () => $this->record->isDraft())
-            ->disabled(fn () => $this->record->items()->doesntExist())
-            ->tooltip(fn () => $this->record->items()->doesntExist() ? 'Add items first' : null)
+            ->modalHeading(fn () => 'Dispatch '.$this->record->reference.' ('.$this->record->items()->count().' '.str('item')->plural($this->record->items()->count()).')')
             ->modalDescription('Every item on this shipment will be marked as in transit, and staff in Ghana will be told it is on its way.')
             ->schema([
                 Select::make('carrier_id')

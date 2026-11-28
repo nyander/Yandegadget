@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckInShipmentItemRequest;
 use App\Models\Shipment;
 use App\Models\ShipmentItem;
+use App\Models\StockBatch;
 use App\Models\User;
 use App\Services\ShipmentService;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,7 +58,7 @@ class ShipmentController extends Controller
         $shipment->load(['carrier', 'destination'])->loadCount(['items', 'items as checked_count' => fn (Builder $q) => $q->whereNotNull('checked_at')]);
 
         $items = $shipment->items()
-            ->with(['stockUnit.product.media', 'stockUnit.condition', 'checker', 'media'])
+            ->with(['stockUnit.product.media', 'stockUnit.condition', 'stockUnit.batch', 'checker', 'media'])
             ->get()
             ->sortBy(fn (ShipmentItem $item) => [$item->isChecked() ? 1 : 0, $item->stockUnit->product->name])
             ->values();
@@ -80,6 +81,10 @@ class ShipmentController extends Controller
                     'name' => $item->stockUnit->condition->name,
                 ],
                 'condition_notes' => $item->stockUnit->condition_notes,
+                'batch' => $item->stockUnit->batch ? [
+                    'id' => $item->stockUnit->batch->id,
+                    'reference' => $item->stockUnit->batch->reference,
+                ] : null,
                 'image' => $item->stockUnit->product->getFirstMediaUrl('gallery', 'thumb') ?: null,
                 'checked' => $item->isChecked(),
                 'outcome' => $item->outcome?->value,
@@ -111,6 +116,23 @@ class ShipmentController extends Controller
                 $request->string('notes')->trim()->toString() ?: null,
                 $photos,
             );
+        } catch (ShipmentRuleViolation $e) {
+            return back()->withErrors(['outcome' => $e->getMessage()]);
+        }
+
+        return back();
+    }
+
+    /** "All arrived" for every unchecked item of one bulk purchase. */
+    public function checkInBatch(Request $request, Shipment $shipment, StockBatch $batch, ShipmentService $shipments): RedirectResponse
+    {
+        Gate::authorize('receive', $shipment);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        try {
+            $shipments->checkInBatch($shipment, $batch, $user);
         } catch (ShipmentRuleViolation $e) {
             return back()->withErrors(['outcome' => $e->getMessage()]);
         }

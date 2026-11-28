@@ -17,6 +17,9 @@ Schedule::command('backup:monitor')->dailyAt('07:00')->onOneServer();
 // Reserved items not collected in time go back on sale (see RefundPolicy).
 Schedule::command('requests:release-uncollected')->dailyAt('06:00')->onOneServer();
 
+// Online reservations: unpaid holds after 30 minutes, uncollected ones (full refund) after the collection window.
+Schedule::command('reservations:release')->everyFiveMinutes()->withoutOverlapping()->onOneServer();
+
 // Housekeeping.
 Schedule::command('queue:prune-failed --hours=720')->weekly();
 Schedule::command('auth:clear-resets')->daily();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Enums\ReservationStatus;
 use App\Enums\StockStatus;
 use App\Exceptions\InvalidStockTransition;
 use App\Models\Concerns\BroadcastsChanges;
@@ -30,6 +31,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property string $reference
  * @property int $product_id
+ * @property int|null $batch_id
  * @property int $condition_id
  * @property int|null $supplier_id
  * @property int $location_id
@@ -55,7 +57,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Location $location
  */
 #[Fillable([
-    'product_id', 'condition_id', 'supplier_id', 'location_id', 'status',
+    'product_id', 'batch_id', 'condition_id', 'supplier_id', 'location_id', 'status',
     'cost', 'price', 'condition_notes', 'serial_number', 'purchased_at', 'created_by',
 ])]
 class StockUnit extends Model implements HasMedia
@@ -174,6 +176,26 @@ class StockUnit extends Model implements HasMedia
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class)->withTrashed();
+    }
+
+    /**
+     * The bulk purchase this item came in, if any. One-off and second-hand items have none.
+     *
+     * @return BelongsTo<StockBatch, $this>
+     */
+    public function batch(): BelongsTo
+    {
+        return $this->belongsTo(StockBatch::class, 'batch_id');
+    }
+
+    /**
+     * The online reservation holding this item, if any.
+     *
+     * @return HasOne<Reservation, $this>
+     */
+    public function activeReservation(): HasOne
+    {
+        return $this->hasOne(Reservation::class)->whereIn('status', [ReservationStatus::AwaitingPayment, ReservationStatus::Reserved])->latestOfMany();
     }
 
     /**

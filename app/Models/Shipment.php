@@ -8,6 +8,7 @@ use App\Models\Concerns\BroadcastsChanges;
 use App\Support\LiveUpdates;
 use Brick\Money\Money;
 use Carbon\CarbonImmutable;
+use Database\Seeders\LocationSeeder;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +25,7 @@ use Illuminate\Support\Str;
  * @property ShipmentStatus $status
  * @property int $origin_location_id
  * @property int $destination_location_id
+ * @property int|null $supplier_id
  * @property int|null $carrier_id
  * @property string|null $tracking_number
  * @property int|null $cost_amount
@@ -43,7 +45,7 @@ use Illuminate\Support\Str;
  * @property-read Carrier|null $carrier
  */
 #[Fillable([
-    'origin_location_id', 'destination_location_id', 'carrier_id', 'tracking_number',
+    'origin_location_id', 'destination_location_id', 'supplier_id', 'carrier_id', 'tracking_number',
     'cost', 'dispatched_on', 'expected_on', 'notes', 'created_by',
 ])]
 class Shipment extends Model
@@ -127,6 +129,22 @@ class Shipment extends Model
         }
 
         return $link;
+    }
+
+    /**
+     * The supplier sending it, when they ship straight to Accra.
+     *
+     * @return BelongsTo<Supplier, $this>
+     */
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    /** Sent by a supplier straight to Accra, not from the UK base. */
+    public function isDirectFromSupplier(): bool
+    {
+        return $this->origin->code === LocationSeeder::DIRECT;
     }
 
     /**

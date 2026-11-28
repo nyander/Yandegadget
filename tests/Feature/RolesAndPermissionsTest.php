@@ -79,7 +79,8 @@ class RolesAndPermissionsTest extends TestCase
         $this->seed(ReferenceDataSeeder::class);
 
         $this->assertSame(count(Role::cases()), RoleModel::count());
-        $this->assertSame(2, Location::count());
+        // Legon store, UK buying, and direct from supplier.
+        $this->assertSame(3, Location::count());
     }
 
     public function test_shared_props_include_roles_and_permissions(): void

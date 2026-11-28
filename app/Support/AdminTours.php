@@ -131,8 +131,22 @@ class AdminTours
             ],
             'resources.shipments.edit' => [
                 [null, 'A shipment', 'Add items while it\'s a draft, then dispatch it when it leaves.'],
-                ['.fi-resource-relation-manager', 'Items in the boxes', 'Use <strong>Add items</strong> to choose what\'s going. Only items bought in the UK and not already on a shipment can be added.'],
+                ['.fi-resource-relation-manager', 'Items in the boxes', 'Use <strong>Add items</strong> to choose what\'s going: whole <strong>bulk purchases</strong> in one go, or single items.'],
+                ['[data-tour="dispatch-bottom"]', 'Dispatch from here too', 'Once all the items are in, the <strong>Dispatch</strong> button is also here at the bottom, so you don\'t need to scroll back up.'],
                 [self::HEADER_ACTIONS, 'Dispatch and track', 'When it leaves, click <strong>Dispatch</strong> and enter the carrier, tracking number, cost and date. Staff in Accra are told it\'s coming. Then <strong>Track</strong> opens the carrier\'s page for it.'],
+            ],
+            'resources.reservations.index' => [
+                [null, 'Online reservations', 'Items customers have reserved and paid for online, by mobile money or card. Keep them aside for collection. '.$guide('reservations', 'Read more')],
+                [self::TABLE, 'Waiting to be collected', 'What they paid online, what\'s left to pay in store, and the date to collect by. Not collected in time? They\'re refunded in full automatically.'],
+            ],
+            'resources.reservations.view' => [
+                [null, 'One reservation', 'The item, the customer, and the money: paid online and left to pay.'],
+                [self::HEADER_ACTIONS, 'When they come in', '<strong>Sell to them</strong> opens the Sell screen with the online payment taken off. <strong>Cancel and refund</strong> gives them everything back.'],
+            ],
+            'resources.bulk-stock.index' => [
+                [null, 'Bulk stock', 'Things you bought several of at once, kept together as a batch. '.$guide('stock', 'Read more')],
+                [self::HEADER_ACTIONS, 'Add bulk stock', 'How many, then what they share once: condition, cost, price and where they are. Serial numbers one per line.'],
+                [self::TABLE, 'Where they are', 'How many are still in the UK, on the way, in store, reserved and sold. <strong>Edit all</strong> changes every unsold item in the batch.'],
             ],
             'resources.product-requests.index' => [
                 [null, 'Customer requests', 'Customers asking you to find something, with a deposit paid. '.$guide('requests', 'Read more')],

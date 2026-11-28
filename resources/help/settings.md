@@ -20,6 +20,10 @@ Customers get an email (and a note on their account) this many days before their
 
 The website's terms page updates itself when you change these.
 
+## Reserving online
+
+**Deposit when paying part online** (20% to start with) and **Days to collect** (3 to start with) for items customers reserve and pay for on the website. Not collected in time means a full refund. See [Selling online: reservations](help:reservations).
+
 ## Change history
 
 At the bottom of the page: every change, who made it, when, and what it was before. Useful if a price or refund ever looks wrong.

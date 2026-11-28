@@ -14,12 +14,14 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\Shipment;
 use App\Models\StaffWage;
+use App\Models\StockBatch;
 use App\Models\StockUnit;
 use App\Models\Supplier;
 use App\Models\TransactionType;
 use App\Models\User;
 use App\Services\SaleService;
 use App\Services\ShipmentService;
+use App\Services\StockIntake;
 use App\Services\SupplierOfferService;
 use Brick\Money\Money;
 use Database\Seeders\Support\SamplePhotos;
@@ -97,6 +99,7 @@ class DemoCatalogueSeeder extends Seeder
         }
 
         $this->shipDemoStock($toShip);
+        self::addDemoBulkStock($supplier);
 
         // Clearly-labelled sample photos for every product and item.
         SamplePhotos::addMissing();
@@ -112,6 +115,43 @@ class DemoCatalogueSeeder extends Seeder
                 'description' => 'Light marks on the base. Battery at 89%. Charger included.',
                 'asking_price' => Money::of(620, 'GBP'),
             ]);
+        }
+    }
+
+    /**
+     * Two bulk purchases: earbuds already in the store, and watches a supplier
+     * ships straight to Accra. Also used to add them to existing local data.
+     */
+    public static function addDemoBulkStock(Supplier $supplier): void
+    {
+        $admin = User::where('email', 'admin@example.test')->first();
+
+        if ($admin === null || StockBatch::exists()) {
+            return;
+        }
+
+        $grades = Condition::pluck('id', 'grade');
+        $intake = app(StockIntake::class);
+
+        foreach ([
+            ['tv-audio', 'Galaxy Buds2 Pro', 'Samsung', 12, 'A', 55, 85, StockStatus::Received, 'ACC-LEGON'],
+            ['smart-tech', 'Apple Watch SE 44mm', 'Apple', 20, 'A', 120, 175, StockStatus::Purchased, LocationSeeder::DIRECT],
+        ] as [$category, $name, $brand, $quantity, $grade, $cost, $price, $status, $location]) {
+            $product = Product::firstOrCreate(['name' => $name], [
+                'category_id' => Category::where('slug', $category)->value('id'),
+                'brand' => $brand,
+                'description' => "{$brand} {$name}, bought new in bulk.",
+            ]);
+
+            $intake->addSeveral($product, [
+                'condition_id' => $grades[$grade],
+                'supplier_id' => $supplier->id,
+                'cost' => Money::of($cost, 'GBP'),
+                'price' => Money::of($price, 'GBP'),
+                'purchased_at' => now()->subWeeks(2)->toDateString(),
+                'status' => $status->value,
+                'location_id' => Location::where('code', $location)->value('id'),
+            ], $quantity, [], $admin);
         }
     }
 

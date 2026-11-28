@@ -44,6 +44,8 @@ class ShopSettings extends Page
         Settings::CANCELLATION_FEE => ['Cancellation fee', '%'],
         Settings::COLLECTION_DAYS => ['Days to collect', ' days'],
         Settings::COLLECTION_REMINDER_DAYS => ['Reminder before the deadline', ' days'],
+        Settings::RESERVATION_DEPOSIT => ['Online deposit', '%'],
+        Settings::RESERVATION_DAYS => ['Days to collect an online reservation', ' days'],
     ];
 
     /** Example amounts for the live explanations, in cedis. */
@@ -74,6 +76,8 @@ class ShopSettings extends Page
             Settings::CANCELLATION_FEE => $settings->cancellationFeePercent(),
             Settings::COLLECTION_DAYS => $settings->collectionDays(),
             Settings::COLLECTION_REMINDER_DAYS => $settings->collectionReminderDays(),
+            Settings::RESERVATION_DEPOSIT => $settings->reservationDepositPercent(),
+            Settings::RESERVATION_DAYS => $settings->reservationDays(),
         ]);
     }
 
@@ -95,6 +99,34 @@ class ShopSettings extends Page
                             ->minValue(1)
                             ->maxValue(100)
                             ->suffix('%')
+                            ->live(debounce: 400)
+                            ->required()
+                            ->extraFieldWrapperAttributes(['class' => 'yg-setting']),
+                    ]),
+                Section::make('Reserving online')
+                    ->description('Customers can reserve an item that\'s in the store and pay by mobile money or card: the full listed price, or a deposit with the rest in store. If they don\'t collect it in time, they get everything back and it goes back on sale.')
+                    ->icon(Heroicon::OutlinedShoppingBag)
+                    ->aside()
+                    ->schema([
+                        TextInput::make(Settings::RESERVATION_DEPOSIT)
+                            ->label('Deposit when paying part online')
+                            ->belowContent(fn (Get $get) => $this->help('A share of the listed price, rounded up to whole cedis. Customers can always choose to pay in full instead.', $this->reservationDepositExample($get(Settings::RESERVATION_DEPOSIT))))
+                            ->numeric()
+                            ->integer()
+                            ->minValue(5)
+                            ->maxValue(100)
+                            ->suffix('%')
+                            ->live(debounce: 400)
+                            ->required()
+                            ->extraFieldWrapperAttributes(['class' => 'yg-setting']),
+                        TextInput::make(Settings::RESERVATION_DAYS)
+                            ->label('Days to collect')
+                            ->belowContent(fn (Get $get) => $this->help('Counted from when they pay. After this, they get a full refund and the item goes back on sale. Checked every few minutes.', $this->collectExample($get(Settings::RESERVATION_DAYS), 'paid for today')))
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1)
+                            ->maxValue(14)
+                            ->suffix('days')
                             ->live(debounce: 400)
                             ->required()
                             ->extraFieldWrapperAttributes(['class' => 'yg-setting']),
@@ -257,7 +289,7 @@ class ShopSettings extends Page
             : $this->example($text);
     }
 
-    private function collectExample(mixed $days): ?HtmlString
+    private function collectExample(mixed $days, string $when = 'that\'s ready today'): ?HtmlString
     {
         if (! is_numeric($days) || $days < 1 || $days > 90) {
             return null;
@@ -265,7 +297,18 @@ class ShopSettings extends Page
 
         $by = CarbonImmutable::today()->addDays((int) $days);
 
-        return $this->example('An item that\'s ready today must be collected by <strong>'.$by->format('l j F').'</strong>.');
+        return $this->example('An item '.e($when).' must be collected by <strong>'.$by->format('l j F').'</strong>.');
+    }
+
+    private function reservationDepositExample(mixed $percent): ?HtmlString
+    {
+        if (! is_numeric($percent) || $percent < 1 || $percent > 100) {
+            return null;
+        }
+
+        $deposit = ceil(self::EXAMPLE_PRICE * $percent / 100);
+
+        return $this->example('On a <strong>'.$this->cedis(self::EXAMPLE_PRICE).'</strong> item, they pay <strong>'.$this->cedis($deposit).'</strong> online and <strong>'.$this->cedis(self::EXAMPLE_PRICE - $deposit).'</strong> in store.');
     }
 
     private function reminderExample(mixed $days, mixed $before): ?HtmlString

@@ -77,9 +77,21 @@ class ProductRequestFlowTest extends TestCase
             'description' => 'iPhone 14 Pro 256GB',
         ]);
 
-        $this->get($response->headers->get('Location') ?? '');
+        $this->approveTestPayment($response->headers->get('Location') ?? '');
 
         return ProductRequest::latest('id')->firstOrFail();
+    }
+
+    /**
+     * Follows the test mobile money checkout and approves the payment, as a customer would.
+     */
+    private function approveTestPayment(string $checkoutUrl): void
+    {
+        $reference = basename(parse_url($checkoutUrl, PHP_URL_PATH) ?: '');
+        $this->get($checkoutUrl)->assertOk();
+        $callback = $this->post(route('payments.test.decide', $reference), ['outcome' => 'approve', 'channel' => 'mobile_money', 'network' => 'mtn'])
+            ->headers->get('Location');
+        $this->get($callback ?? '');
     }
 
     public function test_customer_requests_an_item_and_pays_the_deposit_in_cedis(): void
@@ -102,7 +114,10 @@ class ProductRequestFlowTest extends TestCase
         $this->assertSame(120000, $payment->amount);
         $this->assertSame('GHS', $payment->currency);
         $this->assertSame('15.000000', $payment->exchange_rate);
-        $response->assertRedirect(route('payments.callback', ['reference' => $payment->reference]));
+        // Checkout opens the test mobile money page; approving it comes back to the callback.
+        $response->assertRedirect(route('payments.test', $payment));
+        $this->post(route('payments.test.decide', $payment), ['outcome' => 'approve', 'channel' => 'mobile_money', 'network' => 'mtn'])
+            ->assertRedirect(route('payments.callback', ['reference' => $payment->reference]));
 
         $this->get(route('payments.callback', ['reference' => $payment->reference]))
             ->assertRedirect(route('requests.show', $request));

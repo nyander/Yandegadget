@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @property int $price_paid_amount
  * @property int $deposit_applied_amount
  * @property int|null $product_request_id
+ * @property int|null $reservation_id
  * @property string $currency
  * @property int|null $exchange_rate_id
  * @property string|null $rate
@@ -147,6 +148,16 @@ class Sale extends Model
     public function productRequest(): BelongsTo
     {
         return $this->belongsTo(ProductRequest::class);
+    }
+
+    /**
+     * The online reservation this sale completed, if any.
+     *
+     * @return BelongsTo<Reservation, $this>
+     */
+    public function reservation(): BelongsTo
+    {
+        return $this->belongsTo(Reservation::class);
     }
 
     /**

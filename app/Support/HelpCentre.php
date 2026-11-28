@@ -24,6 +24,7 @@ class HelpCentre
         'stock' => ['title' => 'Adding stock you\'ve bought', 'summary' => 'Products, items, conditions, costs and prices.', 'group' => 'Running the shop'],
         'shipments' => ['title' => 'Sending a shipment to Accra', 'summary' => 'Building, dispatching and checking in shipments.', 'group' => 'Running the shop'],
         'selling' => ['title' => 'Selling in the store', 'summary' => 'The lowest price, reserved items and voiding mistakes.', 'group' => 'Running the shop'],
+        'reservations' => ['title' => 'Selling online: reservations', 'summary' => 'Customers reserving and paying by mobile money, and collecting in store.', 'group' => 'Running the shop'],
         'requests' => ['title' => 'Customer requests and deposits', 'summary' => 'Finding items for customers, and refunds.', 'group' => 'Running the shop'],
         'buying' => ['title' => 'Deciding what to buy', 'summary' => 'The details behind each row, and your buying list.', 'group' => 'Running the shop'],
         'suppliers' => ['title' => 'Offers from UK suppliers', 'summary' => 'Buying or declining what suppliers offer.', 'group' => 'Running the shop'],
